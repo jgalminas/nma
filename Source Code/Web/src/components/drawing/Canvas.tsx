@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { MousePosition } from '../../types/drawing.types';
+import { BrushSettings, MousePosition } from '../../types/drawing.types';
 
 export interface CanvasProps {
-    
+    brushSettings: BrushSettings
 }
 
-export default function Canvas({  }: CanvasProps) {
+export default function Canvas({ brushSettings }: CanvasProps) {
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -65,9 +65,9 @@ export default function Canvas({  }: CanvasProps) {
             if (ctx)  {
                 ctx.beginPath(); // begin
             
-                ctx.lineWidth = 5;
+                ctx.lineWidth = brushSettings.size;
                 ctx.lineCap = 'round';
-                ctx.strokeStyle = '#c0392b';
+                ctx.strokeStyle = brushSettings.colour;
                 
                 ctx.moveTo(mousePos.x, mousePos.y); // from
                 
