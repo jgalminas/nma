@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { MousePosition } from '../../types/drawing.types';
 
 export interface CanvasProps {
     
@@ -9,26 +10,28 @@ export default function Canvas({  }: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    let mousePos: { x:number , y:number } = { x: 0, y: 0 };
+    let mousePos: MousePosition = { x: 0, y: 0 };
 
     useEffect(() => {
-
+        
         const ctx = canvasRef.current?.getContext('2d');
         const canvas = canvasRef?.current;
         const container = containerRef?.current;
 
+
         if (canvas && container && ctx) {
 
-            resizeCanvas(canvas, container);
-
+            resizeCanvas(canvas, container); // set initial size
+            
             const mouseMoveEvent = (e: any) => draw(canvas,ctx, e);
             const resizeEvent = () => resizeCanvas(canvas, container);
-            const mouseDownEvent = (e: any) => setPos(canvas, e);
+            const mouseDownEvent = (e: any) => setMousePosition(canvas, e);
 
-            window.addEventListener('mousedown', mouseDownEvent)
-            window.addEventListener('mousemove', mouseMoveEvent)
-            window.addEventListener('resize', resizeEvent)
+            window.addEventListener('mousedown', mouseDownEvent);
+            window.addEventListener('mousemove', mouseMoveEvent);
+            window.addEventListener('resize', resizeEvent);
 
+            // cleanup events when unmounted
             return () => {
                 window.removeEventListener('resize', resizeEvent);
                 window.removeEventListener('mousemove', mouseMoveEvent);
@@ -38,39 +41,51 @@ export default function Canvas({  }: CanvasProps) {
 
     }, [])
 
+
     const resizeCanvas = (canvas: HTMLCanvasElement, canvasParent: HTMLDivElement) => {
-        if (canvas && canvasParent) {
+
+        const ctx = canvas.getContext('2d');
+
+        if (ctx && canvas && canvasParent) {
+
+            const img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
             canvas.width = canvasParent.offsetWidth;
             canvas.height = canvasParent.offsetHeight;
+
+            ctx.putImageData(img, 0, 0);
         }
+
     }
 
     const draw = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, e: any) => {
         if (e.buttons !== 1) return;
-        
-        if (ctx)  {
-            ctx.beginPath(); // begin
-        
-            ctx.lineWidth = 5;
-            ctx.lineCap = 'round';
-            ctx.strokeStyle = '#c0392b';
-            
-            ctx.moveTo(mousePos.x, mousePos.y); // from
-            
-            setPos(canvas, e);
 
-            ctx.lineTo(mousePos.x, mousePos.y); // to
+        requestAnimationFrame(() => {
+            if (ctx)  {
+                ctx.beginPath(); // begin
             
-            ctx.stroke(); // draw it!
-        }
+                ctx.lineWidth = 5;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#c0392b';
+                
+                ctx.moveTo(mousePos.x, mousePos.y); // from
+                
+                setMousePosition(canvas, e);
+    
+                ctx.lineTo(mousePos.x, mousePos.y); // to
+                
+                ctx.stroke(); // draw
+            }
+        });
     }
 
-    const setPos = (canvas: HTMLCanvasElement, e: any) => {
+    const setMousePosition = (canvas: HTMLCanvasElement, e: any) => {
         mousePos = { x: (e.clientX - canvas.offsetLeft), y: (e.clientY - canvas.offsetTop) }
     }
 
     return (
-        <div ref={containerRef}>
+        <div className='overflow-hidden' ref={containerRef}>
             <canvas ref={canvasRef}/>
         </div>
     )
