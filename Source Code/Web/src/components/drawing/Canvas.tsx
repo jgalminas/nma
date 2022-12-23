@@ -10,14 +10,14 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    let mousePos: MousePosition = { x: 0, y: 0 };
+    let mousePos: MousePosition = { x: 0, y: 0 };    
 
     useEffect(() => {
         
         const ctx = canvasRef.current?.getContext('2d');
         const canvas = canvasRef?.current;
         const container = containerRef?.current;
-
+                
 
         if (canvas && container && ctx) {
 
@@ -39,7 +39,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
             }
         }
 
-    }, [])
+    }, [brushSettings])
 
 
     const resizeCanvas = (canvas: HTMLCanvasElement, canvasParent: HTMLDivElement) => {
@@ -59,12 +59,12 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     }
 
     const draw = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, e: any) => {
-        if (e.buttons !== 1) return;
+        if (e.buttons !== 1) return;        
 
         requestAnimationFrame(() => {
             if (ctx)  {
                 ctx.beginPath(); // begin
-            
+                
                 ctx.lineWidth = brushSettings.size;
                 ctx.lineCap = 'round';
                 ctx.strokeStyle = brushSettings.colour;
