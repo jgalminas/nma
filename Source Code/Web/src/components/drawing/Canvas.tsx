@@ -10,7 +10,8 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    let mousePos: MousePosition = { x: 0, y: 0 };    
+    const mousePos: MousePosition = { x: 0, y: 0 };
+    const easing: number = 0.3;
 
     useEffect(() => {
         
@@ -25,7 +26,10 @@ export default function Canvas({ brushSettings }: CanvasProps) {
             
             const mouseMoveEvent = (e: any) => draw(canvas,ctx, e);
             const resizeEvent = () => resizeCanvas(canvas, container);
-            const mouseDownEvent = (e: any) => setMousePosition(canvas, e);
+            const mouseDownEvent = (e: any) =>  {
+                mousePos.x = e.clientX - canvas.offsetLeft;
+                mousePos.y = e.clientY - canvas.offsetTop;
+            };
 
             window.addEventListener('mousedown', mouseDownEvent);
             window.addEventListener('mousemove', mouseMoveEvent);
@@ -63,25 +67,32 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
         requestAnimationFrame(() => {
             if (ctx)  {
-                ctx.beginPath(); // begin
                 
+                // get mouse pos
+                const mouseX = e.clientX - canvas.offsetLeft;
+                const mouseY = e.clientY - canvas.offsetTop;
+
+                // apply smoothing
+                const smoothedX = mousePos.x + ((mouseX - mousePos.x) * easing);
+                const smoothedY = mousePos.y + ((mouseY - mousePos.y) * easing)
+
+
+                // line settings
                 ctx.lineWidth = brushSettings.size;
                 ctx.lineCap = 'round';
                 ctx.strokeStyle = brushSettings.colour;
-                
-                ctx.moveTo(mousePos.x, mousePos.y); // from
-                
-                setMousePosition(canvas, e);
-    
+
+                ctx.beginPath(); // begin
+                ctx.moveTo(smoothedX, smoothedY); // from     
                 ctx.lineTo(mousePos.x, mousePos.y); // to
-                
                 ctx.stroke(); // draw
+
+
+                // set mouse pos
+                mousePos.x = smoothedX;
+                mousePos.y = smoothedY;
             }
         });
-    }
-
-    const setMousePosition = (canvas: HTMLCanvasElement, e: any) => {
-        mousePos = { x: (e.clientX - canvas.offsetLeft), y: (e.clientY - canvas.offsetTop) }
     }
 
     return (
