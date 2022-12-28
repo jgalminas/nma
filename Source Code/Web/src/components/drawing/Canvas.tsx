@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { BrushSettings, MousePosition } from '../../types/drawing.types';
+import { BrushSettings, PointerPosition } from '../../types/drawing.types';
 
 export interface CanvasProps {
     brushSettings: BrushSettings
@@ -10,7 +10,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const mousePos: MousePosition = { x: 0, y: 0 };
+    const pointerPos: PointerPosition = { x: 0, y: 0 };
     const easing: number = 0.3;
 
     useEffect(() => {
@@ -24,22 +24,26 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
             resizeCanvas(canvas, container); // set initial size
             
-            const mouseMoveEvent = (e: any) => draw(canvas,ctx, e);
-            const resizeEvent = () => resizeCanvas(canvas, container);
-            const mouseDownEvent = (e: any) =>  {
-                mousePos.x = e.clientX - canvas.offsetLeft;
-                mousePos.y = e.clientY - canvas.offsetTop;
+            const pointerMoveEvent = (e: any) => draw(canvas,ctx, e); // draw on pointer move
+            
+            // set initial pointer position on drawing start
+            const pointerDownEvent = (e: any) =>  {
+                pointerPos.x = e.clientX - canvas.offsetLeft;
+                pointerPos.y = e.clientY - canvas.offsetTop;
             };
 
-            window.addEventListener('mousedown', mouseDownEvent);
-            window.addEventListener('mousemove', mouseMoveEvent);
+            // resize canvas on window resize
+            const resizeEvent = () => resizeCanvas(canvas, container);
+
+            window.addEventListener('pointerdown', pointerDownEvent);
+            window.addEventListener('pointermove', pointerMoveEvent);
             window.addEventListener('resize', resizeEvent);
 
             // cleanup events when unmounted
             return () => {
                 window.removeEventListener('resize', resizeEvent);
-                window.removeEventListener('mousemove', mouseMoveEvent);
-                window.removeEventListener('resize', mouseDownEvent);
+                window.removeEventListener('pointermove', pointerMoveEvent);
+                window.removeEventListener('pointerdown', pointerDownEvent);
             }
         }
 
@@ -69,12 +73,12 @@ export default function Canvas({ brushSettings }: CanvasProps) {
             if (ctx)  {
                 
                 // get mouse pos
-                const mouseX = e.clientX - canvas.offsetLeft;
-                const mouseY = e.clientY - canvas.offsetTop;
+                const pointerX = e.clientX - canvas.offsetLeft;
+                const pointerY = e.clientY - canvas.offsetTop;
 
                 // apply smoothing
-                const smoothedX = mousePos.x + ((mouseX - mousePos.x) * easing);
-                const smoothedY = mousePos.y + ((mouseY - mousePos.y) * easing)
+                const smoothedX = pointerPos.x + ((pointerX - pointerPos.x) * easing);
+                const smoothedY = pointerPos.y + ((pointerY - pointerPos.y) * easing)
 
 
                 // line settings
@@ -84,13 +88,13 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
                 ctx.beginPath(); // begin
                 ctx.moveTo(smoothedX, smoothedY); // from     
-                ctx.lineTo(mousePos.x, mousePos.y); // to
+                ctx.lineTo(pointerPos.x, pointerPos.y); // to
                 ctx.stroke(); // draw
 
 
                 // set mouse pos
-                mousePos.x = smoothedX;
-                mousePos.y = smoothedY;
+                pointerPos.x = smoothedX;
+                pointerPos.y = smoothedY;
             }
         });
     }
