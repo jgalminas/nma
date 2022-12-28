@@ -1,5 +1,5 @@
 
-export interface MousePosition {
+export interface PointerPosition {
     x: number,
     y: number
 }
