@@ -1,7 +1,5 @@
 # Marine Aquarium Drawing Application
 
----
-
 ## Project Vision 
 
 An intuitive drawing application which allows users to sketch their perception of what the National Marine Park is. The application will likely be used unsupervised and by people of various ages, therefore, it must have a simple interface and be easy to use.
@@ -14,9 +12,10 @@ A simple drawing application which works on various devices and input methods (t
 
 Features such as layers, rotating the drawing, colour gradients and a wide range of brushes are out of the scope of this project.
 
----
 
 ## Project Structure
+
+More information regarding each part of the project can be found in their repective Read Mes which are located in the root of the project folder.
 
 ### Web
 
@@ -55,7 +54,6 @@ Features such as layers, rotating the drawing, colour gradients and a wide range
 - [SQL Lite database](/Source%20Code/SQL/)
 - [ASP.NET Core API](/Source%20Code/API/)
 
----
 
 ## Development
 
