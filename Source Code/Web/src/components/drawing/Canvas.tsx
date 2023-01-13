@@ -25,8 +25,6 @@ export default function Canvas({ brushSettings }: CanvasProps) {
             resizeCanvas(canvas, container); // set initial size
             
             const pointerMoveEvent = (e: any) => draw(canvas,ctx, e); // draw on pointer move
-            
-            // set initial pointer position on drawing start
             const pointerDownEvent = (e: any) =>  {
                 pointerPos.x = e.clientX - canvas.offsetLeft;
                 pointerPos.y = e.clientY - canvas.offsetTop;
@@ -34,7 +32,6 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
             // resize canvas on window resize
             const resizeEvent = () => resizeCanvas(canvas, container);
-
             window.addEventListener('pointerdown', pointerDownEvent);
             window.addEventListener('pointermove', pointerMoveEvent);
             window.addEventListener('resize', resizeEvent);
@@ -67,7 +64,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     }
 
     const draw = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, e: any) => {
-        if (e.buttons !== 1) return;        
+        if (e.pointerType === 'mouse' && e.buttons !== 1) return;                
 
         requestAnimationFrame(() => {
             if (ctx)  {
@@ -100,7 +97,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     }
 
     return (
-        <div className='overflow-hidden' ref={containerRef}>
+        <div className='overflow-hidden touch-none' ref={containerRef}>
             <canvas ref={canvasRef}/>
         </div>
     )
