@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Brush } from '../../constants';
 import { BrushSettings, PointerPosition } from '../../types/drawing.types';
 
 export interface CanvasProps {
@@ -35,7 +36,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
         if (ctx) {
             setBrushSettings(ctx);
-        }
+        }        
 
     }, [ctx, brushSettings])
 
@@ -43,7 +44,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
         if (canvas && container && ctx) {
             resizeCanvas(canvas, container, ctx); // set initial size
-            setBrushSettings(ctx); // set brush settings
+            setBrushSettings(ctx); // set initial brush settings
         }
 
         // register window events
@@ -76,7 +77,29 @@ export default function Canvas({ brushSettings }: CanvasProps) {
 
     }
 
-    const draw = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, e: any) => {
+    const pen = (ctx: CanvasRenderingContext2D, sx: number, sy: number, fx: number, fy: number) => {
+        console.log("Pen");
+
+        ctx.beginPath(); // begin
+        ctx.moveTo(sx, sy); // from     
+        ctx.lineTo(fx, fy); // to
+        ctx.stroke(); // draw  
+    }
+
+    const eraser = (ctx: CanvasRenderingContext2D, sx: number, sy: number, fx: number, fy: number) => {
+        
+        console.log("Erasing");
+        
+        const radius = brushSettings.size / 2;
+
+        ctx.beginPath();
+        ctx.moveTo(sx, sy);
+        ctx.arc(fx, fy, radius, 0, 2 * Math.PI, false);
+        ctx.clip();
+        ctx.clearRect(fx - radius - 1, fy - radius - 1, radius * 2 + 2, radius * 2 + 2);
+    }
+
+    const draw = (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, e: any, brush: (ctx: CanvasRenderingContext2D, sx: number, sy: number, fx: number, fy: number) => void) => {
         requestAnimationFrame(() => {
             if (ctx)  {
                 
@@ -87,11 +110,36 @@ export default function Canvas({ brushSettings }: CanvasProps) {
                 // apply smoothing
                 const smoothedX = pointerPos.x + ((pointerX - pointerPos.x) * easing);
                 const smoothedY = pointerPos.y + ((pointerY - pointerPos.y) * easing);
+                
+                brush(ctx, smoothedX, smoothedY, pointerPos.x, pointerPos.y);
 
-                ctx.beginPath(); // begin
-                ctx.moveTo(smoothedX, smoothedY); // from     
-                ctx.lineTo(pointerPos.x, pointerPos.y); // to
-                ctx.stroke(); // draw
+
+                // if (brushSettings.type === Brush.PEN) {
+                //     ctx.beginPath(); // begin
+                //     ctx.moveTo(smoothedX, smoothedY); // from     
+                //     ctx.lineTo(pointerPos.x, pointerPos.y); // to
+                //     ctx.stroke(); // draw  
+                // } else {
+                //     // var clearCircle = function(x, y, radius)
+                //     //     {
+                //     //         context.beginPath();
+                //     //         context.arc(x, y, radius, 0, 2 * Math.PI, false);
+                //     //         context.clip();
+                //     //         context.clearRect(x - radius - 1, y - radius - 1,
+                //     //                         radius * 2 + 2, radius * 2 + 2);
+                //     //     };
+
+                //     const radius = brushSettings.size / 2;
+
+                //     ctx.beginPath();
+                //     ctx.moveTo(smoothedX, smoothedY);
+                //     ctx.arc(pointerPos.x, pointerPos.y, radius, 0, 2 * Math.PI, false);
+                //     ctx.clip();
+                //     ctx.clearRect(pointerPos.x - radius - 1, pointerPos.y - radius - 1, radius * 2 + 2, radius * 2 + 2);
+
+                // }
+
+
 
                 // set mouse pos
                 pointerPos.x = smoothedX;
@@ -111,7 +159,11 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     const pointerMoveEvent = (e: any) => {
         if (pointerDown) {
             if (canvas && ctx) {
-                draw(canvas, ctx, e);
+                if (brushSettings.type === Brush.PEN) {
+                    draw(canvas, ctx, e, pen);
+                } else {
+                    draw(canvas, ctx, e, eraser);
+                }
             }
         }
     }
@@ -121,7 +173,7 @@ export default function Canvas({ brushSettings }: CanvasProps) {
     }
 
     const windowResizeEvent = () => {
-        if (canvas && container && ctx) {
+        if (canvas && container && ctx) {            
             resizeCanvas(canvas, container, ctx);
         }
     }
