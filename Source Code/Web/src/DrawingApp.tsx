@@ -22,6 +22,8 @@ export default function DrawingApp() {
     const setSize = (size: number) => setBrushSettings({ ...brushSettings, size });
     const setColour = (colour: string) => setBrushSettings({ ...brushSettings, colour });
 
+    const [isErasing, setErasing] = useState<boolean>(false);
+
     return (
         <div className='h-screen w-screen grid grid-cols-[min-content_auto] grid-rows-[min-content_auto] overflow-hidden'>
 
@@ -30,10 +32,11 @@ export default function DrawingApp() {
             </Sidebar>
             
             <Header>
+                <button onClick={() => setErasing(!isErasing)}> { isErasing ? "True" : "False" } </button>
                 <ColorPalette colours={colours} setColour={setColour}/>
             </Header>
             
-            <Canvas brushSettings={brushSettings}/>
+            <Canvas brushSettings={brushSettings} isErasing={isErasing}/>
             
         </div>
     )
