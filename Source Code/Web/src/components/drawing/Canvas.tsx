@@ -1,56 +1,22 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { BrushSettings, PointerPosition } from '../../types/drawing.types';
 
 export interface CanvasProps {
-    brushSettings: BrushSettings,
-    isErasing: boolean
+    brushSettings: BrushSettings
 }
 
-export default function Canvas({ brushSettings, isErasing }: CanvasProps) {
+export default function Canvas({ brushSettings }: CanvasProps) {
 
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const pointerPos: PointerPosition = { x: 0, y: 0 };
     let pointerDown: boolean = false;
-
     const easing: number = 0.3;
 
     let container = containerRef.current;
     let canvas = canvasRef.current;
     let ctx = canvas?.getContext('2d');
-
-    const pointerDownEvent = (e: any) => {
-        if (canvas) {
-            pointerDown = true;
-            pointerPos.x = e.clientX - canvas.offsetLeft;
-            pointerPos.y = e.clientY - canvas.offsetTop;
-        }
-    }
-
-    const pointerMoveEvent = (e: any) => {
-        if (pointerDown) {
-            if (canvas && ctx) {
-                draw(canvas, ctx, e);
-            }
-        }
-    }
-
-    const pointerUpEvent = (e: any) => {
-        pointerDown = false;
-    }
-
-    const windowResizeEvent = () => {
-        if (canvas && container && ctx) {
-            resizeCanvas(canvas, container, ctx);
-        }
-    }
-
-    const setBrushSettings = (ctx: CanvasRenderingContext2D) => {
-        ctx.lineWidth = brushSettings.size;
-        ctx.strokeStyle = brushSettings.colour;
-        ctx.lineCap = 'round';
-    }
 
     useEffect(() => {
 
@@ -68,40 +34,26 @@ export default function Canvas({ brushSettings, isErasing }: CanvasProps) {
     useEffect(() => {
 
         if (ctx) {
-
             setBrushSettings(ctx);
         }
 
-    }, [ctx, isErasing, brushSettings])
+    }, [ctx, brushSettings])
 
     useEffect(() => {
 
         if (canvas && container && ctx) {
-
             resizeCanvas(canvas, container, ctx); // set initial size
-            
-            //const pointerMoveEvent = (e: any) => draw(canvas,ctx, e); // draw on pointer move
-            // const pointerDownEvent = (e: any) =>  {
-            //     pointerPos.x = e.clientX - canvas.offsetLeft;
-            //     pointerPos.y = e.clientY - canvas.offsetTop;
-            // };
-
-            // // resize canvas on window resize
-            // const resizeEvent = () => resizeCanvas(canvas, container);
-
-            // window.addEventListener('resize', resizeEvent);
-
-
+            setBrushSettings(ctx); // set brush settings
         }
 
+        // register window events
         window.addEventListener('resize', windowResizeEvent);
         window.addEventListener('pointerup', pointerUpEvent)
         window.addEventListener('pointerdown', pointerDownEvent);
         window.addEventListener('pointermove', pointerMoveEvent);
 
-        // // cleanup events when unmounted
+        // cleanup events when unmounted
         return () => {
-            //     window.removeEventListener('resize', resizeEvent);
                 window.removeEventListener('pointermove', pointerMoveEvent);
                 window.removeEventListener('pointerdown', pointerDownEvent);
                 window.removeEventListener('pointerup', pointerUpEvent);
@@ -148,13 +100,40 @@ export default function Canvas({ brushSettings, isErasing }: CanvasProps) {
         });
     }
 
+    const pointerDownEvent = (e: any) => {
+        if (canvas) {
+            pointerDown = true;
+            pointerPos.x = e.clientX - canvas.offsetLeft;
+            pointerPos.y = e.clientY - canvas.offsetTop;
+        }
+    }
+
+    const pointerMoveEvent = (e: any) => {
+        if (pointerDown) {
+            if (canvas && ctx) {
+                draw(canvas, ctx, e);
+            }
+        }
+    }
+
+    const pointerUpEvent = () => {
+        pointerDown = false;
+    }
+
+    const windowResizeEvent = () => {
+        if (canvas && container && ctx) {
+            resizeCanvas(canvas, container, ctx);
+        }
+    }
+
+    const setBrushSettings = (ctx: CanvasRenderingContext2D) => {
+        ctx.lineWidth = brushSettings.size;
+        ctx.strokeStyle = brushSettings.colour;
+        ctx.lineCap = 'round';
+    }
+
     return (
-        <div className='overflow-hidden touch-none'
-            // onPointerDown={pointerDownEvent}
-            // onPointerMove={pointerMoveEvent}
-            // onPointerUp={pointerUpEvent}
-            // onResize={windowResizeEvent}
-            ref={containerRef}>
+        <div className='overflow-hidden touch-none' ref={containerRef}>
             <canvas ref={canvasRef}/>
         </div>
     )
