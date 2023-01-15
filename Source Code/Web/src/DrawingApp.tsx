@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import Canvas from './components/drawing/Canvas';
-import ColorPalette from './components/drawing/ColourPalette';
-import Header from './components/drawing/Header';
-import Sidebar from './components/drawing/Sidebar';
-import SizePalette from './components/drawing/SizePalette';
+import Canvas from './drawing/Canvas';
+import ColorPalette from './drawing/ColourPalette';
+import Header from './drawing/Header';
+import Sidebar from './drawing/Sidebar';
+import SizePalette from './drawing/SizePalette';
 import { Brush } from './constants';
 import { BrushSettings } from './types/drawing.types';
 
 export default function DrawingApp() {
 
     // colors in hex
-    const colours: string[] = ['#565656', '#A1A1A1', '#FDA0E3', '#6892FF', '#7DE57B', '#FFBA52', '#FFF16F', '#FE5A6E'];
+    const colours: string[] = ['#565656', '#A1A1A1', '#FDA0E3', '#6892FF', '#7DE57B', '#FFBA52', '#FFF16F', '#FE5A6E', '#ffffff'];
 
     // sizes in px
     const sizes: number[] = [14, 12, 10, 8, 6, 4, 2];
@@ -33,8 +33,6 @@ export default function DrawingApp() {
             </Sidebar>
             
             <Header>
-                <button onClick={() => setBrush(Brush.ERASER)}> Eraser </button>
-                <button onClick={() => setBrush(Brush.PEN)}> Pen </button>
                 <ColorPalette colours={colours} setColour={setColour}/>
             </Header>
             
