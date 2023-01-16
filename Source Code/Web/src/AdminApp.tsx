@@ -1,42 +1,53 @@
-﻿import ImageScorer from './ImageScorer';
+﻿import ImageScorer from './admin/ImageScorer';
+import { Image } from './admin/ImageScorer';
 
 export default function AdminApp() {
 
   return (
     <div>
-      Admin app entry point
+          Admin app entry point
+       {/*   <ScoringFrame images={sampleData} factors={factors} />*/} 
     </div>
   )
 }
 
 
 
-const images = [ // Test Data
+const sampleData = [ // Test Data
     {
         id: 'image1',
-        url: './ExampleImages/One.png',
+        location: 'Test',
+        name: 'Teset 1',
+        date: Date(),
+        url: '.\src\Admin\ExampleImages\Three.png',
         scores: {
-            'Creativity': 2,
+            'Creativity': null,
             'Colour': null,
             'Relevance': null
         }
     },
     {
         id: 'image2',
-        url: './ExampleImages/Two.png',
+        location: 'Test',
+        name: 'Teset 2',
+        date: Date(),
+        url: '.\src\Admin\ExampleImages\Three.png',
         scores: {
             'Creativity': null,
-            'Colour': 4,
-            'Relevance': 3
+            'Colour': null,
+            'Relevance': null
         }
     },
     {
         id: 'image3',
-        url: './ExampleImages/Three.png',
+        location: 'Test',
+        name: 'Teset 3',
+        date: Date(),
+        url: '.\src\Admin\ExampleImages\Three.png',
         scores: {
-            'Creativity': 5,
-            'Colour': 2,
-            'Relevance': 1
+            'Creativity': null,
+            'Colour': null,
+            'Relevance': null
         }
     }
 ]
@@ -50,23 +61,20 @@ const factors = [ // Temp
 ];
 
 
-interface DrawingInfo {
-    name: string;
-    location?: string;
-    date: Date;
-    imageURL: string;
+interface ScoringFrameProps {
+    images: Image[];
+    factors: string[];
 }
 
-export const ScoringFrame: React.FunctionComponent<DrawingInfo> = (props) => {
+export const ScoringFrame: React.FunctionComponent<ScoringFrameProps> = (props) => {
     return (
         <div className="drawingViewFrame">
-            <ImageScorer images={images} factors={factors} />;
-            <DrawingInfo {...props} />
+            <ImageScorer images={props.images} factors={props.factors} />;
         </div>
     )
 }
 
-export const DrawingInfo: React.FunctionComponent<DrawingInfo> = (props) => {
+export const DrawingInfo: React.FunctionComponent<Image> = (props) => {
     return (
         <div>
             <table className="infoGrid" >
@@ -89,7 +97,7 @@ export const DrawingInfo: React.FunctionComponent<DrawingInfo> = (props) => {
                         {props.location}
                     </td>
                     <td className="gridValue">
-                        {props.date.toLocaleString()}
+                        {props.date}
                     </td>
                 </tr>
             </table>

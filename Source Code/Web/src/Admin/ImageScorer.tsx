@@ -4,8 +4,11 @@ interface Comments {
   author: string;
   text: string;
 }
-interface Image {
+export interface Image {
   id: string;
+  location: string;
+  name: string;
+  date: string;
   url: string;
   scores: { [key: string]: number | null };
   comments?: Comments;
@@ -83,11 +86,11 @@ const ImageScorer: React.FC<ImageScorerProps> = ({ images, factors }) => {
         isFormValid = false
     }
     if (isFormValid) {
-      // send the scores, comments and author name to the server
+      // send the data to the server
       alert("Submitted successfully!");
       handleNextImage();
     } else {
-      alert("Please rate all the factors and fill out the author name field before submitting.");
+      alert("Please rate all the factors and fill out the author name field before submitting."); // temp
     }
   };
 
