@@ -6,12 +6,22 @@ import android.os.Bundle;
 import android.widget.Button;
 import com.example.nmadrawingapp.model.data_sources.db.Database;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
+import com.example.nmadrawingapp.model.repositories.ImageRepository;
+
 import java.util.List;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private Button button;
+
+    @Inject
+    ImageRepository imageRepository; // for testing purposes, this should be used in the viewmodel
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,10 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
         button = findViewById(R.id.btn);
 
-
         //region room read example
 
-        LiveData<List<Image>> imageList = Database.getDatabase(this).imageDao().getAll();
+        LiveData<List<Image>> imageList = imageRepository.getAllImages();
 
         imageList.observe(this, images -> {
             button.setText(String.valueOf(images.size()));
@@ -36,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(button -> {
 
             byte[] bytes = { 90, 20, 40, 10, 20, 40, 33 };
-            Database.write.execute(() -> Database.getDatabase(this).imageDao().insert(new Image(UUID.randomUUID(), ".webp", bytes)));
+            imageRepository.insertImage(new Image(UUID.randomUUID(), ".webp", bytes));
 
         });
 
