@@ -8,18 +8,23 @@ import java.util.UUID;
 @Entity
 public class Image {
 
-    public Image(UUID uuid, String extension, byte[] image) {
-        this.uuid = uuid;
-        this.extension = extension;
+    private static final String EXTENSION = "webp";
+
+    public Image(int drawersAge, byte[] image) {
+        this.uuid = UUID.randomUUID();
+        this.extension = EXTENSION;
+        this.drawersAge = drawersAge;
         this.image = image;
     }
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private final UUID uuid;
+    private UUID uuid;
 
-    private final String extension;
+    private String extension;
+
+    private final int drawersAge;
 
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private final byte[] image;
@@ -44,6 +49,18 @@ public class Image {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public void setExtension(String extension) {
+        this.extension = extension;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public int getDrawersAge() {
+        return drawersAge;
     }
 
     //endregion

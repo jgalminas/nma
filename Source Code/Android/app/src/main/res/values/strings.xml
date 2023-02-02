@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">NMA Drawing App</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="please_enter_your_age">Please enter your age</string>
+    <string name="save_drawing">Save Drawing</string>
+    <string name="enter_your_age_here">enter your age here</string>
 </resources>

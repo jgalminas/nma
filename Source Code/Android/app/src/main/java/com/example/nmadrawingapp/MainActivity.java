@@ -2,29 +2,23 @@ package com.example.nmadrawingapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
-
-import android.graphics.Color;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.os.Bundle;
-import android.widget.Button;
-
+import android.view.LayoutInflater;
+import android.widget.EditText;
 import com.example.nmadrawingapp.databinding.ActivityMainBinding;
-import com.example.nmadrawingapp.model.data_sources.db.Database;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
-import com.example.nmadrawingapp.views.CanvasView;
-
-import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.UUID;
-
 import javax.inject.Inject;
-
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private Dialog dialog;
 
     @Inject
     ImageRepository imageRepository; // for testing purposes
@@ -45,13 +39,49 @@ public class MainActivity extends AppCompatActivity {
 
         //endregion
 
-        //region room write example
 
         binding.btn.setOnClickListener(button -> {
-            imageRepository.insertImage(new Image(UUID.randomUUID(), ".webp", binding.canvas.getImageBytes()));
+            showDialog();
         });
 
-        //endregion
+    }
+
+    private Dialog createDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = this.getLayoutInflater();
+
+        builder.setView(inflater.inflate(R.layout.save_image_dialog, null));
+
+        return builder.create();
+    }
+
+    private void showDialog() {
+
+        dialog = createDialog();
+
+        dialog.show(); // must show dialog before registering listeners
+
+        // register on cancel listener
+        dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
+            dialog.cancel();
+        });
+
+        // register on save listener
+        dialog.findViewById(R.id.save_button).setOnClickListener(button -> {
+
+            EditText ageInput = dialog.findViewById(R.id.age_input);
+
+            imageRepository.insertImage(new Image(
+                    Integer.parseInt(ageInput.getText().toString()),
+                    binding.canvas.getImageBytes()
+            ));
+
+            binding.canvas.clearCanvas();
+            dialog.dismiss();
+        });
 
     }
+
 }
