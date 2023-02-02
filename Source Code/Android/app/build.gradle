@@ -7,6 +7,10 @@ android {
     namespace 'com.example.nmadrawingapp'
     compileSdk 33
 
+    viewBinding {
+        enabled true
+    }
+
     defaultConfig {
         applicationId "com.example.nmadrawingapp"
         minSdk 21
