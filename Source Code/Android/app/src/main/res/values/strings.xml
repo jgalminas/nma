@@ -5,4 +5,5 @@
     <string name="please_enter_your_age">Please enter your age</string>
     <string name="save_drawing">Save Drawing</string>
     <string name="enter_your_age_here">enter your age here</string>
+    <string name="please_enter_a_valid_age_between_1_and_130">Please enter a valid age.. (between 1 and 130)</string>
 </resources>

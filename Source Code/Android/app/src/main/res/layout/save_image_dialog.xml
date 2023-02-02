@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,7 +10,7 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="40dp"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
         android:text="@string/cancel"
@@ -37,7 +38,7 @@
         android:id="@+id/input_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:fontFamily="sans-serif"
         android:text="@string/please_enter_your_age"
         android:textSize="16sp"
@@ -65,11 +66,25 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="6dp"
         android:layout_marginEnd="30dp"
+        android:maxLength="3"
         android:ems="10"
         android:inputType="number"
         android:hint="@string/enter_your_age_here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_label" />
+
+    <TextView
+        android:id="@+id/error_message"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/please_enter_a_valid_age_between_1_and_130"
+        android:textColor="#DA1001"
+        android:textSize="16sp"
+        android:textStyle="italic"
+        app:layout_constraintStart_toStartOf="@+id/age_input"
+        app:layout_constraintTop_toBottomOf="@+id/age_input" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
