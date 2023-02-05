@@ -63,7 +63,7 @@ public class UploadFragment extends Fragment {
 
         ImageAdapter adapter = new ImageAdapter(images.getValue());
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(requireContext(), columnCount);
-        GridSpacingDecorator separator = new GridSpacingDecorator(columnCount, 30);
+        GridSpacingDecorator separator = new GridSpacingDecorator(columnCount, 40);
 
         binding.imagesRecycler.setLayoutManager(layoutManager);
         binding.imagesRecycler.setItemAnimator(new DefaultItemAnimator());
