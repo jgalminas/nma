@@ -15,4 +15,15 @@
         <item name="android:background">@drawable/primary_button</item>
     </style>
 
+    <style name="RoundCheckBox">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:minWidth">48dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:src">@drawable/checkbox_selector</item>
+        <item name="android:stateListAnimator">@animator/scale</item>
+    </style>
+
 </resources>

@@ -6,13 +6,18 @@ import android.widget.Checkable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
-public class CheckableLayout extends ConstraintLayout implements Checkable {
+import com.example.nmadrawingapp.R;
 
-    private boolean isChecked = false;
+public class RoundCheckBox extends androidx.appcompat.widget.AppCompatImageView implements Checkable {
 
-    public CheckableLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+    private boolean isChecked;
+
+    private static final int[] CHECKED_STATE_SET = {
+            android.R.attr.state_checked
+    };
+
+    public RoundCheckBox(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
@@ -30,17 +35,14 @@ public class CheckableLayout extends ConstraintLayout implements Checkable {
     @Override
     public void toggle() {
         isChecked = !isChecked;
+        refreshDrawableState();
     }
 
-    private static final int[] CheckedStateSet = {
-            android.R.attr.state_checked,
-    };
-
     @Override
-    protected int[] onCreateDrawableState(int extraSpace) {
+    public int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
         if (isChecked()) {
-            mergeDrawableStates(drawableState, CheckedStateSet);
+            mergeDrawableStates(drawableState, CHECKED_STATE_SET);
         }
         return drawableState;
     }
