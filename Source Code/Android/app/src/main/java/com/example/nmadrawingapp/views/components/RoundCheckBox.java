@@ -2,6 +2,7 @@ package com.example.nmadrawingapp.views.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.Checkable;
 
 import androidx.annotation.NonNull;
@@ -52,5 +53,4 @@ public class RoundCheckBox extends androidx.appcompat.widget.AppCompatImageView 
         toggle();
         return super.performClick();
     }
-
 }
