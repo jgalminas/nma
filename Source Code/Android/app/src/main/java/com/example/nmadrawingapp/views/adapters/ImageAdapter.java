@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> {
 
-    private List<Image> images;
+    private List<Bitmap> images = new ArrayList<>();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -46,31 +46,17 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
 
     }
 
-    public ImageAdapter(List<Image> images) {
-        if (images != null) {
-            this.images = images;
-        } else {
-            this.images = new ArrayList<>();
-        }
-    }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.image_item, parent, false);
-
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
-        // TODO: optimise the images by reducing size and possibly quality, the recycler is a bit slow loading these
-
-        byte[] image = images.get(position).getImage();
-        Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length);
-        holder.getImageView().setImageBitmap(bitmap);
+        holder.getImageView().setImageBitmap(images.get(position));
     }
 
     @Override
@@ -78,7 +64,7 @@ public class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ViewHolder> 
         return images.size();
     }
 
-    public void setImages(List<Image> images) {
+    public void setImages(List<Bitmap> images) {
         this.images = images;
         notifyDataSetChanged();
     }

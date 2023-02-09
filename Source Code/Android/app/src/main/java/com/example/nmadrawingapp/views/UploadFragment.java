@@ -1,5 +1,7 @@
 package com.example.nmadrawingapp.views;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.example.nmadrawingapp.model.repositories.ImageRepository;
 import com.example.nmadrawingapp.views.adapters.ImageAdapter;
 import com.example.nmadrawingapp.views.components.GridSpacingDecorator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,7 +51,7 @@ public class UploadFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentUploadBinding.inflate(inflater, container, false);
@@ -60,10 +63,11 @@ public class UploadFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         int columnCount = 3;
+        int gap = 40;
 
-        ImageAdapter adapter = new ImageAdapter(images.getValue());
+        ImageAdapter adapter = new ImageAdapter();
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(requireContext(), columnCount);
-        GridSpacingDecorator separator = new GridSpacingDecorator(columnCount, 40);
+        GridSpacingDecorator separator = new GridSpacingDecorator(columnCount, gap);
 
         binding.imagesRecycler.setLayoutManager(layoutManager);
         binding.imagesRecycler.setItemAnimator(new DefaultItemAnimator());
@@ -71,7 +75,25 @@ public class UploadFragment extends Fragment {
         binding.imagesRecycler.addItemDecoration(separator);
 
         images.observe(getViewLifecycleOwner(), images -> {
-            adapter.setImages(images);
+
+            List<Bitmap> bitmaps = new ArrayList<>();
+
+            // get recycler width - gaps
+            int w = (binding.imagesRecycler.getWidth() / columnCount) - (gap * 2);
+
+            // getting height following 16:9 aspect ratio
+            int h = (int)(w * 0.5625);
+
+            for (Image i : images) {
+                // convert binary to bitmap
+                Bitmap b = BitmapFactory.decodeByteArray(i.getImage(), 0, i.getImage().length);
+
+                // scale bitmap
+                bitmaps.add(Bitmap.createScaledBitmap(b, w, h, false));
+            }
+
+            adapter.setImages(bitmaps);
+
         });
 
     }
