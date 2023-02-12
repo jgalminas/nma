@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".views.DrawingFragment">
+    tools:context=".view.DrawingFragment">
 
-    <com.example.nmadrawingapp.views.components.CanvasView
+    <com.example.nmadrawingapp.view.components.CanvasView
         android:id="@+id/canvas"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn"
+        app:layout_constraintBottom_toTopOf="@+id/save_drawing_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btn"
+        android:id="@+id/save_drawing_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Button"
@@ -25,15 +25,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/upload_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="upload images (testing)"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/btn"
-        app:layout_constraintTop_toBottomOf="@+id/canvas" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

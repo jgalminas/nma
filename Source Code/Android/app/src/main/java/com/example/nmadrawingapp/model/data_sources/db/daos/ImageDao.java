@@ -24,4 +24,6 @@ interface ImageDao {
     @Delete
     void delete(Image image);
 
+    @Query("SELECT COUNT(id) FROM image")
+    LiveData<Integer> getCount();
 }

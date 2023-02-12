@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
-    <com.example.nmadrawingapp.views.components.RoundCheckBox
+    <com.example.nmadrawingapp.view.components.RoundCheckBox
         style="@style/RoundCheckBox"
         android:id="@+id/checkbox"
         android:layout_width="wrap_content"

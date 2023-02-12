@@ -14,4 +14,6 @@
     <string name="set_up_an_event">Set up an event</string>
     <string name="event_code">Event code</string>
     <string name="upload_drawings">Upload Drawings</string>
+    <string name="drawings_to_upload">Drawings to upload: %1d</string>
+    <string name="drawings_selected">%1d of %2d drawings selected</string>
 </resources>

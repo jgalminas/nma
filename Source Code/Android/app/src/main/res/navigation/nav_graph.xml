@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/drawingFragment"
-        android:name="com.example.nmadrawingapp.views.DrawingFragment"
+        android:name="com.example.nmadrawingapp.view.DrawingFragment"
         android:label="fragment_drawing"
         tools:layout="@layout/fragment_drawing" />
     <fragment
         android:id="@+id/uploadFragment"
-        android:name="com.example.nmadrawingapp.views.UploadFragment"
+        android:name="com.example.nmadrawingapp.view.UploadFragment"
         android:label="fragment_upload"
         tools:layout="@layout/fragment_upload" />
     <fragment
         android:id="@+id/startFragment"
-        android:name="com.example.nmadrawingapp.views.StartFragment"
+        android:name="com.example.nmadrawingapp.view.StartFragment"
         android:label="fragment_start"
         tools:layout="@layout/fragment_start" >
         <action

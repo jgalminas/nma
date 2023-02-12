@@ -27,6 +27,11 @@ public class ImageRepository implements IImageRepository {
     }
 
     @Override
+    public LiveData<Integer> getImageCount() {
+        return imageDao.getCount();
+    }
+
+    @Override
     public void insertImage(Image image) {
         Database.write.execute(() -> imageDao.insert(image));
     }

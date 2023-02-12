@@ -8,6 +8,7 @@ public interface IImageRepository {
 
     LiveData<List<Image>> getAllImages();
     LiveData<Image> getImageById(int id);
+    LiveData<Integer> getImageCount();
     void insertImage(Image image);
     void deleteImage(Image image);
 

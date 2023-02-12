@@ -5,7 +5,7 @@
     android:background="@color/gray_400"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".views.StartFragment">
+    tools:context=".view.StartFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
@@ -117,7 +117,7 @@
             style="@style/RegularText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Drawings to upload: xx"
+            android:text="@string/drawings_to_upload"
             app:layout_constraintBottom_toBottomOf="@+id/start_upload_button"
             app:layout_constraintStart_toStartOf="@+id/upload_heading"
             app:layout_constraintTop_toTopOf="@+id/start_upload_button" />

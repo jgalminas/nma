@@ -1,4 +1,4 @@
-package com.example.nmadrawingapp.views;
+package com.example.nmadrawingapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -62,24 +62,18 @@ public class DrawingFragment extends Fragment {
 
         navController = Navigation.findNavController(view); // initiate nav controller
 
-
-        binding.uploadButton.setOnClickListener(button -> {
-            navController.navigate(R.id.uploadFragment);
-        });
-
-
         //region room read example
 
         LiveData<List<Image>> imageList = imageRepository.getAllImages();
 
         imageList.observe(getViewLifecycleOwner(), images -> {
-            binding.btn.setText("# of images in db: " + images.size());
+            binding.saveDrawingButton.setText("# of images in db: " + images.size());
         });
 
         //endregion
 
 
-        binding.btn.setOnClickListener(button -> {
+        binding.saveDrawingButton.setOnClickListener(button -> {
             showDialog();
         });
 
