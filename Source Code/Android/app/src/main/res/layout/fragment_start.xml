@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/gray_400"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".views.StartFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/card_shape"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/event_heading"
+            style="@style/HeadingText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="30dp"
+            android:text="@string/set_up_an_event"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/event_input_label"
+            android:labelFor="@+id/event_input"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:text="@string/event_code"
+            app:layout_constraintStart_toStartOf="@+id/event_heading"
+            app:layout_constraintTop_toBottomOf="@+id/event_heading" />
+
+
+        <EditText
+            android:id="@+id/event_input"
+            style="@style/EditText"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:inputType="number"
+            app:layout_constraintEnd_toStartOf="@+id/start_button"
+            app:layout_constraintStart_toStartOf="@+id/event_input_label"
+            app:layout_constraintTop_toBottomOf="@+id/event_input_label" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_button"
+            style="@style/Primary_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:text="@string/start"
+            app:layout_constraintBottom_toBottomOf="@+id/event_input"
+            app:layout_constraintEnd_toStartOf="@+id/button_divider"
+            app:layout_constraintTop_toTopOf="@+id/event_input" />
+
+        <ImageButton
+            android:id="@+id/scan_qr_button"
+            style="@style/Icon_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/primary_text"
+            android:contentDescription="@string/delete_drawings"
+            android:src="@drawable/ic_camera"
+            app:layout_constraintBottom_toBottomOf="@+id/button_divider"
+            app:layout_constraintEnd_toEndOf="@+id/layout_divider"
+            app:layout_constraintTop_toTopOf="@+id/button_divider" />
+
+        <View
+            android:id="@+id/button_divider"
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@color/gray_600"
+            app:layout_constraintBottom_toBottomOf="@+id/start_button"
+            app:layout_constraintEnd_toStartOf="@+id/scan_qr_button"
+            app:layout_constraintTop_toTopOf="@+id/start_button" />
+
+        <View
+            android:id="@+id/layout_divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="30dp"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="30dp"
+            android:background="@color/gray_600"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/event_input" />
+
+        <TextView
+            android:id="@+id/upload_heading"
+            style="@style/HeadingText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="35dp"
+            android:text="@string/upload_drawings"
+            app:layout_constraintEnd_toEndOf="@+id/layout_divider"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/layout_divider"
+            app:layout_constraintTop_toBottomOf="@+id/layout_divider" />
+
+
+        <TextView
+            android:id="@+id/drawings_num_label"
+            style="@style/RegularText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Drawings to upload: xx"
+            app:layout_constraintBottom_toBottomOf="@+id/start_upload_button"
+            app:layout_constraintStart_toStartOf="@+id/upload_heading"
+            app:layout_constraintTop_toTopOf="@+id/start_upload_button" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/start_upload_button"
+            style="@style/Primary_Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="35dp"
+            android:text="@string/upload"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/upload_heading"
+            app:layout_constraintTop_toBottomOf="@+id/upload_heading" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
