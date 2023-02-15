@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -22,6 +23,7 @@ import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
+import com.example.nmadrawingapp.viewmodel.SharedViewModel;
 
 import java.util.List;
 
@@ -32,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DrawingFragment extends Fragment {
 
+    private SharedViewModel sharedViewModel;
     private FragmentDrawingBinding binding;
     private Dialog dialog;
 
@@ -45,6 +48,7 @@ public class DrawingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
@@ -97,6 +101,7 @@ public class DrawingFragment extends Fragment {
 
             if (ageIsValid) {
                 imageRepository.insertImage(new Image(
+                        sharedViewModel.getEventId(),
                         age,
                         binding.canvas.getImageBytes()
                 ));
