@@ -2,6 +2,8 @@ package com.example.nmadrawingapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -83,6 +85,9 @@ public class DrawingFragment extends Fragment {
     private void showDialog() {
 
         dialog = createDialog();
+
+        // make background transparent
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         dialog.show(); // must show dialog before registering listeners
 

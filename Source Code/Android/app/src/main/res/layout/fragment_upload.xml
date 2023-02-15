@@ -28,7 +28,7 @@
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/send_button"
-            style="@style/Primary_Button"
+            style="@style/PrimaryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
