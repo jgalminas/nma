@@ -13,10 +13,10 @@ public
 interface ImageDao {
 
     @Query("SELECT * FROM image")
-    LiveData<List<Image>> getAll();
+    List<Image> getAll();
 
     @Query("SELECT * FROM image WHERE id == (:id)")
-    LiveData<Image> findById(int id);
+    Image findById(int id);
 
     @Insert
     void insert(Image image);
@@ -25,5 +25,5 @@ interface ImageDao {
     void delete(Image image);
 
     @Query("SELECT COUNT(id) FROM image")
-    LiveData<Integer> getCount();
+    Integer getCount();
 }

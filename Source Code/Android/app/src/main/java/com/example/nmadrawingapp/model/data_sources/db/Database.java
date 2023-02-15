@@ -12,7 +12,7 @@ public abstract class Database extends RoomDatabase {
     // private static volatile Database database;
     private static final int NUM_OF_THREADS = 4;
     // executor for performing write operations
-    public static final ExecutorService write = Executors.newFixedThreadPool(NUM_OF_THREADS);
+    public static final ExecutorService executor = Executors.newFixedThreadPool(NUM_OF_THREADS);
 
     public abstract ImageDao imageDao();
 
