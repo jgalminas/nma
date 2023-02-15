@@ -1,14 +1,11 @@
-package com.example.nmadrawingapp.views.components;
+package com.example.nmadrawingapp.view.components;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.Checkable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import com.example.nmadrawingapp.R;
 
 public class RoundCheckBox extends androidx.appcompat.widget.AppCompatImageView implements Checkable {
 

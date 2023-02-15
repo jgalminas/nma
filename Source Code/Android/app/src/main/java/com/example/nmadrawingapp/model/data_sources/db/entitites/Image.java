@@ -10,15 +10,18 @@ public class Image {
 
     private static final String EXTENSION = "webp";
 
-    public Image(int drawersAge, byte[] image) {
+    public Image(int eventId, int drawersAge, byte[] image) {
         this.uuid = UUID.randomUUID();
         this.extension = EXTENSION;
         this.drawersAge = drawersAge;
         this.image = image;
+        this.eventId = eventId;
     }
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    private int eventId;
 
     private UUID uuid;
 
@@ -61,6 +64,14 @@ public class Image {
 
     public int getDrawersAge() {
         return drawersAge;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     //endregion

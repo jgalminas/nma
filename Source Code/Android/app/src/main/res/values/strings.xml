@@ -8,4 +8,13 @@
     <string name="please_enter_a_valid_age_between_1_and_130">Please enter a valid age.. (between 1 and 130)</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="delete_drawings">Delete selected drawings</string>
+    <string name="upload">Upload</string>
+    <string name="start">Start</string>
+    <string name="set_up_an_event">Set up an event</string>
+    <string name="event_code">Event code</string>
+    <string name="upload_drawings">Upload Drawings</string>
+    <string name="drawings_to_upload">Drawings to upload: %1d</string>
+    <string name="drawings_selected">%1d of %2d drawings selected</string>
+    <string name="event_code_input_can_t_be_empty">Event code input can\'t be empty</string>
 </resources>

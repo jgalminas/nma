@@ -1,4 +1,4 @@
-package com.example.nmadrawingapp.views;
+package com.example.nmadrawingapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -22,6 +23,7 @@ import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
+import com.example.nmadrawingapp.viewmodel.SharedViewModel;
 
 import java.util.List;
 
@@ -32,8 +34,8 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class DrawingFragment extends Fragment {
 
+    private SharedViewModel sharedViewModel;
     private FragmentDrawingBinding binding;
-    private NavController navController;
     private Dialog dialog;
 
     @Inject
@@ -46,10 +48,11 @@ public class DrawingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDrawingBinding.inflate(inflater, container, false);
@@ -60,26 +63,7 @@ public class DrawingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        navController = Navigation.findNavController(view); // initiate nav controller
-
-
-        binding.uploadButton.setOnClickListener(button -> {
-            navController.navigate(R.id.uploadFragment);
-        });
-
-
-        //region room read example
-
-        LiveData<List<Image>> imageList = imageRepository.getAllImages();
-
-        imageList.observe(getViewLifecycleOwner(), images -> {
-            binding.btn.setText("# of images in db: " + images.size());
-        });
-
-        //endregion
-
-
-        binding.btn.setOnClickListener(button -> {
+        binding.saveDrawingButton.setOnClickListener(button -> {
             showDialog();
         });
 
@@ -117,6 +101,7 @@ public class DrawingFragment extends Fragment {
 
             if (ageIsValid) {
                 imageRepository.insertImage(new Image(
+                        sharedViewModel.getEventId(),
                         age,
                         binding.canvas.getImageBytes()
                 ));

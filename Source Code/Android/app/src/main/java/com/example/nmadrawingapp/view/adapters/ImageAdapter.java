@@ -1,4 +1,4 @@
-package com.example.nmadrawingapp.views.adapters;
+package com.example.nmadrawingapp.view.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.model.DisplayImage;
-import com.example.nmadrawingapp.views.components.RoundCheckBox;
+import com.example.nmadrawingapp.view.components.RoundCheckBox;
 import java.util.ArrayList;
 import java.util.List;
 

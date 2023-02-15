@@ -1,4 +1,4 @@
-package com.example.nmadrawingapp.views.components;
+package com.example.nmadrawingapp.view.components;
 
 import android.graphics.Rect;
 import android.view.View;
