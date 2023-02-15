@@ -58,20 +58,24 @@ public class StartFragment extends Fragment {
 
         navController = Navigation.findNavController(view);
 
+        // navigate to upload fragment
         binding.startUploadButton.setOnClickListener(btn -> {
             navController.navigate(R.id.uploadFragment);
         });
 
+        // display number of images currently stored locally
         startViewModel.getImageCount().observe(getViewLifecycleOwner(), count -> {
             binding.drawingsNumLabel.setText(getString(R.string.drawings_to_upload, count));
         });
 
+
+        // on event start
         binding.startButton.setOnClickListener(btn -> {
             if (isEventIdValid()) {
                 sharedViewModel.setEventId(Integer.parseInt(binding.eventInput.getText().toString()));
                 navController.navigate(R.id.drawingFragment);
             } else {
-                // TODO
+                binding.startErrorMessage.setVisibility(View.VISIBLE);
             }
         });
 
@@ -79,6 +83,9 @@ public class StartFragment extends Fragment {
 
     private boolean isEventIdValid() {
         // TODO validate fully based on ID criteria
+        if (binding.startErrorMessage.getVisibility() == View.VISIBLE) {
+            binding.startErrorMessage.setVisibility(View.GONE);
+        }
         return binding.eventInput.getText().length() > 0;
     }
 
