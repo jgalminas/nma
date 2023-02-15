@@ -33,7 +33,6 @@ import dagger.hilt.android.AndroidEntryPoint;
 public class DrawingFragment extends Fragment {
 
     private FragmentDrawingBinding binding;
-    private NavController navController;
     private Dialog dialog;
 
     @Inject
@@ -49,7 +48,7 @@ public class DrawingFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentDrawingBinding.inflate(inflater, container, false);
@@ -59,19 +58,6 @@ public class DrawingFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        navController = Navigation.findNavController(view); // initiate nav controller
-
-        //region room read example
-
-        LiveData<List<Image>> imageList = imageRepository.getAllImages();
-
-        imageList.observe(getViewLifecycleOwner(), images -> {
-            binding.saveDrawingButton.setText("# of images in db: " + images.size());
-        });
-
-        //endregion
-
 
         binding.saveDrawingButton.setOnClickListener(button -> {
             showDialog();
