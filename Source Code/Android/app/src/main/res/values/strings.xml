@@ -16,5 +16,7 @@
     <string name="upload_drawings">Upload Drawings</string>
     <string name="drawings_to_upload">Drawings to upload: %1d</string>
     <string name="drawings_selected">%1d of %2d drawings selected</string>
+    <string name="event">Event</string>
+    <string name="event_id">%1d</string>
     <string name="event_code_input_can_t_be_empty">Event code input can\'t be empty</string>
 </resources>

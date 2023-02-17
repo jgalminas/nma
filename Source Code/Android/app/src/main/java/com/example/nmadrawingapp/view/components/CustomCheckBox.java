@@ -7,7 +7,7 @@ import android.widget.Checkable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class RoundCheckBox extends androidx.appcompat.widget.AppCompatImageView implements Checkable {
+public class CustomCheckBox extends androidx.appcompat.widget.AppCompatImageView implements Checkable {
 
     private boolean isChecked;
 
@@ -15,7 +15,7 @@ public class RoundCheckBox extends androidx.appcompat.widget.AppCompatImageView 
             android.R.attr.state_checked
     };
 
-    public RoundCheckBox(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public CustomCheckBox(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 

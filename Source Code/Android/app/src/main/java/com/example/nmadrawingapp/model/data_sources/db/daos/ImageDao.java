@@ -1,10 +1,10 @@
 package com.example.nmadrawingapp.model.data_sources.db.daos;
 
-import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
+
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import java.util.List;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public
 interface ImageDao {
 
-    @Query("SELECT * FROM image")
+    @Query("SELECT * FROM image ORDER BY eventId")
     List<Image> getAll();
 
     @Query("SELECT * FROM image WHERE id == (:id)")
@@ -26,4 +26,5 @@ interface ImageDao {
 
     @Query("SELECT COUNT(id) FROM image")
     Integer getCount();
+
 }

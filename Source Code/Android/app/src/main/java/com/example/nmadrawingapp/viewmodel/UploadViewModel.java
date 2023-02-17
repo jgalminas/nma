@@ -2,20 +2,17 @@ package com.example.nmadrawingapp.viewmodel;
 
 import static com.example.nmadrawingapp.view.UploadFragment.COLUMN_COUNT;
 import static com.example.nmadrawingapp.view.UploadFragment.GAP;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.view.WindowManager;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.nmadrawingapp.model.DisplayImage;
+import com.example.nmadrawingapp.model.Event;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
+import com.example.nmadrawingapp.model.enums.ItemType;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
-
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -31,37 +28,54 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
-    private final MutableLiveData<List<DisplayImage>> images = new MutableLiveData<>(new ArrayList<>());
+    public LiveData<List<Object>> getAllImages() {
 
-    public LiveData<List<DisplayImage>> getAllImages() {
+        MutableLiveData<List<Object>> data = new MutableLiveData<>();
 
         imageRepository.getAllImages(new Callback<List<Image>>() {
             @Override
             public void onComplete(List<Image> result) {
 
-                List<DisplayImage> bitmaps = new ArrayList<>();
+                final List<Object> items = new ArrayList<>();
 
                 for (Image i : result) {
 
-                    // convert binary to bitmap
-                    Bitmap b = BitmapFactory.decodeByteArray(i.getImage(), 0, i.getImage().length);
+                    // group by event Id
+                    if (!containsEvent(items, i.getEventId())) {
+                        items.add(new Event(ItemType.Event, i.getEventId()));
+                    }
 
-                    // calculate width and height (16:9 aspect ratio)
-                    int w = (b.getWidth() / COLUMN_COUNT) - (GAP * 2);
-                    int h = (int)(w * 0.5625);
+                    items.add(new DisplayImage(ItemType.Image, i.getId(), toBitmap(i)));
 
-                    // scale bitmap
-                    bitmaps.add(
-                        new DisplayImage(i.getId(), Bitmap.createScaledBitmap(b, w, h, false))
-                    );
                 }
 
-                images.postValue(bitmaps);
-
+                data.postValue(items);
             }
         });
 
-        return images;
+        return data;
+    }
+
+    private boolean containsEvent(List<Object> items, int id) {
+
+        for (Object item : items) {
+            if (item instanceof Event && ((Event) item).getEventId() == id) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private Bitmap toBitmap(Image image) {
+        // convert binary to bitmap
+        Bitmap b = BitmapFactory.decodeByteArray(image.getImage(), 0, image.getImage().length);
+
+        // calculate width and height (16:9 aspect ratio)
+        int w = (b.getWidth() / COLUMN_COUNT) - (GAP * 2);
+        int h = (int)(w * 0.5625);
+
+        return Bitmap.createScaledBitmap(b, w, h, false);
     }
 
 }
