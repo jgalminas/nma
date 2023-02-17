@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModel;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
+import com.example.nmadrawingapp.model.enums.ItemType;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
 import java.util.ArrayList;
@@ -27,45 +28,38 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
-    public LiveData<List<Event>> getAllEvents() {
+    public LiveData<List<Object>> getAllImages() {
 
-        MutableLiveData<List<Event>> data = new MutableLiveData<>();
+        MutableLiveData<List<Object>> data = new MutableLiveData<>();
 
         imageRepository.getAllImages(new Callback<List<Image>>() {
             @Override
             public void onComplete(List<Image> result) {
 
-                final List<Event> events = new ArrayList<>();
+                final List<Object> items = new ArrayList<>();
 
                 for (Image i : result) {
 
                     // group by event Id
-                    if (!containsEvent(events, i.getEventId())) {
-                        events.add(new Event(i.getEventId()));
+                    if (!containsEvent(items, i.getEventId())) {
+                        items.add(new Event(ItemType.Event, i.getEventId()));
                     }
 
-                    // add image to event
-                    for (Event e : events) {
-                        if (e.getEventId() == i.getEventId()) {
-                            e.getImages().add(
-                                new DisplayImage(i.getId(), toBitmap(i))
-                            );
-                        }
-                    }
+                    items.add(new DisplayImage(ItemType.Image, i.getId(), toBitmap(i)));
 
                 }
 
-                data.postValue(events);
+                data.postValue(items);
             }
         });
 
         return data;
     }
 
-    private boolean containsEvent(List<Event> events, int id) {
+    private boolean containsEvent(List<Object> items, int id) {
 
-        for (Event event : events) {
-            if (event.getEventId() == id) {
+        for (Object item : items) {
+            if (item instanceof Event && ((Event) item).getEventId() == id) {
                 return true;
             }
         }
