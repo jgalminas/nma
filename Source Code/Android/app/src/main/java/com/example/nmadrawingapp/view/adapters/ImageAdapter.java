@@ -18,6 +18,7 @@ import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
 import com.example.nmadrawingapp.model.Item;
 import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.view.components.CustomCheckBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +50,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static class ImageViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView imageView;
-        private final CheckBox checkBox;
+        private final CustomCheckBox checkBox;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -62,7 +63,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return imageView;
         }
 
-        public CheckBox getCheckBox() {
+        public CustomCheckBox getCheckBox() {
             return checkBox;
         }
 
