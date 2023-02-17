@@ -9,10 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -26,8 +23,6 @@ import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -77,7 +72,7 @@ public class DrawingFragment extends Fragment {
 
         LayoutInflater inflater = this.getLayoutInflater();
 
-        builder.setView(inflater.inflate(R.layout.save_image_dialog, null));
+        builder.setView(inflater.inflate(R.layout.dialog_image_save, null));
 
         return builder.create();
     }
