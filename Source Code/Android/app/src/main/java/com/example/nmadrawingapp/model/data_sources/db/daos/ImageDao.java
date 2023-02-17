@@ -12,7 +12,7 @@ import java.util.List;
 public
 interface ImageDao {
 
-    @Query("SELECT * FROM image")
+    @Query("SELECT * FROM image ORDER BY eventId")
     List<Image> getAll();
 
     @Query("SELECT * FROM image WHERE id == (:id)")
