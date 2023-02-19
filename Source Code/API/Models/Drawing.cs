@@ -20,6 +20,6 @@ namespace API.Models
 
         public string FileExt { get; set; } = string.Empty;
 
-        public bool Deleted { get; set; }
+        public bool Deleted { get; set; } = false;
     }
 }

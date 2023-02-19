@@ -30,9 +30,9 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] string name)
+        public IActionResult Get([FromQuery] int id)
         {
-            if (_context.GetEvent(name) is Event ev)
+            if (_context.GetEvent(id) is Event ev)
             {
                 return new JsonResult(ev) { StatusCode = StatusCodes.Status200OK };
             }
@@ -49,9 +49,9 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromQuery] string name)
+        public IActionResult Delete([FromQuery] int id)
         {
-            return new StatusCodeResult(_context.DeleteEvent(name).ToStatus());
+            return new StatusCodeResult(_context.DeleteEvent(id).ToStatus());
         }
     }
 }

@@ -6,9 +6,9 @@ namespace API.Models
     {
         internal DbSet<Event> Events { get; set; }
 
-        public Event? GetEvent(string name)
+        public Event? GetEvent(int id)
         {
-            return Events.Find(name);
+            return Events.Find(id);
         }
 
         public Event[] GetEvents()
@@ -18,7 +18,7 @@ namespace API.Models
 
         public CreateResult CreateEvent(Event ev)
         {
-            if (Events.Find(ev.Name) != null) return CreateResult.AlreadyExists;
+            if (Events.Find(ev.ID) != null) return CreateResult.AlreadyExists;
             Events.Add(ev);
             SaveChanges();
             return CreateResult.Ok;
@@ -26,15 +26,15 @@ namespace API.Models
 
         public UpdateDeleteResult UpdateEvent(Event ev)
         {
-            if (Events.Find(ev.Name) == null) return UpdateDeleteResult.NotFound;
+            if (Events.Find(ev.ID) == null) return UpdateDeleteResult.NotFound;
             Events.Update(ev);
             SaveChanges();
             return UpdateDeleteResult.Ok;
         }
 
-        public UpdateDeleteResult DeleteEvent(string name)
+        public UpdateDeleteResult DeleteEvent(int id)
         {
-            if (Events.Find(name) is Event ev)
+            if (Events.Find(id) is Event ev)
             {
                 Events.Remove(ev);
                 SaveChanges();
