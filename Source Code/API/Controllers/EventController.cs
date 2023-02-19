@@ -9,7 +9,6 @@ namespace API.Controllers
     public class EventController : ControllerBase
     {
         // TODO: Swagger annotations
-        // TODO: Abstract out Context->StatusCode logic
 
         private readonly EventContext _context;
 
@@ -21,14 +20,13 @@ namespace API.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] Event ev)
         {
-            int code = _context.AddEvent(ev) ? StatusCodes.Status201Created : StatusCodes.Status409Conflict;
-            return new StatusCodeResult(code);
+            return new StatusCodeResult(_context.CreateEvent(ev).ToStatus());
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return new JsonResult(_context.GetEvents()) { StatusCode = StatusCodes.Status200OK }; 
+            return new JsonResult(_context.GetEvents()) { StatusCode = StatusCodes.Status200OK };
         }
 
         [HttpGet]
@@ -36,7 +34,7 @@ namespace API.Controllers
         {
             if (_context.GetEvent(name) is Event ev)
             {
-                return new JsonResult(ev) { StatusCode = StatusCodes.Status200OK }; 
+                return new JsonResult(ev) { StatusCode = StatusCodes.Status200OK };
             }
             else
             {
@@ -47,15 +45,13 @@ namespace API.Controllers
         [HttpPut]
         public IActionResult Put([FromBody] Event ev)
         {
-            int code = _context.UpdateEvent(ev) ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
-            return new StatusCodeResult(code);
+            return new StatusCodeResult(_context.UpdateEvent(ev).ToStatus());
         }
 
         [HttpDelete]
         public IActionResult Delete([FromQuery] string name)
         {
-            int code = _context.DeleteEvent(name) ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
-            return new StatusCodeResult(code);
+            return new StatusCodeResult(_context.DeleteEvent(name).ToStatus());
         }
     }
 }

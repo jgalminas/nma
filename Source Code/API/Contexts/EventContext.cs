@@ -16,33 +16,33 @@ namespace API.Models
             return Events.ToArray();
         }
 
-        public bool AddEvent(Event ev)
+        public CreateResult CreateEvent(Event ev)
         {
-            if (Events.Find(ev.Name) != null) return false;
+            if (Events.Find(ev.Name) != null) return CreateResult.AlreadyExists;
             Events.Add(ev);
             SaveChanges();
-            return true;
+            return CreateResult.Ok;
         }
 
-        public bool UpdateEvent(Event ev)
+        public UpdateDeleteResult UpdateEvent(Event ev)
         {
-            if (Events.Find(ev.Name) == null) return false;
+            if (Events.Find(ev.Name) == null) return UpdateDeleteResult.NotFound;
             Events.Update(ev);
             SaveChanges();
-            return true;
+            return UpdateDeleteResult.Ok;
         }
 
-        public bool DeleteEvent(string name)
+        public UpdateDeleteResult DeleteEvent(string name)
         {
             if (Events.Find(name) is Event ev)
             {
                 Events.Remove(ev);
                 SaveChanges();
-                return true;
+                return UpdateDeleteResult.Ok;
             }
             else
             {
-                return false;
+                return UpdateDeleteResult.NotFound;
             }
         }
     }
