@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace API.Models
 {
     public class Event
     {
+        [Key]
         public string Name { get; set; } = string.Empty;
 
         public string Notes { get; set; } = string.Empty;
