@@ -47,13 +47,6 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get()
-        {
-            // TODO
-            return null;
-        }
-
-        [HttpGet]
         public IActionResult Get([FromQuery] int id)
         {
             // TODO

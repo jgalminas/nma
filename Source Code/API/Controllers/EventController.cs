@@ -23,11 +23,13 @@ namespace API.Controllers
             return new StatusCodeResult(_context.CreateEvent(ev).ToStatus());
         }
 
-        [HttpGet]
+
+        // cant have two paths with the same name
+/*        [HttpGet]
         public IActionResult Get()
         {
             return new JsonResult(_context.GetEvents()) { StatusCode = StatusCodes.Status200OK };
-        }
+        }*/
 
         [HttpGet]
         public IActionResult Get([FromQuery] int id)
