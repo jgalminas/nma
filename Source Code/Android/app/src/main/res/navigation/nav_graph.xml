@@ -3,20 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/drawingFragment">
+    app:startDestination="@id/startFragment">
 
     <fragment
         android:id="@+id/drawingFragment"
-        android:name="com.example.nmadrawingapp.views.DrawingFragment"
+        android:name="com.example.nmadrawingapp.view.DrawingFragment"
         android:label="fragment_drawing"
-        tools:layout="@layout/fragment_drawing" >
-        <action
-            android:id="@+id/action_drawingFragment_to_uploadFragment"
-            app:destination="@id/uploadFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_drawing" />
     <fragment
         android:id="@+id/uploadFragment"
-        android:name="com.example.nmadrawingapp.views.UploadFragment"
+        android:name="com.example.nmadrawingapp.view.UploadFragment"
         android:label="fragment_upload"
         tools:layout="@layout/fragment_upload" />
+    <fragment
+        android:id="@+id/startFragment"
+        android:name="com.example.nmadrawingapp.view.StartFragment"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_startFragment_to_uploadFragment"
+            app:destination="@id/uploadFragment" />
+        <action
+            android:id="@+id/action_startFragment_to_drawingFragment"
+            app:destination="@id/drawingFragment" />
+    </fragment>
 </navigation>

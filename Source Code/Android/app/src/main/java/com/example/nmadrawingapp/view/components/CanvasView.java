@@ -1,4 +1,4 @@
-package com.example.nmadrawingapp.views.components;
+package com.example.nmadrawingapp.view.components;
 
 import android.content.Context;
 import android.graphics.Bitmap;
