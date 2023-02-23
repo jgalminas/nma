@@ -18,30 +18,31 @@ namespace API.Services.Implementations
             _storageClient = storageClient;
         }
 
-        /// <summary>
-        /// Find drawing by name in Backblaze S2
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <returns> A stream containing the image data </returns>
-        /// <exception cref="DrawingNotFound"></exception>
-        /// <exception cref="ServerError"></exception>
-        public async Task<DrawingStream> GetDrawingByName(string fileName)
+        public async Task DeleteDrawingAsync(string fileId)
+        {
+
+            throw new NotImplementedException();
+        }
+
+        public async Task<DrawingStream> GetDrawingByIdAsync(string fileId)
         {
 
             var stream = new MemoryStream();
-            var response = await _storageClient.DownloadAsync(
-                    _config["Backblaze:drawingsBucket:name"],
-                    fileName,
-                    stream
-                );
+            var response = await _storageClient.DownloadByIdAsync(fileId, stream);
 
             if (response.StatusCode == HttpStatusCode.NotFound)
             {
-                throw new DrawingNotFound("Drawing with this id does not exist");
-            } else if (response.StatusCode != HttpStatusCode.OK)
+                throw new NotFound("Drawing with this id does not exist");
+            }
+            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                throw new BadRequest("File id is not valid");
+            }
+            else if (response.StatusCode != HttpStatusCode.OK)
             {
                 throw new ServerError("An error occured while trying to communicate with Backblaze S2 Service");
-            } else
+            }
+            else
             {
                 return new DrawingStream(stream, response.Response.ContentType);
             }

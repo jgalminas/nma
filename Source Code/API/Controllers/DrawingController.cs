@@ -52,20 +52,25 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDrawingByName([FromQuery] string fileName)
+        public async Task<IActionResult> GetDrawingById([FromQuery] string fileId)
         {
 
             try
             {
-                DrawingStream drawing = await _drawingService.GetDrawingByName(fileName);
+                DrawingStream drawing = await _drawingService.GetDrawingByIdAsync(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
             catch (Exception e)
             {
-                if (e is DrawingNotFound)
+                if (e is NotFound)
                 {
                     return NotFound(e.Message);
-                } else
+                }
+                else if (e is BadRequest)
+                {
+                    return BadRequest(e.Message);
+                }
+                else
                 {
                     return StatusCode(500, e.Message);
                 }
