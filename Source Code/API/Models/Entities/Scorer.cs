@@ -1,8 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace API.Models
+namespace API.Models.Entities
 {
-    public class Topic
+    public class Scorer
     {
         [Key]
         public int ID { get; set; }

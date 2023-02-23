@@ -1,3 +1,4 @@
+using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 using static API.Controllers.DrawingController;
 

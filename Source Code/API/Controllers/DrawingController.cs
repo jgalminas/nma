@@ -1,4 +1,7 @@
+using API.Exceptions;
 using API.Models;
+using API.Models.Entities;
+using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -12,11 +15,13 @@ namespace API.Controllers
 
         private readonly DrawingContext _drawingContext;
         private readonly EventContext _eventContext;
+        private readonly IDrawingService _drawingService;
 
-        public DrawingController(DrawingContext drawingContext, EventContext eventContext)
+        public DrawingController(IDrawingService drawingService, DrawingContext drawingContext, EventContext eventContext)
         {
             _drawingContext = drawingContext;
             _eventContext = eventContext;
+            _drawingService = drawingService;
         }
 
         public class NewDrawing
@@ -47,10 +52,25 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] int id)
+        public async Task<IActionResult> GetDrawingByName([FromQuery] string fileName)
         {
-            // TODO
-            return null;
+
+            try
+            {
+                DrawingStream drawing = await _drawingService.GetDrawingByName(fileName);
+                return new FileStreamResult(drawing.Stream, drawing.ContentType);
+            }
+            catch (Exception e)
+            {
+                if (e is DrawingNotFound)
+                {
+                    return NotFound(e.Message);
+                } else
+                {
+                    return StatusCode(500, e.Message);
+                }
+            }
+            
         }
 
         [HttpPut]
