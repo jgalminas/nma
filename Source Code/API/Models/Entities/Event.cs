@@ -1,20 +1,23 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Event
+    public partial class Event
     {
-        [Key]
-        public int ID { get; set; }
+        public Event()
+        {
+            Drawings = new HashSet<Drawing>();
+        }
 
-        public string Name { get; set; } = string.Empty;
+        public int EventId { get; set; }
+        public int? LocationId { get; set; }
+        public string? EventName { get; set; }
+        public string? Notes { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? FinishTime { get; set; }
 
-        public string Notes { get; set; } = string.Empty;
-
-        public DateTime Start { get; set; }
-
-        public DateTime End { get; set; }
-
-        public bool Virtual { get; set; }
+        public virtual Location? Location { get; set; }
+        public virtual ICollection<Drawing> Drawings { get; set; }
     }
 }

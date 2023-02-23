@@ -1,23 +1,17 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class TopicScored
+    public partial class TopicScore
     {
-        [Key]
-        public int ID { get; set; }
+        public int TopicScoreId { get; set; }
+        public int? ScoreId { get; set; }
+        public int? TopicId { get; set; }
+        public int? Depth { get; set; }
+        public int? Extent { get; set; }
 
-        [ForeignKey("Score")]
-        private int _scoreID { get; set; }
-        public Score Score { get; set; } = new Score();
-
-        [ForeignKey("Topic")]
-        private int _topicID { get; set; }
-        public Topic Topic { get; set; } = new Topic();
-
-        public int Depth { get; set; }
-
-        public int Extent { get; set; }
+        public virtual Score? Score { get; set; }
+        public virtual Topic? Topic { get; set; }
     }
 }

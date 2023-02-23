@@ -1,23 +1,23 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Score
+    public partial class Score
     {
-        [Key]
-        public int ID { get; set; }
+        public Score()
+        {
+            TopicScores = new HashSet<TopicScore>();
+        }
 
-        [ForeignKey("Drawing")]
-        private int _drawingID { get; set; }
-        public Drawing Drawing { get; set; } = new Drawing();
+        public int ScoreId { get; set; }
+        public int? DrawingId { get; set; }
+        public int? ScorerId { get; set; }
+        public DateTime? ScoredAt { get; set; }
+        public string? Notes { get; set; }
 
-        public string Description { get; set; } = string.Empty;
-
-        [ForeignKey("Scorer")]
-        private int _scorerID { get; set; }
-        public Scorer Scorer { get; set; } = new Scorer();
-
-        public DateTime ScoredAt { get; set; }
+        public virtual Drawing? Drawing { get; set; }
+        public virtual Scorer? Scorer { get; set; }
+        public virtual ICollection<TopicScore> TopicScores { get; set; }
     }
 }

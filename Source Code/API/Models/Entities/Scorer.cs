@@ -1,12 +1,18 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Scorer
+    public partial class Scorer
     {
-        [Key]
-        public int ID { get; set; }
+        public Scorer()
+        {
+            Scores = new HashSet<Score>();
+        }
 
-        public string Name { get; set; } = string.Empty;
+        public int ScorerId { get; set; }
+        public string? Username { get; set; }
+
+        public virtual ICollection<Score> Scores { get; set; }
     }
 }

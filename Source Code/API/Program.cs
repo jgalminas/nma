@@ -1,7 +1,9 @@
+using API.Contexts;
 using API.Models;
 using API.Services.Implementations;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,13 +19,14 @@ builder.Services.AddSingleton<IStorageClient>(o => {
 });
 
 
+// Db Context
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration["ConnectionStrings:DB"]);
+});
+
 // Services
 builder.Services.AddScoped<IDrawingService, DrawingService>();
-
-
-builder.Services.AddDbContext<DrawingContext>();
-builder.Services.AddDbContext<EventContext>();
-builder.Services.AddDbContext<LocationContext>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

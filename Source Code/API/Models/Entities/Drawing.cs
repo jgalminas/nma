@@ -1,25 +1,23 @@
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Drawing
+    public partial class Drawing
     {
-        [Key]
-        public int ID { get; set; }
+        public Drawing()
+        {
+            Scores = new HashSet<Score>();
+        }
 
-        public DateTime Created { get; set; }
+        public int DrawingId { get; set; }
+        public int? EventId { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public int? DrawersAge { get; set; }
+        public string? FileId { get; set; }
+        public string? FileExt { get; set; }
 
-        public int CreatorAge { get; set; }
-
-        [ForeignKey("Event")]
-        private int _eventID { get; set; }
-        public Event Event { get; set; } = new Event();
-
-        public string FileGUID { get; set; } = string.Empty;
-
-        public string FileExt { get; set; } = string.Empty;
-
-        public bool Deleted { get; set; } = false;
+        public virtual Event? Event { get; set; }
+        public virtual ICollection<Score> Scores { get; set; }
     }
 }

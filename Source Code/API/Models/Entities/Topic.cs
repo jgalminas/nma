@@ -1,12 +1,18 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Topic
+    public partial class Topic
     {
-        [Key]
-        public int ID { get; set; }
+        public Topic()
+        {
+            TopicScores = new HashSet<TopicScore>();
+        }
 
-        public string Name { get; set; } = string.Empty;
+        public int TopicId { get; set; }
+        public string? TopicName { get; set; }
+
+        public virtual ICollection<TopicScore> TopicScores { get; set; }
     }
 }

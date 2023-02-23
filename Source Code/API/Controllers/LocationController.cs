@@ -10,17 +10,16 @@ namespace API.Controllers
     {
         // TODO: Swagger annotations
 
-        private readonly LocationContext _context;
 
-        public LocationController(LocationContext context)
+        public LocationController()
         {
-            _context = context;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            return new JsonResult(_context.GetLocations()) { StatusCode = StatusCodes.Status200OK };
-        }
+            return Ok();
+/*            return new JsonResult(_context.GetLocations()) { StatusCode = StatusCodes.Status200OK };
+*/        }
     }
 }

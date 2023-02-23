@@ -1,16 +1,20 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
 
 namespace API.Models.Entities
 {
-    public class Location
+    public partial class Location
     {
-        [Key]
-        public int ID { get; set; }
+        public Location()
+        {
+            Events = new HashSet<Event>();
+        }
 
-        public string Country { get; set; } = string.Empty;
+        public int LocationId { get; set; }
+        public string? Country { get; set; }
+        public string? City { get; set; }
+        public string? LocationName { get; set; }
 
-        public string City { get; set; } = string.Empty;
-
-        public string LocationName { get; set; } = string.Empty;
+        public virtual ICollection<Event> Events { get; set; }
     }
 }
