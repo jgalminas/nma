@@ -20,6 +20,7 @@ CREATE TABLE Drawing (
     CreatedAt DATETIME DEFAULT GETDATE(),
     DrawersAge INT,
     FileId VARCHAR(98),
+    FileName UNIQUEIDENTIFIER,
     FileExt VARCHAR(4),
     DrawersName NVARCHAR(49)
 )
