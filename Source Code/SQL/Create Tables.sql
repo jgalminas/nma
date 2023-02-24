@@ -8,7 +8,7 @@ CREATE TABLE Location (
 CREATE TABLE Event (
     EventId INT PRIMARY KEY IDENTITY(1,1),
     LocationId INT FOREIGN KEY REFERENCES Location(LocationId),
-    EventName VARCHAR(95),
+    EventName NVARCHAR(95),
     Notes NVARCHAR(1023),
     StartTime DATETIME,
     FinishTime DATETIME
@@ -19,8 +19,10 @@ CREATE TABLE Drawing (
     EventId INT FOREIGN KEY REFERENCES Event(EventId),
     CreatedAt DATETIME DEFAULT GETDATE(),
     DrawersAge INT,
-    FileId VARCHAR(98),
-    FileExt VARCHAR(4)
+    FileId VARCHAR(99),
+    FileName UNIQUEIDENTIFIER,
+    FileExt VARCHAR(4),
+    DrawersName NVARCHAR(49)
 )
 
 CREATE TABLE Scorer (
@@ -38,7 +40,7 @@ CREATE TABLE Score (
 
 CREATE TABLE Topic (
     TopicId INT PRIMARY KEY IDENTITY(1,1),
-    TopicName VARCHAR(63)
+    TopicName NVARCHAR(63)
 )
 
 CREATE TABLE TopicScores (

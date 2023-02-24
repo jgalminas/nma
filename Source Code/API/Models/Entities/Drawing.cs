@@ -15,7 +15,9 @@ namespace API.Models.Entities
         public DateTime? CreatedAt { get; set; }
         public int? DrawersAge { get; set; }
         public string? FileId { get; set; }
+        public Guid? FileName { get; set; }
         public string? FileExt { get; set; }
+        public string? DrawersName { get; set; }
 
         public virtual Event? Event { get; set; }
         public virtual ICollection<Score> Scores { get; set; }
