@@ -19,7 +19,7 @@ CREATE TABLE Drawing (
     EventId INT FOREIGN KEY REFERENCES Event(EventId),
     CreatedAt DATETIME DEFAULT GETDATE(),
     DrawersAge INT,
-    FileId VARCHAR(98),
+    FileId VARCHAR(99),
     FileName UNIQUEIDENTIFIER,
     FileExt VARCHAR(4),
     DrawersName NVARCHAR(49)
