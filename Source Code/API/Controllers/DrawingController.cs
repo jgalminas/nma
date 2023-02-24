@@ -1,6 +1,7 @@
 using API.Exceptions;
 using API.Models;
-using API.Models.Entities;
+using API.Models.DTOs;
+using API.Models.Responses;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,7 +9,6 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Produces("application/json")]
     public class DrawingController : ControllerBase
     {
         // TODO: Swagger annotations
@@ -20,31 +20,36 @@ namespace API.Controllers
             _drawingService = drawingService;
         }
 
-        public class NewDrawing
-        {
-            public DateTime Created { get; set; }
-
-            public int CreatorAge { get; set; }
-
-            public int EventID { get; set; }
-        }
-
         [HttpPost]
-        public IActionResult Post([FromForm] IFormFile image, [FromBody] NewDrawing drawing)
+        public async Task<IActionResult> Post([FromForm]NewDrawingDTO data)
         {
-/*            Event? ev = _eventContext.GetEvent(drawing.EventID);
-            if (ev == null) return new StatusCodeResult(StatusCodes.Status404NotFound);
 
-            Drawing d = new Drawing() {
-                Created = drawing.Created,
-                DrawersAge = drawing.CreatorAge,
-                Event = ev,
-                // TODO
-                FileGUID = "",
-                FileExt = Path.GetExtension(image.FileName).Substring(1),
-            };*/
+            try
+            {
+                var drawingId = await _drawingService.UploadDrawingAsync(data);
+                return Ok(new IdResponse()
+                {
+                    Id = drawingId,
+                    Message = "OK"
+                });
+            }
+            catch (Exception e)
+            {
+                if (e is NotFound)
+                {
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                } else
+                {
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+            }
 
-            return new StatusCodeResult(2);
         }
 
         [HttpGet]
@@ -60,22 +65,31 @@ namespace API.Controllers
             {
                 if (e is NotFound)
                 {
-                    return NotFound(e.Message);
+                    return NotFound(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
                 }
                 else if (e is BadRequest)
                 {
-                    return BadRequest(e.Message);
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
                 }
                 else
                 {
-                    return StatusCode(500, e.Message);
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
                 }
             }
             
         }
 
         [HttpPut]
-        public IActionResult Put([FromQuery] int id, [FromBody] NewDrawing drawing)
+        public IActionResult Put([FromQuery] int id, [FromBody] NewDrawingDTO drawing)
         {
             return Ok();
 /*            return new StatusCodeResult(_drawingContext.UpdateDrawing(id, drawing).ToStatus());

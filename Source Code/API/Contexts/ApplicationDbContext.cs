@@ -1,5 +1,8 @@
-﻿using API.Models.Entities;
+﻿using System;
+using System.Collections.Generic;
+using API.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace API.Contexts
 {
@@ -32,27 +35,27 @@ namespace API.Contexts
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
 
+                entity.Property(e => e.DrawersName).HasMaxLength(49);
+
                 entity.Property(e => e.FileExt)
                     .HasMaxLength(4)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FileId)
-                    .HasMaxLength(98)
+                    .HasMaxLength(99)
                     .IsUnicode(false);
 
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.Drawings)
                     .HasForeignKey(d => d.EventId)
-                    .HasConstraintName("FK__Drawing__EventId__4F7CD00D");
+                    .HasConstraintName("FK__Drawing__EventId__09A971A2");
             });
 
             modelBuilder.Entity<Event>(entity =>
             {
                 entity.ToTable("Event");
 
-                entity.Property(e => e.EventName)
-                    .HasMaxLength(95)
-                    .IsUnicode(false);
+                entity.Property(e => e.EventName).HasMaxLength(95);
 
                 entity.Property(e => e.FinishTime).HasColumnType("datetime");
 
@@ -63,7 +66,7 @@ namespace API.Contexts
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.Events)
                     .HasForeignKey(d => d.LocationId)
-                    .HasConstraintName("FK__Event__LocationI__4CA06362");
+                    .HasConstraintName("FK__Event__LocationI__06CD04F7");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -96,12 +99,12 @@ namespace API.Contexts
                 entity.HasOne(d => d.Drawing)
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.DrawingId)
-                    .HasConstraintName("FK__Score__DrawingId__5535A963");
+                    .HasConstraintName("FK__Score__DrawingId__0F624AF8");
 
                 entity.HasOne(d => d.Scorer)
                     .WithMany(p => p.Scores)
                     .HasForeignKey(d => d.ScorerId)
-                    .HasConstraintName("FK__Score__ScorerId__5629CD9C");
+                    .HasConstraintName("FK__Score__ScorerId__10566F31");
             });
 
             modelBuilder.Entity<Scorer>(entity =>
@@ -117,9 +120,7 @@ namespace API.Contexts
             {
                 entity.ToTable("Topic");
 
-                entity.Property(e => e.TopicName)
-                    .HasMaxLength(63)
-                    .IsUnicode(false);
+                entity.Property(e => e.TopicName).HasMaxLength(63);
             });
 
             modelBuilder.Entity<TopicScore>(entity =>
@@ -127,12 +128,12 @@ namespace API.Contexts
                 entity.HasOne(d => d.Score)
                     .WithMany(p => p.TopicScores)
                     .HasForeignKey(d => d.ScoreId)
-                    .HasConstraintName("FK__TopicScor__Score__5BE2A6F2");
+                    .HasConstraintName("FK__TopicScor__Score__160F4887");
 
                 entity.HasOne(d => d.Topic)
                     .WithMany(p => p.TopicScores)
                     .HasForeignKey(d => d.TopicId)
-                    .HasConstraintName("FK__TopicScor__Topic__5CD6CB2B");
+                    .HasConstraintName("FK__TopicScor__Topic__17036CC0");
             });
 
             OnModelCreatingPartial(modelBuilder);
