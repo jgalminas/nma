@@ -1,10 +1,10 @@
 ﻿using API.Contexts;
 using API.Exceptions;
-using API.Models;
 using API.Models.DTOs;
 using API.Models.Entities;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
+using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -24,10 +24,45 @@ namespace API.Services.Implementations
             _storageClient = storageClient;
         }
 
-        public async Task DeleteDrawingAsync(string fileId)
+        /// <summary>
+        /// Delete drawing record from database and image from Backblaze S2
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="NotFound"></exception>
+        /// <exception cref="ServerError"></exception>
+        public async Task DeleteDrawingAsync(int id)
         {
 
-            throw new NotImplementedException();
+            // get drawing
+            var drawing = await _db.Drawings.FindAsync(id);
+
+            if (drawing == null)
+            {
+                throw new NotFound($"Drawing with id {id} doesn't exist");
+            }
+
+            // delete image from Backblaze S2
+            var response = await _storageClient.Files.DeleteAsync(
+                    drawing.FileId,
+                    $"{drawing.FileName}.{drawing.FileExt}"
+                );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ServerError();
+            }
+
+            // delete drawing record from database
+            _db.Drawings.Remove(drawing);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                throw new ServerError();
+            }
+
         }
 
         /// <summary>
@@ -38,7 +73,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
         /// <exception cref="BadRequest"></exception>
-        public async Task<DrawingStream> GetDrawingByIdAsync(string fileId)
+        public async Task<DrawingStreamDTO> GetDrawingByIdAsync(string fileId)
         {
 
             var stream = new MemoryStream();
@@ -58,7 +93,85 @@ namespace API.Services.Implementations
             }
             else
             {
-                return new DrawingStream(stream, response.Response.ContentType);
+                return new DrawingStreamDTO(stream, response.Response.ContentType);
+            }
+
+        }
+
+        /// <summary>
+        /// Get drawing data by id, including the scores
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns> Drawing data </returns>
+        /// <exception cref="NotFound"></exception>
+        public async Task<DrawingDTO> GetDrawingByIdAsync(int id)
+        {
+            
+            var drawing = await _db.Drawings.Select(d => new DrawingDTO()
+            {
+                // map drawing data
+                Id = d.DrawingId,
+                EventId = d.EventId,
+                CreatedAt = d.CreatedAt,
+                DrawersAge = d.DrawersAge,
+                DrawersName = d.DrawersName,
+                ImageUrl = $"/api/drawing/image/{d.FileId}",
+
+                // map score data
+                Scores = d.Scores.Select(s => new ScoreDTO()
+                {
+                    ScoreId = s.ScoreId,
+                    Breadth = s.TopicScores.Count(),
+                    ScoredAt = s.ScoredAt,
+                    ScoredBy = s.Scorer.Username,
+                    Notes = s.Notes,
+
+                    //map scores for each topic
+                    TopicScores = s.TopicScores.Select(ts => new TopicScoreDTO()
+                    {
+                        TopicScoreId = ts.TopicScoreId,
+                        Depth = ts.Depth,
+                        Extent = ts.Extent
+                    }).ToArray()
+
+                }).ToArray()
+
+            }).FirstOrDefaultAsync(d => d.Id == id);
+
+            if (drawing == null)
+            {
+                throw new NotFound($"Drawing with id {id} doesn't exist");
+            }
+
+            return drawing;
+        }
+
+        /// <summary>
+        /// Update some drawing values - drawers name, age and the event id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        /// <exception cref="NotFound"></exception>
+        public async Task UpdateDrawingAsync(int id, DrawingUpdateDTO data)
+        {
+
+            var drawing = await _db.Drawings.FindAsync(id);
+
+            if (drawing == null)
+            {
+                throw new NotFound($"Drawing with id {id} doesn't exist");
+            }
+
+            drawing.DrawersName = data.DrawersName;
+            drawing.DrawersAge = data.DrawersAge;
+            drawing.EventId = data.EventId;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            } catch (ReferenceConstraintException)
+            {
+                throw new NotFound($"Event with id {data.EventId} doesn't exist");
             }
 
         }

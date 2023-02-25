@@ -1,9 +1,9 @@
-﻿namespace API.Models
+﻿namespace API.Models.DTOs
 {
-    public class DrawingStream
+    public class DrawingStreamDTO
     {
 
-        public DrawingStream(Stream stream, string mymeType)
+        public DrawingStreamDTO(Stream stream, string mymeType)
         {
             Stream = stream;
             ContentType = mymeType;
