@@ -106,10 +106,33 @@ namespace API.Controllers
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromQuery] int id)
+        [Route("{id:int}")]
+        public async Task<IActionResult> Delete(int id)
         {
-            return Ok();
+            try
+            {
+                await _drawingService.DeleteDrawingAsync(id);
+                return Ok();
+            } catch (Exception e)
+            {
+                if (e is NotFound)
+                {
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                } 
+                else
+                {
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+            }
+
 /*            return new StatusCodeResult(_drawingContext.DeleteDrawing(id).ToStatus());
-*/        }
+*/
+          }
     }
 }

@@ -24,10 +24,45 @@ namespace API.Services.Implementations
             _storageClient = storageClient;
         }
 
-        public async Task DeleteDrawingAsync(string fileId)
+        /// <summary>
+        /// Delete drawing record from database and image from Backblaze S2
+        /// </summary>
+        /// <param name="id"></param>
+        /// <exception cref="NotFound"></exception>
+        /// <exception cref="ServerError"></exception>
+        public async Task DeleteDrawingAsync(int id)
         {
 
-            throw new NotImplementedException();
+            // get drawing
+            var drawing = await _db.Drawings.FindAsync(id);
+
+            if (drawing == null)
+            {
+                throw new NotFound($"Drawing with id {id} doesn't exist");
+            }
+
+            // delete image from Backblaze S2
+            var response = await _storageClient.Files.DeleteAsync(
+                    drawing.FileId,
+                    $"{drawing.FileName}.{drawing.FileExt}"
+                );
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new ServerError();
+            }
+
+            // delete drawing record from database
+            _db.Drawings.Remove(drawing);
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            } catch (DbUpdateException)
+            {
+                throw new ServerError();
+            }
+
         }
 
         /// <summary>
