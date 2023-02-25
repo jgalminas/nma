@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("Api/[Controller]")]
     public class DrawingController : ControllerBase
     {
 
@@ -51,7 +51,26 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetDrawingById([FromQuery] string fileId)
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetDrawing(int id)
+        {
+            try
+            {
+                var drawing = await _drawingService.GetDrawingByIdAsync(id);
+                return Ok(drawing);
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+        }
+
+        [HttpGet]
+        [Route("Image/{fileId}")]
+        public async Task<IActionResult> GetImage(string fileId)
         {
 
             try
@@ -107,7 +126,7 @@ namespace API.Controllers
 
         [HttpDelete]
         [Route("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> DeleteDrawing(int id)
         {
             try
             {
@@ -130,9 +149,6 @@ namespace API.Controllers
                     });
                 }
             }
-
-/*            return new StatusCodeResult(_drawingContext.DeleteDrawing(id).ToStatus());
-*/
           }
     }
 }
