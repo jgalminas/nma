@@ -1,10 +1,10 @@
 ﻿using API.Contexts;
 using API.Exceptions;
-using API.Models;
 using API.Models.DTOs;
 using API.Models.Entities;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
+using EntityFramework.Exceptions.Common;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
 
@@ -38,7 +38,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
         /// <exception cref="BadRequest"></exception>
-        public async Task<DrawingStream> GetDrawingByIdAsync(string fileId)
+        public async Task<DrawingStreamDTO> GetDrawingByIdAsync(string fileId)
         {
 
             var stream = new MemoryStream();
@@ -58,7 +58,37 @@ namespace API.Services.Implementations
             }
             else
             {
-                return new DrawingStream(stream, response.Response.ContentType);
+                return new DrawingStreamDTO(stream, response.Response.ContentType);
+            }
+
+        }
+
+        /// <summary>
+        /// Update some drawing values - drawers name, age and the event id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="data"></param>
+        /// <exception cref="NotFound"></exception>
+        public async Task UpdateDrawingAsync(int id, DrawingUpdateDTO data)
+        {
+
+            var drawing = await _db.Drawings.FindAsync(id);
+
+            if (drawing == null)
+            {
+                throw new NotFound($"Drawing with id {id} doesn't exist");
+            }
+
+            drawing.DrawersName = data.DrawersName;
+            drawing.DrawersAge = data.DrawersAge;
+            drawing.EventId = data.EventId;
+
+            try
+            {
+                await _db.SaveChangesAsync();
+            } catch (ReferenceConstraintException)
+            {
+                throw new NotFound($"Event with id {data.EventId} doesn't exist");
             }
 
         }

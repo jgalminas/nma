@@ -1,5 +1,4 @@
 using API.Exceptions;
-using API.Models;
 using API.Models.DTOs;
 using API.Models.Responses;
 using API.Services.Interfaces;
@@ -11,7 +10,6 @@ namespace API.Controllers
     [Route("api/[controller]")]
     public class DrawingController : ControllerBase
     {
-        // TODO: Swagger annotations
 
         private readonly IDrawingService _drawingService;
 
@@ -21,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromForm]NewDrawingDTO data)
+        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
         {
 
             try
@@ -58,7 +56,7 @@ namespace API.Controllers
 
             try
             {
-                DrawingStream drawing = await _drawingService.GetDrawingByIdAsync(fileId);
+                DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
             catch (Exception e)
@@ -88,12 +86,24 @@ namespace API.Controllers
             
         }
 
-        [HttpPut]
-        public IActionResult Put([FromQuery] int id, [FromBody] NewDrawingDTO drawing)
+        [HttpPatch]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateDrawing(int id, [FromBody] DrawingUpdateDTO data)
         {
-            return Ok();
-/*            return new StatusCodeResult(_drawingContext.UpdateDrawing(id, drawing).ToStatus());
-*/        }
+            try
+            {
+                await _drawingService.UpdateDrawingAsync(id, data);
+                return Ok();
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+
+        }
 
         [HttpDelete]
         public IActionResult Delete([FromQuery] int id)

@@ -3,6 +3,7 @@ using API.Models;
 using API.Services.Implementations;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
+using EntityFramework.Exceptions.SqlServer;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,7 @@ builder.Services.AddSingleton<IStorageClient>(o => {
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration["ConnectionStrings:DB"]);
+    options.UseExceptionProcessor();
 });
 
 // Services
