@@ -36,6 +36,7 @@ public class DrawingFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
     private FragmentDrawingBinding binding;
+
     private Dialog dialog;
 
     Button changeColorRed;
