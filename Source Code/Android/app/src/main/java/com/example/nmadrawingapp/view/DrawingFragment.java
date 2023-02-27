@@ -2,6 +2,7 @@ package com.example.nmadrawingapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -16,12 +17,14 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
+import com.example.nmadrawingapp.view.components.CanvasView;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
 
 import javax.inject.Inject;
@@ -35,17 +38,36 @@ public class DrawingFragment extends Fragment {
     private FragmentDrawingBinding binding;
     private Dialog dialog;
 
+    Button changeColorRed;
+    Button changeColourOrange;
+    Button changeColourYellow;
+    Button changeColourYellowGreen;
+    Button changeColorGreen;
+    Button changeColorBlueGreen;
+    Button changeColorLightBlue;
+    // Required empty public constructor
+    Button changeColorBlue;
+    Button changeColorBlueViolet;
+    Button changeColorRedViolet;
+    Button changeColorBrown;
+    Button changeColorBlack;
+
     @Inject
     ImageRepository imageRepository; // for testing purposes
 
     public DrawingFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
+
+        changeColorBlue.findViewById(R.id.buttonColorBlue);
+        changeColorBlue.setOnClickListener(button -> {
+            //CanvasView.BrushSettings.setColor(R.color.blue);
+        });
+
     }
 
     @Override

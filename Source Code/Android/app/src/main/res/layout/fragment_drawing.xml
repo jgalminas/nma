@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save_drawing_button"
             style="@style/PrimaryButton"
@@ -33,11 +34,196 @@
 
     <com.example.nmadrawingapp.view.components.CanvasView
         android:id="@+id/canvas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="1177dp"
+        android:layout_height="714dp"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drawing_header"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/buttonColorRed"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:cornerRadius="25dp"
+        android:insetBottom="0dp"
+        android:insetTop="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
+        android:backgroundTint="@color/red"
+
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/drawing_header" />
+
+    <Button
+        android:id="@+id/buttonColorOrange"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/orange"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorRed" />
+
+    <Button
+        android:id="@+id/buttonColorYellow"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/yellow"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorOrange" />
+
+    <Button
+        android:id="@+id/buttonColorYellowGreen"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/yellow_green"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorYellow" />
+
+    <Button
+        android:id="@+id/buttonColorGreen"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/green"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorYellowGreen" />
+
+    <Button
+        android:id="@+id/buttonColorBlueGreen"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue_green"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorGreen" />
+
+    <Button
+        android:id="@+id/buttonColorLightBlue"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/light_blue"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorBlueGreen" />
+
+    <Button
+        android:id="@+id/buttonColorBlue"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorLightBlue" />
+
+    <Button
+        android:id="@+id/buttonColorBlueViolet"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/blue_violet"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorBlue" />
+
+    <Button
+        android:id="@+id/buttonColorRedViolet"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/red_violet"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorBlueViolet" />
+
+    <Button
+        android:id="@+id/buttonColorBrown"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/brown"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorRedViolet" />
+
+    <Button
+        android:id="@+id/buttonColorBlack"
+
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/black"
+        android:insetTop="0dp"
+
+        android:insetBottom="0dp"
+        app:cornerRadius="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonColorBrown" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

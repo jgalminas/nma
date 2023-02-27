@@ -1,6 +1,7 @@
 package com.example.nmadrawingapp.view.components;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -13,6 +14,8 @@ import android.view.View;
 import java.io.ByteArrayOutputStream;
 
 public class CanvasView extends View {
+
+
 
     public static class BrushSettings {
 

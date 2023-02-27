@@ -19,6 +19,21 @@
     <color name="secondary_blue">#74A4FF</color>
     <color name="primary_text">#201F27</color>
     <color name="secondary_text">#555861</color>
-    <color name="red">#EF5B47</color>
+
+    <color name="brown">#3D2814</color>
+    <color name="red">#FF0000</color>
+    <color name="red_orange">#FF2400</color>
+    <color name="orange">#FF7F00</color>
+    <color name="yellow_orange">#FFCC00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="yellow_green">#ADFF2F</color>
+    <color name="green">#00FF00</color>
+    <color name="blue_green">#008080</color>
+    <color name="light_blue">#9999FF</color>
+    <color name="blue">#0000FF</color>
+    <color name="blue_violet">#8A2BE2</color>
+    <color name="purple">#A020F0</color>
+    <color name="red_violet">#D02090</color>
+
     <color name="transparent">#00FFFFFF</color>
 </resources>
