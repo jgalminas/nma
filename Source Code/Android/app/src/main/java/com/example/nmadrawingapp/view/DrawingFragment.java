@@ -89,7 +89,10 @@ public class DrawingFragment extends Fragment {
             showDialog();
         });
 
-       binding.buttonColorBlue.setOnClickListener(button -> binding.canvas.getBrushSettings().setColor(Color.BLUE));
+       binding.buttonColorBlue.setOnClickListener(button -> {
+           ColorDrawable cd = new ColorDrawable(getResources().getColor(R.color.blue));
+           binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow_green));
+       });
 
     }
 
