@@ -18,7 +18,7 @@ public class CanvasView extends View {
 
 
     public static class BrushSettings {
-
+        
         private final Paint paint = new Paint();
 
         private BrushSettings() {

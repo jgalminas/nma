@@ -38,6 +38,8 @@ public class DrawingFragment extends Fragment {
     private FragmentDrawingBinding binding;
     private Dialog dialog;
 
+
+
     Button changeColorRed;
     Button changeColourOrange;
     Button changeColourYellow;
@@ -63,10 +65,10 @@ public class DrawingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        changeColorBlue.findViewById(R.id.buttonColorBlue);
-        changeColorBlue.setOnClickListener(button -> {
+        //changeColorBlue.findViewById(R.id.buttonColorBlue);
+        //changeColorBlue.setOnClickListener(button -> {
             //CanvasView.BrushSettings.setColor(R.color.blue);
-        });
+        //});
 
     }
 
@@ -85,6 +87,8 @@ public class DrawingFragment extends Fragment {
         binding.saveDrawingButton.setOnClickListener(button -> {
             showDialog();
         });
+
+       binding.buttonColorBlue.setOnClickListener(button -> binding.canvas.getBrushSettings().setColor(Color.BLUE));
 
     }
 
