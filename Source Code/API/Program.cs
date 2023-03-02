@@ -1,5 +1,4 @@
 using API.Contexts;
-using API.Models;
 using API.Services.Implementations;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
@@ -37,11 +36,8 @@ builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
