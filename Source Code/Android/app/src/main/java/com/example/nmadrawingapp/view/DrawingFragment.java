@@ -105,6 +105,7 @@ public class DrawingFragment extends Fragment {
             if (ageIsValid && nameIsValid) {
                 imageRepository.insertImage(new Image(
                         sharedViewModel.getEventId(),
+                        name,
                         age,
                         binding.canvas.getImageBytes()
                 ));

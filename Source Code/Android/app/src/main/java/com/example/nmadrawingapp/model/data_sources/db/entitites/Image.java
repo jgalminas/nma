@@ -10,7 +10,8 @@ public class Image {
 
     private static final String EXTENSION = "webp";
 
-    public Image(int eventId, int drawersAge, byte[] image) {
+    public Image(int eventId, String drawersName, int drawersAge, byte[] image) {
+        this.drawersName = drawersName;
         this.uuid = UUID.randomUUID();
         this.extension = EXTENSION;
         this.drawersAge = drawersAge;
@@ -28,6 +29,8 @@ public class Image {
     private String extension;
 
     private final int drawersAge;
+
+    private final String drawersName;
 
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
     private final byte[] image;
@@ -64,6 +67,10 @@ public class Image {
 
     public int getDrawersAge() {
         return drawersAge;
+    }
+
+    public String getDrawersName() {
+        return drawersName;
     }
 
     public int getEventId() {
