@@ -54,3 +54,29 @@ CREATE TABLE TopicScores (
     Depth INT,
     Extent INT
 )
+
+GO
+
+INSERT INTO Location(LocationName, City, Country)
+VALUES
+('Location 1', 'City', 'Country'),
+('Location 1', 'City', 'Country'),
+('Location 1', 'City', 'Country')
+
+INSERT INTO Event(LocationId, EventName, Notes)
+VALUES
+(1, 'Event 1', 'Event notes'),
+(2, 'Event 2', 'Event notes'),
+(3, 'Event 3', 'Event notes')
+
+INSERT INTO Scorer(Username)
+VALUES
+('Scorer 1'),
+('Scorer 2'),
+('Scorer 3')
+
+INSERT INTO Topic(TopicName)
+VALUES
+('Topic 1'),
+('Topic 2'),
+('Topic 3')
