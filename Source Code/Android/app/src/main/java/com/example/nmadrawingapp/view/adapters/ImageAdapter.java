@@ -182,9 +182,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public void setImages(List<Object> items) {
         this.items = items;
-
         setToSelectedOnLoad(items); // select all images on load
-
         notifyDataSetChanged();
     }
 
@@ -202,6 +200,50 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         selected.setValue(selectedImages);
+    }
+
+    public void removeImage(int imageId) {
+
+        for (int i = 0; i < items.size(); i++) {
+
+            Item it = (Item) items.get(i);
+
+            if (it.getType() == ItemType.Image) {
+
+                // find the image by id
+                if (((DisplayImage) it).getId() == imageId) {
+
+                    // check if its the last view in that event, if so remove the event view as well
+                    if (((Item)items.get(i - 1)).getType() == ItemType.Event && ((Item)items.get(i + 1)).getType() == ItemType.Event) {
+                        items.remove(it); // remove image
+                        items.remove(i - 1); // remove event view
+                        notifyItemRangeRemoved(i - 1, 2); // update recycler view
+                    } else {
+                        items.remove(it); // remove just image
+                        notifyItemRemoved(i); // update recycler
+                    }
+
+                    removeFromSelected(imageId); // update the selected item list
+
+                }
+
+            }
+        }
+
+    }
+
+    private void removeFromSelected(int imageId) {
+
+        for (int i = 0; i < selected.getValue().size(); i++) {
+
+            if (selected.getValue().get(i) == imageId) {
+                ArrayList<Integer> list = selected.getValue();
+                list.remove(i);
+                selected.setValue(list);
+            }
+
+        }
+
     }
 
     private void updateSelectedList(ImageViewHolder holder, DisplayImage image) {

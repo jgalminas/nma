@@ -14,6 +14,6 @@ public interface IImageRepository {
     void getImageCount(Callback<Integer> callback);
     void insertImage(Image image);
     void deleteImage(Image image);
-    LiveData<ResponseStatus> uploadImage(int eventId, Image image);
+    void uploadImage(Image image, Callback<ResponseStatus> callback);
 
 }

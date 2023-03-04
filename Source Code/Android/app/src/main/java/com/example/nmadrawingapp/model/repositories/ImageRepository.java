@@ -74,34 +74,33 @@ public class ImageRepository implements IImageRepository {
     }
 
     @Override
-    public LiveData<ResponseStatus> uploadImage(int eventId, Image image) {
-
-        MutableLiveData<ResponseStatus> status = new MutableLiveData<>(ResponseStatus.LOADING);
+    public void uploadImage(Image image, Callback<ResponseStatus> callback) {
 
         MultipartBody.Part file = MultipartBody.Part.createFormData(
                 "File",
-                "image.webp",
-                RequestBody.create(MediaType.parse("image/webp"),
+                "image." + image.getExtension(),
+                RequestBody.create(MediaType.parse("image/" + image.getExtension()),
                 image.getImage())
         );
 
-        api.postDrawing(eventId, file, image.getDrawersName(), image.getDrawersAge()).enqueue(new retrofit2.Callback<Void>() {
+        api.postDrawing(image.getEventId(), file, image.getDrawersName(), image.getDrawersAge()).enqueue(new retrofit2.Callback<Void>() {
             @Override
             public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
                 if (response.isSuccessful()) {
-                    status.setValue(ResponseStatus.SUCCESS);
-                } else {
-                    status.setValue(ResponseStatus.ERROR);
+                    callback.onComplete(ResponseStatus.SUCCESS);
+                } else if (response.code() == 400) {
+                    callback.onComplete(ResponseStatus.INVALID_EVENT_ID);
+                }else {
+                    callback.onComplete(ResponseStatus.ERROR);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                status.setValue(ResponseStatus.ERROR);
+                callback.onComplete(ResponseStatus.ERROR);
             }
         });
 
-        return status;
     }
 
 }

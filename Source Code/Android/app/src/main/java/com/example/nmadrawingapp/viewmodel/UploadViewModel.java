@@ -9,8 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
+import com.example.nmadrawingapp.model.UploadingResponse;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.model.enums.ResponseStatus;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
 import java.util.ArrayList;
@@ -76,6 +78,36 @@ public class UploadViewModel extends ViewModel {
         int h = (int)(w * 0.5625);
 
         return Bitmap.createScaledBitmap(b, w, h, false);
+    }
+
+    public LiveData<UploadingResponse> uploadImage(int id) {
+
+        MutableLiveData<UploadingResponse> status = new MutableLiveData<>(new UploadingResponse(id, ResponseStatus.LOADING));
+
+        imageRepository.getImageById(id, new Callback<Image>() {
+            @Override
+            public void onComplete(Image image) {
+
+                imageRepository.uploadImage(image, new Callback<ResponseStatus>() {
+                    @Override
+                    public void onComplete(ResponseStatus result) {
+
+                        if (result == ResponseStatus.SUCCESS) {
+                            status.postValue(new UploadingResponse(id, ResponseStatus.SUCCESS));
+                            imageRepository.deleteImage(image);
+                        } else if (result == ResponseStatus.INVALID_EVENT_ID) {
+                            status.postValue(new UploadingResponse(id, ResponseStatus.INVALID_EVENT_ID));
+                        } else {
+                            status.postValue(new UploadingResponse(id, ResponseStatus.ERROR));
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+        return status;
     }
 
 }
