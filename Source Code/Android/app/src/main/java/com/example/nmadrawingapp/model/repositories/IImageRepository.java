@@ -2,6 +2,7 @@ package com.example.nmadrawingapp.model.repositories;
 
 import androidx.lifecycle.LiveData;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
+import com.example.nmadrawingapp.model.enums.ResponseStatus;
 import com.example.nmadrawingapp.utils.Callback;
 
 import java.util.List;
@@ -13,5 +14,6 @@ public interface IImageRepository {
     void getImageCount(Callback<Integer> callback);
     void insertImage(Image image);
     void deleteImage(Image image);
+    LiveData<ResponseStatus> uploadImage(int eventId, Image image);
 
 }
