@@ -52,11 +52,11 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task<int> CreateEventAsync(NewEventDTO data)
         {
-            if (await _db.Locations.FindAsync(data.LocationID) is Location location)
+            if (await _db.Locations.FindAsync(data.LocationId) is Location location)
             {
                 var ev = new Event()
                 {
-                    LocationId = data.LocationID,
+                    LocationId = data.LocationId,
                     EventName = data.EventName,
                     Notes = data.Notes,
                     StartTime = data.StartTime,
@@ -77,7 +77,7 @@ namespace API.Services.Implementations
             }
             else
             {
-                throw new NotFound($"Location with id {data.LocationID} doesn't exist");
+                throw new NotFound($"Location with id {data.LocationId} doesn't exist");
             }
         }
 
