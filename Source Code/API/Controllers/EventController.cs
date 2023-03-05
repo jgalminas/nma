@@ -20,7 +20,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromForm] NewEventDTO data)
+        public async Task<IActionResult> CreateEvent([FromForm] EventNewDTO data)
         {
             try
             {

@@ -183,7 +183,7 @@ namespace API.Services.Implementations
         /// <returns> The ID of the Drawing record if successful </returns>
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
-        public async Task<int> UploadDrawingAsync(NewDrawingDTO data)
+        public async Task<int> UploadDrawingAsync(DrawingNewDTO data)
         {
 
             // check if event with specified ID exists

@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
+        public async Task<IActionResult> UploadDrawing([FromForm] DrawingNewDTO data)
         {
 
             try

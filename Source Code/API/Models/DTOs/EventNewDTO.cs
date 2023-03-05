@@ -1,6 +1,6 @@
 namespace API.Models.DTOs
 {
-    public class NewEventDTO
+    public class EventNewDTO
     {
         public int LocationId { get; set; }
         public string EventName { get; set; }

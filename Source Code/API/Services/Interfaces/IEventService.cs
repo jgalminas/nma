@@ -7,7 +7,7 @@ namespace API.Services.Interfaces
     {
         Task<Event> GetEventByIdAsync(int id);
         Task<Event[]> GetEventsAsync();
-        Task<int> CreateEventAsync(NewEventDTO data);
+        Task<int> CreateEventAsync(EventNewDTO data);
         Task UpdateEventAsync(int id, EventUpdateDTO data);
         Task DeleteEventAsync(int id);
     }

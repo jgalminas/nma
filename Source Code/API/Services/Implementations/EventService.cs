@@ -50,7 +50,7 @@ namespace API.Services.Implementations
         /// <returns> An event id </returns>
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
-        public async Task<int> CreateEventAsync(NewEventDTO data)
+        public async Task<int> CreateEventAsync(EventNewDTO data)
         {
             if (await _db.Locations.FindAsync(data.LocationId) is Location location)
             {
