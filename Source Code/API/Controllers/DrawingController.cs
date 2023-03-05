@@ -133,7 +133,7 @@ namespace API.Controllers
                 {
                     Message = e.Message
                 });
-            } 
+            }
             catch (Exception e)
             {
                 return StatusCode(500, new GenericResponse()

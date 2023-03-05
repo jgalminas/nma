@@ -32,11 +32,11 @@ namespace API.Controllers
             }
             catch (NotFound e)
             {
-                return BadRequest(new GenericResponse() { Message = e.Message } );
+                return BadRequest(new GenericResponse() { Message = e.Message });
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse() { Message = e.Message } );
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
         }
 
@@ -56,7 +56,7 @@ namespace API.Controllers
             }
             catch (NotFound e)
             {
-                return BadRequest(new GenericResponse() { Message = e.Message } );
+                return BadRequest(new GenericResponse() { Message = e.Message });
             }
         }
 
@@ -71,7 +71,7 @@ namespace API.Controllers
             }
             catch (NotFound e)
             {
-                return BadRequest(new GenericResponse() { Message = e.Message } );
+                return BadRequest(new GenericResponse() { Message = e.Message });
             }
         }
 
@@ -86,11 +86,11 @@ namespace API.Controllers
             }
             catch (NotFound e)
             {
-                return BadRequest(new GenericResponse() { Message = e.Message } );
+                return BadRequest(new GenericResponse() { Message = e.Message });
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse() { Message = e.Message } );
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
         }
     }
