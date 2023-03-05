@@ -1,4 +1,5 @@
 using API.Models;
+using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -8,18 +9,16 @@ namespace API.Controllers
     [Produces("application/json")]
     public class LocationController : ControllerBase
     {
-        // TODO: Swagger annotations
+        private readonly ILocationService _locationService;
 
-
-        public LocationController()
+        public LocationController(ILocationService locationService)
         {
+            _locationService = locationService;
         }
-
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> GetLocations()
         {
-            return Ok();
-/*            return new JsonResult(_context.GetLocations()) { StatusCode = StatusCodes.Status200OK };
-*/        }
+            return Ok(await _locationService.GetLocationsAsync());
+        }
     }
 }
