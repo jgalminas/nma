@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioGroup;
 
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
@@ -39,21 +40,11 @@ public class DrawingFragment extends Fragment {
 
     private Dialog dialog;
 
+    private RadioGroup colorSelection;
+    private RadioGroup drawTypeSelection;
+    private RadioGroup strokeWidthSelection;
 
 
-    Button changeColorRed;
-    Button changeColourOrange;
-    Button changeColourYellow;
-    Button changeColourYellowGreen;
-    Button changeColorGreen;
-    Button changeColorBlueGreen;
-    Button changeColorLightBlue;
-    // Required empty public constructor
-    Button changeColorBlue;
-    Button changeColorBlueViolet;
-    Button changeColorRedViolet;
-    Button changeColorBrown;
-    Button changeColorBlack;
 
     @Inject
     ImageRepository imageRepository; // for testing purposes
@@ -66,10 +57,7 @@ public class DrawingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         sharedViewModel = new ViewModelProvider(requireActivity()).get(SharedViewModel.class);
 
-        //changeColorBlue.findViewById(R.id.buttonColorBlue);
-        //changeColorBlue.setOnClickListener(button -> {
-            //CanvasView.BrushSettings.setColor(R.color.blue);
-        //});
+
 
     }
 
@@ -89,10 +77,101 @@ public class DrawingFragment extends Fragment {
             showDialog();
         });
 
-       binding.buttonColorBlue.setOnClickListener(button -> {
-           ColorDrawable cd = new ColorDrawable(getResources().getColor(R.color.blue));
-           binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow_green));
-       });
+        colorSelection = (RadioGroup) getView().findViewById(R.id.radioGroupColorSelector);
+        colorSelection.check(R.id.radioButtonBlack);
+        colorSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+
+                switch(i){
+                    case R.id.radioButtonRed:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red));
+                        break;
+                    case R.id.radioButtonOrange:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.orange));
+                        break;
+                    case R.id.radioButtonYellow:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow));
+                        break;
+                    case R.id.radioButtonYellowGreen:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow_green));
+                        break;
+                    case R.id.radioButtonGreen:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.green));
+                        break;
+                    case R.id.radioButtonBlueGreen:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue_green));
+                        break;
+                    case R.id.radioButtonLightBlue:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.light_blue));
+                        break;
+                    case R.id.radioButtonBlue:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
+                        break;
+                    case R.id.radioButtonPurple:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.purple));
+                        break;
+                    case R.id.radioButtonRedViolet:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red_violet));
+                        break;
+                    case R.id.radioButtonBrown:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.brown));
+                        break;
+                    case R.id.radioButtonBlack:
+                        binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.black));
+                        break;
+
+                }
+            }
+
+
+
+        });
+
+        drawTypeSelection = (RadioGroup) getView().findViewById(R.id.radioGroupDrawTypeSelection);
+        drawTypeSelection.check(R.id.radioButtonLineDraw);
+        drawTypeSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioButtonLineDraw:
+                        binding.canvas.setStyleStroke();
+                        break;
+                    case R.id.radioButtonFillDraw:
+                        binding.canvas.setStyleFill();
+                        break;
+                }
+            }
+        });
+
+        strokeWidthSelection = (RadioGroup) getView().findViewById((R.id.radioGroupStrokeSelection));
+        strokeWidthSelection.check(R.id.radioButtonMediumStroke);
+        strokeWidthSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup radioGroup, int i) {
+                switch (i){
+                    case R.id.radioButtonThinnestStroke:
+                        binding.canvas.getBrushSettings().setWidth(3);
+                        break;
+                    case R.id.radioButtonThinStroke:
+                        binding.canvas.getBrushSettings().setWidth(6);
+                        break;
+                    case R.id.radioButtonMediumStroke:
+                        binding.canvas.getBrushSettings().setWidth(9);
+                        break;
+                    case R.id.radioButtonThickStroke:
+                        binding.canvas.getBrushSettings().setWidth(12);
+                        break;
+                    case R.id.radioButtonThickestStroke:
+                        binding.canvas.getBrushSettings().setWidth(15);
+                        break;
+                }
+            }
+        });
+//       binding.buttonColorBlue.setOnClickListener(button -> {
+//
+//           binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
+//       });
 
     }
 

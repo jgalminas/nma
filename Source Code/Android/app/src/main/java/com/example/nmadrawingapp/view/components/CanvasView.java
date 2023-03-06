@@ -17,6 +17,7 @@ public class CanvasView extends View {
 
 
 
+
     public static class BrushSettings {
         
         private final Paint paint = new Paint();
@@ -46,6 +47,8 @@ public class CanvasView extends View {
         public float getWidth() {
             return paint.getStrokeWidth();
         }
+
+
 
         private Paint getPaint() {
             return paint;
@@ -149,6 +152,14 @@ public class CanvasView extends View {
 
     public BrushSettings getBrushSettings() {
         return brushSettings;
+    }
+
+    public void setStyleFill(){
+        brushSettings.paint.setStyle(Paint.Style.FILL);
+    }
+
+    public void setStyleStroke(){
+        brushSettings.paint.setStyle((Paint.Style.STROKE));
     }
 
     public void clearCanvas() {
