@@ -90,7 +90,7 @@
         android:text="@string/enter_your_age"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/name_input" />
 
     <TextView
         android:id="@+id/error_message"
@@ -116,7 +116,7 @@
         app:layout_constraintTop_toBottomOf="@+id/dialog_divider" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/name_input"
         style="@style/EditText"
         android:layout_width="736dp"
         android:layout_height="49dp"

@@ -197,6 +197,8 @@ public class DrawingFragment extends Fragment {
 
         EditText ageInput = dialog.findViewById(R.id.age_input);
 
+        EditText nameInput = dialog.findViewById(R.id.name_input);
+
         // register on cancel listener
         dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
             dialog.cancel();
