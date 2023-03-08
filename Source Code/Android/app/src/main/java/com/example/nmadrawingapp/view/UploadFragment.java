@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class UploadFragment extends Fragment {
 
-    public static final int COLUMN_COUNT = 5; // num of columns in recycler view grid
+    public static final int COLUMN_COUNT = 4; // num of columns in recycler view grid
     public static final int GAP = 40; // gap size between items in recycler view
 
     private FragmentUploadBinding binding;
@@ -56,9 +57,9 @@ public class UploadFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // set up image recycler view
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), COLUMN_COUNT);
         ImageAdapter adapter = new ImageAdapter(layoutManager);
-
         binding.imagesRecycler.setLayoutManager(layoutManager);
         binding.imagesRecycler.setItemAnimator(new DefaultItemAnimator());
         binding.imagesRecycler.setAdapter(adapter);
@@ -71,11 +72,26 @@ public class UploadFragment extends Fragment {
         // display how many images are selected
         displaySelectedImageAmount(adapter, binding);
 
+        // number of images currently being uploaded
+        MutableLiveData<Integer> uploading = new MutableLiveData<>(0);
+
+        // disable uploading button while currently uploading
+        disableUploadButtonWhileUploading(uploading);
+
         binding.sendButton.setOnClickListener(button -> {
 
-            for (int imageId : adapter.getSelectedImages().getValue()) {
+            List<Integer> selectedImages = adapter.getSelectedImages().getValue();
+
+            for (int imageId : selectedImages) {
 
                 uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
+
+                    if (status.getStatus() == ResponseStatus.LOADING) {
+                        adapter.setImageLoadingStatus(imageId, true);
+                        uploading.setValue(uploading.getValue() + 1); //
+                    } else {
+                        uploading.setValue(uploading.getValue() - 1); // reduce currently uploading number
+                    }
 
                     if (status.isSuccessful()) {
                         adapter.removeImage(status.getImageId());
@@ -83,9 +99,6 @@ public class UploadFragment extends Fragment {
                     else if (status.getStatus() == ResponseStatus.INVALID_EVENT_ID) {
                         adapter.showEventError(imageId, true);
                         adapter.setImageLoadingStatus(imageId, false);
-                    }
-                    else if (status.getStatus() == ResponseStatus.LOADING) {
-                        adapter.setImageLoadingStatus(imageId, true);
                     }
 
                 });
@@ -104,4 +117,9 @@ public class UploadFragment extends Fragment {
         });
     }
 
+    private void disableUploadButtonWhileUploading(LiveData<Integer> uploading) {
+        uploading.observe(getViewLifecycleOwner(), up -> {
+            binding.sendButton.setEnabled(up == 0);
+        });
+    }
 }
