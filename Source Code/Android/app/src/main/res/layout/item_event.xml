@@ -14,7 +14,6 @@
         android:layout_marginTop="16dp"
         android:text="@string/event"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,5 +27,17 @@
         app:layout_constraintBottom_toBottomOf="@+id/event_label"
         app:layout_constraintStart_toEndOf="@+id/event_label"
         app:layout_constraintTop_toTopOf="@+id/event_label" />
+
+    <TextView
+        android:id="@+id/id_error"
+        style="@style/ErrorText"
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="@string/event_id_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_label" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentUploadBinding;
+import com.example.nmadrawingapp.model.UploadingResponse;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.enums.ResponseStatus;
 import com.example.nmadrawingapp.view.adapters.ImageAdapter;
@@ -68,27 +69,39 @@ public class UploadFragment extends Fragment {
         });
 
         // display how many images are selected
+        displaySelectedImageAmount(adapter, binding);
+
+        binding.sendButton.setOnClickListener(button -> {
+
+            for (int imageId : adapter.getSelectedImages().getValue()) {
+
+                uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
+
+                    if (status.isSuccessful()) {
+                        adapter.removeImage(status.getImageId());
+                    }
+                    else if (status.getStatus() == ResponseStatus.INVALID_EVENT_ID) {
+                        adapter.showEventError(imageId, true);
+                        adapter.setImageLoadingStatus(imageId, false);
+                    }
+                    else if (status.getStatus() == ResponseStatus.LOADING) {
+                        adapter.setImageLoadingStatus(imageId, true);
+                    }
+
+                });
+
+            }
+
+        });
+
+    }
+
+    private void displaySelectedImageAmount(ImageAdapter adapter, FragmentUploadBinding binding) {
         adapter.getSelectedImages().observe(getViewLifecycleOwner(), images -> {
             if (adapter.getItemCount() > 0) {
                 binding.selected.setText(getString(R.string.drawings_selected, images.size(), adapter.getImageCount()));
             }
         });
-
-        binding.sendButton.setOnClickListener(button -> {
-
-            for (int image : adapter.getSelectedImages().getValue()) {
-                uploadViewModel.uploadImage(image).observe(getViewLifecycleOwner(), status -> {
-
-                    System.out.println(String.valueOf(image) + " : " + status.getStatus());
-
-                    if (status.isSuccessful()) {
-                        adapter.removeImage(status.getImageId());
-                    }
-                });
-            }
-
-        });
-
     }
 
 }

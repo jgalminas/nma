@@ -5,10 +5,11 @@ import static com.example.nmadrawingapp.view.UploadFragment.COLUMN_COUNT;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -28,7 +29,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int EVENT_TYPE = 0;
     private final int IMAGE_TYPE = 1;
 
-    private List<Object> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
     private final MutableLiveData<ArrayList<Integer>> selected = new MutableLiveData<>(new ArrayList<>());
 
     public ImageAdapter(GridLayoutManager layoutManager) {
@@ -37,7 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (((Item)items.get(position)).getType() == ItemType.Event) {
+                if (items.get(position).getType() == ItemType.Event) {
                     return COLUMN_COUNT;
                 } else {
                     return 1;
@@ -51,12 +52,14 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private final ImageView imageView;
         private final CustomCheckBox checkBox;
+        private final ProgressBar spinner;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imageView = itemView.findViewById(R.id.image);
             checkBox = itemView.findViewById(R.id.image_checkbox);
+            spinner = itemView.findViewById(R.id.spinner);
         }
 
         public ImageView getImageView() {
@@ -71,17 +74,22 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return itemView;
         }
 
+        public ProgressBar getSpinner() {
+            return spinner;
+        }
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView eventId;
         private final TextView eventLabel;
+        private final TextView error;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             this.eventId = itemView.findViewById(R.id.event_id);
             this.eventLabel = itemView.findViewById(R.id.event_label);
+            this.error = itemView.findViewById(R.id.id_error);
         }
 
         private TextView getEventId() {
@@ -91,12 +99,16 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private TextView getEventLabel() {
             return eventLabel;
         }
+
+        private TextView getError() {
+            return error;
+        }
     }
 
     @Override
     public int getItemViewType(int position) {
         // based on you list you will return the ViewType
-        if (((Item)items.get(position)).getType() == ItemType.Event) {
+        if (items.get(position).getType() == ItemType.Event) {
             return EVENT_TYPE;
         } else {
             return IMAGE_TYPE;
@@ -124,11 +136,24 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         final int type = getItemViewType(position);
 
-        if (type == IMAGE_TYPE) {
+        if (type == EVENT_TYPE) {
+
+            EventViewHolder eventHolder = (EventViewHolder) holder;
+            Event event = items.get(position).toEvent();
+
+            eventHolder.getEventId().setText(String.valueOf(event.getId()));
+
+            if (event.isShowError()) {
+                eventHolder.getError().setVisibility(View.VISIBLE);
+            } else {
+                eventHolder.getError().setVisibility(View.GONE);
+            }
+
+        } else if (type == IMAGE_TYPE) {
 
             ImageViewHolder imageHolder = (ImageViewHolder) holder;
 
-            DisplayImage image = (DisplayImage) items.get(position);
+            DisplayImage image = items.get(position).toImage();
 
             // bind image
             imageHolder.getImageView().setImageBitmap(image.getImage());
@@ -151,12 +176,14 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 updateSelectedList(imageHolder, image); // update selected list
             });
 
-        } else if (type == EVENT_TYPE) {
-
-            EventViewHolder eventHolder = (EventViewHolder) holder;
-            Event event = (Event) items.get(position);
-
-            eventHolder.getEventId().setText(String.valueOf(event.getEventId()));
+            // loading spinner
+            if (image.isUploading()) {
+                imageHolder.getSpinner().setVisibility(View.VISIBLE);
+                imageHolder.getCheckBox().setVisibility(View.GONE);
+            } else {
+                imageHolder.getSpinner().setVisibility(View.GONE);
+                imageHolder.getCheckBox().setVisibility(View.VISIBLE);
+            }
 
         }
 
@@ -166,8 +193,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         int count = 0;
 
-        for (Object item : items) {
-            if (((Item) item).getType() == ItemType.Image) {
+        for (Item item : items) {
+            if (item.getType() == ItemType.Image) {
                 count ++;
             }
         }
@@ -180,7 +207,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return items.size();
     }
 
-    public void setImages(List<Object> items) {
+    public void setImages(List<Item> items) {
         this.items = items;
         setToSelectedOnLoad(items); // select all images on load
         notifyDataSetChanged();
@@ -190,12 +217,12 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return selected;
     }
 
-    private void setToSelectedOnLoad(List<Object> items) {
+    private void setToSelectedOnLoad(List<Item> items) {
         ArrayList<Integer> selectedImages = new ArrayList<>();
 
-        for (Object img : items) {
-            if (img instanceof DisplayImage) {
-                selectedImages.add(((DisplayImage) img).getId());
+        for (Item img : items) {
+            if (img.getType() == ItemType.Image) {
+                selectedImages.add(img.toImage().getId());
             }
         }
 
@@ -206,15 +233,15 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         for (int i = 0; i < items.size(); i++) {
 
-            Item it = (Item) items.get(i);
+            Item it = items.get(i);
 
             if (it.getType() == ItemType.Image) {
 
                 // find the image by id
-                if (((DisplayImage) it).getId() == imageId) {
+                if (it.toImage().getId() == imageId) {
 
                     // check if its the last view in that event, if so remove the event view as well
-                    if (((Item)items.get(i - 1)).getType() == ItemType.Event && ((Item)items.get(i + 1)).getType() == ItemType.Event) {
+                    if (items.get(i - 1).getType() == ItemType.Event && items.get(i + 1).getType() == ItemType.Event) {
                         items.remove(it); // remove image
                         items.remove(i - 1); // remove event view
                         notifyItemRangeRemoved(i - 1, 2); // update recycler view
@@ -254,5 +281,58 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             selected.getValue().remove((Integer) image.getId());
             selected.setValue(selected.getValue());
         }
+    }
+
+    public void setImageLoadingStatus(int id, boolean bool) {
+
+        DisplayImage image = getImageById(id);
+
+        if (image != null) {
+
+            int index = items.indexOf(image);
+            image.setUploading(bool);
+
+            notifyItemChanged(index);
+
+        }
+
+    }
+
+    private DisplayImage getImageById(int id) {
+
+        for (Item i : items) {
+            if (i.getType() == ItemType.Image && i.getId() == id) {
+                return i.toImage();
+            }
+        }
+
+        return null;
+    }
+
+    private Event getEventById(int id) {
+
+        for (Item i : items) {
+            if (i.getType() == ItemType.Event && i.getId() == id) {
+                return i.toEvent();
+            }
+        }
+
+        return null;
+    }
+
+    public void showEventError(int imageId, boolean bool) {
+
+        DisplayImage image = getImageById(imageId);
+
+        if (image != null) {
+
+            Event event = getEventById(image.getEventId());
+
+            if (event != null) {
+                event.setShowError(bool);
+                notifyDataSetChanged();
+            }
+        }
+
     }
 }
