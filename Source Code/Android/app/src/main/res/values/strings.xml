@@ -20,5 +20,6 @@
     <string name="event_code_input_can_t_be_empty">Event code input can\'t be empty</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="enter_valid_name">Name field cannot be empty or contain numbers</string>
-    <string name="event_id_error">Failed to upload. Event with this ID doesn\'t exist. Change the ID and try again.</string>
+    <string name="upload_error">Upload Error</string>
+    <string name="upload_failed_message">Upload failed. This event ID is invalid. Please change it and try again.</string>
 </resources>

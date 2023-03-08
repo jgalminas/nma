@@ -28,14 +28,12 @@
         app:layout_constraintStart_toEndOf="@+id/event_label"
         app:layout_constraintTop_toTopOf="@+id/event_label" />
 
-    <TextView
+    <include
         android:id="@+id/id_error"
-        style="@style/ErrorText"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
+        layout="@layout/dialog_alert"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="@string/event_id_error"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_label" />

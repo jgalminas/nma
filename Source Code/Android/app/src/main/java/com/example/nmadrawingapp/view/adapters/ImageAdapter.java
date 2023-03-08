@@ -83,7 +83,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         private final TextView eventId;
         private final TextView eventLabel;
-        private final TextView error;
+        private final ConstraintLayout error;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,7 +100,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return eventLabel;
         }
 
-        private TextView getError() {
+        private ConstraintLayout getError() {
             return error;
         }
     }
