@@ -87,6 +87,7 @@ public class DrawingFragment extends Fragment {
         dialog.show(); // must show dialog before registering listeners
 
         EditText ageInput = dialog.findViewById(R.id.age_input);
+        EditText nameInput = dialog.findViewById(R.id.name_input);
 
         // register on cancel listener
         dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
@@ -97,11 +98,14 @@ public class DrawingFragment extends Fragment {
         dialog.findViewById(R.id.save_button).setOnClickListener(button -> {
 
             int age = parseAge(ageInput.getText().toString());
+            String name = nameInput.getText().toString();
             boolean ageIsValid = validateAge(age);
+            boolean nameIsValid = validateName(name);
 
-            if (ageIsValid) {
+            if (ageIsValid && nameIsValid) {
                 imageRepository.insertImage(new Image(
                         sharedViewModel.getEventId(),
+                        name,
                         age,
                         binding.canvas.getImageBytes()
                 ));
@@ -111,26 +115,48 @@ public class DrawingFragment extends Fragment {
 
             }
 
+            if (!ageIsValid) {
+                dialog.findViewById(R.id.age_error_message).setVisibility(View.VISIBLE);
+            }
+
+            if (!nameIsValid) {
+                dialog.findViewById(R.id.name_error_message).setVisibility(View.VISIBLE);
+            }
+
         });
 
         // validate age input on text change
         ageInput.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
             public void afterTextChanged(Editable text) {
                 if (validateAge(parseAge(text.toString()))) {
-                    dialog.findViewById(R.id.error_message).setVisibility(View.GONE);
+                    dialog.findViewById(R.id.age_error_message).setVisibility(View.GONE);
                 } else {
-                    dialog.findViewById(R.id.error_message).setVisibility(View.VISIBLE);
+                    dialog.findViewById(R.id.age_error_message).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        // validate name input on text change
+        nameInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable text) {
+                if (validateName(text.toString())) {
+                    dialog.findViewById(R.id.name_error_message).setVisibility(View.GONE);
+                } else {
+                    dialog.findViewById(R.id.name_error_message).setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -139,6 +165,21 @@ public class DrawingFragment extends Fragment {
 
     private boolean validateAge(int age) {
         return age > 0 && age <= 130;
+    }
+
+    private boolean validateName(String name) {
+
+        if (name.isEmpty()) {
+            return false;
+        }
+
+        for (char c : name.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return false;
+            }
+        }
+
+         return true;
     }
 
     private int parseAge(String text) {

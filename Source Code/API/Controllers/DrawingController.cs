@@ -1,75 +1,154 @@
-using API.Models;
+using API.Exceptions;
+using API.Models.DTOs;
+using API.Models.Responses;
+using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    [Produces("application/json")]
+    [Route("Api/[Controller]")]
     public class DrawingController : ControllerBase
     {
-        // TODO: Swagger annotations
 
-        private readonly DrawingContext _drawingContext;
-        private readonly EventContext _eventContext;
+        private readonly IDrawingService _drawingService;
 
-        public DrawingController(DrawingContext drawingContext, EventContext eventContext)
+        public DrawingController(IDrawingService drawingService)
         {
-            _drawingContext = drawingContext;
-            _eventContext = eventContext;
-        }
-
-        public class NewDrawing
-        {
-            public DateTime Created { get; set; }
-
-            public int CreatorAge { get; set; }
-
-            public int EventID { get; set; }
+            _drawingService = drawingService;
         }
 
         [HttpPost]
-        public IActionResult Post([FromForm] IFormFile image, [FromBody] NewDrawing drawing)
+        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
         {
-            Event? ev = _eventContext.GetEvent(drawing.EventID);
-            if (ev == null) return new StatusCodeResult(StatusCodes.Status404NotFound);
 
-            Drawing d = new Drawing() {
-                Created = drawing.Created,
-                CreatorAge = drawing.CreatorAge,
-                Event = ev,
-                // TODO
-                FileGUID = "",
-                FileExt = Path.GetExtension(image.FileName).Substring(1),
-            };
+            try
+            {
+                var drawingId = await _drawingService.UploadDrawingAsync(data);
+                return Ok(new IdResponse()
+                {
+                    Id = drawingId,
+                    Message = "OK"
+                });
+            }
+            catch (Exception e)
+            {
+                if (e is NotFound)
+                {
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                } else
+                {
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+            }
 
-            return new StatusCodeResult(_drawingContext.CreateDrawing(d).ToStatus());
         }
 
         [HttpGet]
-        public IActionResult Get()
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetDrawing(int id)
         {
-            // TODO
-            return null;
+            try
+            {
+                var drawing = await _drawingService.GetDrawingByIdAsync(id);
+                return Ok(drawing);
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] int id)
+        [Route("Image/{fileId}")]
+        public async Task<IActionResult> GetImage(string fileId)
         {
-            // TODO
-            return null;
+
+            try
+            {
+                DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
+                return new FileStreamResult(drawing.Stream, drawing.ContentType);
+            }
+            catch (Exception e)
+            {
+                if (e is NotFound)
+                {
+                    return NotFound(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+                else if (e is BadRequest)
+                {
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+                else
+                {
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+            }
+            
         }
 
-        [HttpPut]
-        public IActionResult Put([FromQuery] int id, [FromBody] NewDrawing drawing)
+        [HttpPatch]
+        [Route("{id:int}")]
+        public async Task<IActionResult> UpdateDrawing(int id, [FromBody] DrawingUpdateDTO data)
         {
-            return new StatusCodeResult(_drawingContext.UpdateDrawing(id, drawing).ToStatus());
+            try
+            {
+                await _drawingService.UpdateDrawingAsync(id, data);
+                return Ok();
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+
         }
 
         [HttpDelete]
-        public IActionResult Delete([FromQuery] int id)
+        [Route("{id:int}")]
+        public async Task<IActionResult> DeleteDrawing(int id)
         {
-            return new StatusCodeResult(_drawingContext.DeleteDrawing(id).ToStatus());
-        }
+            try
+            {
+                await _drawingService.DeleteDrawingAsync(id);
+                return Ok();
+            } catch (Exception e)
+            {
+                if (e is NotFound)
+                {
+                    return BadRequest(new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                } 
+                else
+                {
+                    return StatusCode(500, new GenericResponse()
+                    {
+                        Message = e.Message
+                    });
+                }
+            }
+          }
     }
 }
