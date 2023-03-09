@@ -1,13 +1,13 @@
 package com.example.nmadrawingapp.model;
 
-import com.example.nmadrawingapp.model.enums.Item;
+import com.example.nmadrawingapp.model.enums.ItemType;
 
 public class Event extends com.example.nmadrawingapp.model.Item {
 
     private int Id;
     private boolean showError = false;
 
-    public Event(Item type, int Id) {
+    public Event(ItemType type, int Id) {
         super(Id, type);
         this.Id = Id;
     }

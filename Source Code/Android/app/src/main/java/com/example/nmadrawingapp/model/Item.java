@@ -1,16 +1,18 @@
 package com.example.nmadrawingapp.model;
 
+import com.example.nmadrawingapp.model.enums.ItemType;
+
 public abstract class Item {
 
     private final int Id;
-    private final com.example.nmadrawingapp.model.enums.Item type;
+    private final ItemType type;
 
-    public Item (int Id, com.example.nmadrawingapp.model.enums.Item type) {
+    public Item (int Id, ItemType type) {
         this.type = type;
         this.Id = Id;
     }
 
-    public com.example.nmadrawingapp.model.enums.Item getType() {
+    public ItemType getType() {
         return type;
     }
 

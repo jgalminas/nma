@@ -9,9 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
+import com.example.nmadrawingapp.model.Item;
 import com.example.nmadrawingapp.model.UploadingResponse;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
-import com.example.nmadrawingapp.model.enums.Item;
+import com.example.nmadrawingapp.model.enums.ItemType;
 import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
@@ -30,22 +31,22 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
-    public LiveData<List<com.example.nmadrawingapp.model.Item>> getAllImages() {
+    public LiveData<List<Item>> getAllImages() {
 
-        MutableLiveData<List<com.example.nmadrawingapp.model.Item>> data = new MutableLiveData<>();
+        MutableLiveData<List<Item>> data = new MutableLiveData<>();
 
         imageRepository.getAllImages(result -> {
 
-            final List<com.example.nmadrawingapp.model.Item> items = new ArrayList<>();
+            final List<Item> items = new ArrayList<>();
 
             for (Image i : result) {
 
                 // group by event Id
                 if (!containsEvent(items, i.getEventId())) {
-                    items.add(new Event(Item.EVENT, i.getEventId()));
+                    items.add(new Event(ItemType.EVENT, i.getEventId()));
                 }
 
-                items.add(new DisplayImage(Item.IMAGE, i.getId(), toBitmap(i), i.getEventId()));
+                items.add(new DisplayImage(ItemType.IMAGE, i.getId(), toBitmap(i), i.getEventId()));
 
             }
 
@@ -56,9 +57,9 @@ public class UploadViewModel extends ViewModel {
         return data;
     }
 
-    private boolean containsEvent(List<com.example.nmadrawingapp.model.Item> items, int id) {
+    private boolean containsEvent(List<Item> items, int id) {
 
-        for (com.example.nmadrawingapp.model.Item item : items) {
+        for (Item item : items) {
             if (item instanceof Event && ((Event) item).getId() == id) {
                 return true;
             }
@@ -106,6 +107,14 @@ public class UploadViewModel extends ViewModel {
         });
 
         return status;
+    }
+
+    public void deleteImages(List<Integer> imageIds) {
+
+        for (int id : imageIds) {
+            imageRepository.deleteById(id);
+        }
+
     }
 
 }

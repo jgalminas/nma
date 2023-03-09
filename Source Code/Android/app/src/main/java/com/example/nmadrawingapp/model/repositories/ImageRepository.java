@@ -101,4 +101,9 @@ public class ImageRepository implements IImageRepository {
 
     }
 
+    @Override
+    public void deleteById(int id) {
+        Database.executor.execute(() -> imageDao.deleteById(id));
+    }
+
 }

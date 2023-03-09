@@ -17,8 +17,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
+import com.example.nmadrawingapp.model.Item;
 import com.example.nmadrawingapp.model.enums.Image;
-import com.example.nmadrawingapp.model.enums.Item;
+import com.example.nmadrawingapp.model.enums.ItemType;
 import com.example.nmadrawingapp.view.components.CustomCheckBox;
 
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int EVENT_TYPE = 0;
     private final int IMAGE_TYPE = 1;
 
-    private List<com.example.nmadrawingapp.model.Item> items = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
     private final MutableLiveData<ArrayList<Integer>> selected = new MutableLiveData<>(new ArrayList<>());
 
     public ImageAdapter(GridLayoutManager layoutManager) {
@@ -38,7 +39,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (items.get(position).getType() == Item.EVENT) {
+                if (items.get(position).getType() == ItemType.EVENT) {
                     return COLUMN_COUNT;
                 } else {
                     return 1;
@@ -114,7 +115,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
         // based on you list you will return the ViewType
-        if (items.get(position).getType() == Item.EVENT) {
+        if (items.get(position).getType() == ItemType.EVENT) {
             return EVENT_TYPE;
         } else {
             return IMAGE_TYPE;
@@ -207,7 +208,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         int count = 0;
 
         for (com.example.nmadrawingapp.model.Item item : items) {
-            if (item.getType() == Item.IMAGE) {
+            if (item.getType() == ItemType.IMAGE) {
                 count ++;
             }
         }
@@ -220,7 +221,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return items.size();
     }
 
-    public void setImages(List<com.example.nmadrawingapp.model.Item> items) {
+    public void setImages(List<Item> items) {
         this.items = items;
         setToSelectedOnLoad(items); // select all images on load
         notifyDataSetChanged();
@@ -230,11 +231,11 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return selected;
     }
 
-    private void setToSelectedOnLoad(List<com.example.nmadrawingapp.model.Item> items) {
+    private void setToSelectedOnLoad(List<Item> items) {
         ArrayList<Integer> selectedImages = new ArrayList<>();
 
-        for (com.example.nmadrawingapp.model.Item img : items) {
-            if (img.getType() == Item.IMAGE) {
+        for (Item img : items) {
+            if (img.getType() == ItemType.IMAGE) {
                 selectedImages.add(img.toImage().getId());
             }
         }
@@ -246,15 +247,15 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         for (int i = 0; i < items.size(); i++) {
 
-            com.example.nmadrawingapp.model.Item it = items.get(i);
+            Item it = items.get(i);
 
-            if (it.getType() == Item.IMAGE) {
+            if (it.getType() == ItemType.IMAGE) {
 
                 // find the image by id
                 if (it.toImage().getId() == imageId) {
 
                     // check if its the last view in that event, if so remove the event view as well
-                    if (items.get(i - 1).getType() == Item.EVENT && items.get(i + 1).getType() == Item.EVENT) {
+                    if (items.get(i - 1).getType() == ItemType.EVENT && items.get(i + 1).getType() == ItemType.EVENT) {
                         items.remove(it); // remove image
                         items.remove(i - 1); // remove event view
                         notifyItemRangeRemoved(i - 1, 2); // update recycler view
@@ -313,8 +314,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private DisplayImage getImageById(int id) {
 
-        for (com.example.nmadrawingapp.model.Item i : items) {
-            if (i.getType() == Item.IMAGE && i.getId() == id) {
+        for (Item i : items) {
+            if (i.getType() == ItemType.IMAGE && i.getId() == id) {
                 return i.toImage();
             }
         }
@@ -325,7 +326,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private Event getEventById(int id) {
 
         for (com.example.nmadrawingapp.model.Item i : items) {
-            if (i.getType() == Item.EVENT && i.getId() == id) {
+            if (i.getType() == ItemType.EVENT && i.getId() == id) {
                 return i.toEvent();
             }
         }

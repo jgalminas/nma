@@ -1,5 +1,9 @@
 package com.example.nmadrawingapp.view;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -9,9 +13,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentUploadBinding;
 import com.example.nmadrawingapp.model.enums.Image;
@@ -19,6 +25,7 @@ import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.view.adapters.ImageAdapter;
 import com.example.nmadrawingapp.viewmodel.UploadViewModel;
 import java.util.List;
+import java.util.Objects;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -30,6 +37,7 @@ public class UploadFragment extends Fragment {
 
     private FragmentUploadBinding binding;
     private UploadViewModel uploadViewModel;
+    private Dialog dialog;
 
     public UploadFragment() {
         // Required empty public constructor
@@ -76,7 +84,9 @@ public class UploadFragment extends Fragment {
         disableUploadButtonWhileUploading(uploading);
 
         // handle upload button click
-        onUpload(adapter, uploadViewModel, uploading);
+        onUploadButtonClick(adapter, uploadViewModel, uploading);
+
+        onDeleteButtonClick(adapter, uploadViewModel);
 
     }
 
@@ -94,7 +104,7 @@ public class UploadFragment extends Fragment {
         });
     }
 
-    private void onUpload(ImageAdapter adapter, UploadViewModel uploadViewModel, MutableLiveData<Integer> uploading) {
+    private void onUploadButtonClick(ImageAdapter adapter, UploadViewModel uploadViewModel, MutableLiveData<Integer> uploading) {
 
         binding.sendButton.setOnClickListener(button -> {
 
@@ -136,4 +146,49 @@ public class UploadFragment extends Fragment {
         });
 
     }
+
+    private void onDeleteButtonClick(ImageAdapter adapter, UploadViewModel uploadViewModel) {
+        binding.deleteButton.setOnClickListener(button -> {
+            showDialog(adapter, uploadViewModel);
+        });
+    }
+
+    private Dialog createDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        LayoutInflater inflater = this.getLayoutInflater();
+        builder.setView(inflater.inflate(R.layout.dialog_confirm_delete, null));
+
+        return builder.create();
+    }
+
+    private void showDialog(ImageAdapter adapter, UploadViewModel uploadViewModel) {
+
+        dialog = createDialog();
+
+        // make background transparent
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show(); // must show dialog before registering listeners
+
+        // register on cancel listener
+        dialog.findViewById(R.id.confirm_cancel_button).setOnClickListener(button -> {
+            dialog.cancel();
+        });
+
+        // register on confirm listener
+        dialog.findViewById(R.id.confirm_delete_button).setOnClickListener(button -> {
+
+            uploadViewModel.deleteImages(Objects.requireNonNull(adapter.getSelectedImages().getValue()));
+
+            for (int id : adapter.getSelectedImages().getValue()) {
+                adapter.removeImage(id);
+            }
+
+            dialog.cancel();
+
+        });
+
+    }
+
 }
