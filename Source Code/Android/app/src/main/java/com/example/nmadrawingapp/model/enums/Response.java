@@ -1,6 +1,6 @@
 package com.example.nmadrawingapp.model.enums;
 
-public enum ResponseStatus {
+public enum Response {
     SUCCESS,
     ERROR,
     LOADING,

@@ -14,13 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentUploadBinding;
-import com.example.nmadrawingapp.model.UploadingResponse;
-import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
-import com.example.nmadrawingapp.model.enums.ResponseStatus;
+import com.example.nmadrawingapp.model.enums.Image;
+import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.view.adapters.ImageAdapter;
 import com.example.nmadrawingapp.viewmodel.UploadViewModel;
-
-import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -70,46 +67,20 @@ public class UploadFragment extends Fragment {
         });
 
         // display how many images are selected
-        displaySelectedImageAmount(adapter, binding);
+        displaySelectedImageAmount(adapter);
 
         // number of images currently being uploaded
         MutableLiveData<Integer> uploading = new MutableLiveData<>(0);
 
-        // disable uploading button while currently uploading
+        // disable upload button while currently uploading
         disableUploadButtonWhileUploading(uploading);
 
-        binding.sendButton.setOnClickListener(button -> {
-
-            List<Integer> selectedImages = adapter.getSelectedImages().getValue();
-
-            for (int imageId : selectedImages) {
-
-                uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
-
-                    if (status.getStatus() == ResponseStatus.LOADING) {
-                        adapter.setImageLoadingStatus(imageId, true);
-                        uploading.setValue(uploading.getValue() + 1); //
-                    } else {
-                        uploading.setValue(uploading.getValue() - 1); // reduce currently uploading number
-                    }
-
-                    if (status.isSuccessful()) {
-                        adapter.removeImage(status.getImageId());
-                    }
-                    else if (status.getStatus() == ResponseStatus.INVALID_EVENT_ID) {
-                        adapter.showEventError(imageId, true);
-                        adapter.setImageLoadingStatus(imageId, false);
-                    }
-
-                });
-
-            }
-
-        });
+        // handle upload button click
+        onUpload(adapter, uploadViewModel, uploading);
 
     }
 
-    private void displaySelectedImageAmount(ImageAdapter adapter, FragmentUploadBinding binding) {
+    private void displaySelectedImageAmount(ImageAdapter adapter) {
         adapter.getSelectedImages().observe(getViewLifecycleOwner(), images -> {
             if (adapter.getItemCount() > 0) {
                 binding.selected.setText(getString(R.string.drawings_selected, images.size(), adapter.getImageCount()));
@@ -121,5 +92,48 @@ public class UploadFragment extends Fragment {
         uploading.observe(getViewLifecycleOwner(), up -> {
             binding.sendButton.setEnabled(up == 0);
         });
+    }
+
+    private void onUpload(ImageAdapter adapter, UploadViewModel uploadViewModel, MutableLiveData<Integer> uploading) {
+
+        binding.sendButton.setOnClickListener(button -> {
+
+            List<Integer> selectedImages = adapter.getSelectedImages().getValue();
+
+            for (int imageId : selectedImages) {
+
+                uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
+
+                    // check if image is loading
+                    if (status.getStatus() == Response.LOADING) {
+                        adapter.showEventError(imageId, false);
+                        adapter.setImageLoadingStatus(imageId, Image.UPLOADING);
+
+                        // increase currently uploading number
+                        uploading.setValue(uploading.getValue() + 1);
+                    }
+                    else {
+                        // reduce currently uploading number
+                        uploading.setValue(uploading.getValue() - 1);
+                    }
+
+                    // handle result
+                    if (status.isSuccessful()) {
+                        adapter.removeImage(status.getImageId());
+                    }
+                    else if (status.getStatus() == Response.INVALID_EVENT_ID) {
+                        adapter.showEventError(imageId, true);
+                        adapter.setImageLoadingStatus(imageId, Image.DEFAULT);
+                    }
+                    else if (status.getStatus() == Response.ERROR) {
+                        adapter.setImageLoadingStatus(imageId, Image.ERROR);
+                    }
+
+                });
+
+            }
+
+        });
+
     }
 }

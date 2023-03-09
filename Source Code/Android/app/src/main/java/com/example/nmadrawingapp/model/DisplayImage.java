@@ -2,16 +2,17 @@ package com.example.nmadrawingapp.model;
 
 import android.graphics.Bitmap;
 
-import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.model.enums.Image;
+import com.example.nmadrawingapp.model.enums.Item;
 
-public class DisplayImage extends Item {
+public class DisplayImage extends com.example.nmadrawingapp.model.Item {
 
     private final Bitmap image;
     private final int id;
-    private boolean isUploading = false;
+    private Image status = Image.DEFAULT;
     private final int eventId;
 
-    public DisplayImage(ItemType type, int id, Bitmap image, int eventId) {
+    public DisplayImage(Item type, int id, Bitmap image, int eventId) {
         super(id, type);
         this.image = image;
         this.id = id;
@@ -26,12 +27,12 @@ public class DisplayImage extends Item {
         return id;
     }
 
-    public boolean isUploading() {
-        return isUploading;
+    public Image getStatus() {
+        return status;
     }
 
-    public void setUploading(boolean uploading) {
-        isUploading = uploading;
+    public void setStatus(Image status) {
+        this.status = status;
     }
 
     public int getEventId() {

@@ -9,11 +9,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
-import com.example.nmadrawingapp.model.Item;
 import com.example.nmadrawingapp.model.UploadingResponse;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
-import com.example.nmadrawingapp.model.enums.ItemType;
-import com.example.nmadrawingapp.model.enums.ResponseStatus;
+import com.example.nmadrawingapp.model.enums.Item;
+import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
 import java.util.ArrayList;
@@ -31,22 +30,22 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
-    public LiveData<List<Item>> getAllImages() {
+    public LiveData<List<com.example.nmadrawingapp.model.Item>> getAllImages() {
 
-        MutableLiveData<List<Item>> data = new MutableLiveData<>();
+        MutableLiveData<List<com.example.nmadrawingapp.model.Item>> data = new MutableLiveData<>();
 
         imageRepository.getAllImages(result -> {
 
-            final List<Item> items = new ArrayList<>();
+            final List<com.example.nmadrawingapp.model.Item> items = new ArrayList<>();
 
             for (Image i : result) {
 
                 // group by event Id
                 if (!containsEvent(items, i.getEventId())) {
-                    items.add(new Event(ItemType.Event, i.getEventId()));
+                    items.add(new Event(Item.EVENT, i.getEventId()));
                 }
 
-                items.add(new DisplayImage(ItemType.Image, i.getId(), toBitmap(i), i.getEventId()));
+                items.add(new DisplayImage(Item.IMAGE, i.getId(), toBitmap(i), i.getEventId()));
 
             }
 
@@ -57,9 +56,9 @@ public class UploadViewModel extends ViewModel {
         return data;
     }
 
-    private boolean containsEvent(List<Item> items, int id) {
+    private boolean containsEvent(List<com.example.nmadrawingapp.model.Item> items, int id) {
 
-        for (Item item : items) {
+        for (com.example.nmadrawingapp.model.Item item : items) {
             if (item instanceof Event && ((Event) item).getId() == id) {
                 return true;
             }
@@ -81,23 +80,23 @@ public class UploadViewModel extends ViewModel {
 
     public LiveData<UploadingResponse> uploadImage(int id) {
 
-        MutableLiveData<UploadingResponse> status = new MutableLiveData<>(new UploadingResponse(id, ResponseStatus.LOADING));
+        MutableLiveData<UploadingResponse> status = new MutableLiveData<>(new UploadingResponse(id, Response.LOADING));
 
         imageRepository.getImageById(id, new Callback<Image>() {
             @Override
             public void onComplete(Image image) {
 
-                imageRepository.uploadImage(image, new Callback<ResponseStatus>() {
+                imageRepository.uploadImage(image, new Callback<Response>() {
                     @Override
-                    public void onComplete(ResponseStatus result) {
+                    public void onComplete(Response result) {
 
-                        if (result == ResponseStatus.SUCCESS) {
-                            status.postValue(new UploadingResponse(id, ResponseStatus.SUCCESS));
+                        if (result == Response.SUCCESS) {
+                            status.postValue(new UploadingResponse(id, Response.SUCCESS));
                             imageRepository.deleteImage(image);
-                        } else if (result == ResponseStatus.INVALID_EVENT_ID) {
-                            status.postValue(new UploadingResponse(id, ResponseStatus.INVALID_EVENT_ID));
+                        } else if (result == Response.INVALID_EVENT_ID) {
+                            status.postValue(new UploadingResponse(id, Response.INVALID_EVENT_ID));
                         } else {
-                            status.postValue(new UploadingResponse(id, ResponseStatus.ERROR));
+                            status.postValue(new UploadingResponse(id, Response.ERROR));
                         }
 
                     }

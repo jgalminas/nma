@@ -1,6 +1,6 @@
 package com.example.nmadrawingapp.model.enums;
 
-public enum ItemType {
-    Event,
-    Image
+public enum Item {
+    EVENT,
+    IMAGE
 }

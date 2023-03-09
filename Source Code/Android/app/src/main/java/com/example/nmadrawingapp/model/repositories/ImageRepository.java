@@ -1,15 +1,13 @@
 package com.example.nmadrawingapp.model.repositories;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.example.nmadrawingapp.model.data_sources.db.Database;
 import com.example.nmadrawingapp.model.data_sources.db.daos.ImageDao;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.data_sources.network.RetrofitClient;
 import com.example.nmadrawingapp.model.data_sources.network.services.DrawingService;
-import com.example.nmadrawingapp.model.enums.ResponseStatus;
+import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.utils.Callback;
 import java.util.List;
 import javax.inject.Inject;
@@ -18,7 +16,6 @@ import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Response;
 
 public class ImageRepository implements IImageRepository {
 
@@ -74,8 +71,9 @@ public class ImageRepository implements IImageRepository {
     }
 
     @Override
-    public void uploadImage(Image image, Callback<ResponseStatus> callback) {
+    public void uploadImage(Image image, Callback<Response> callback) {
 
+        // set up form part for image
         MultipartBody.Part file = MultipartBody.Part.createFormData(
                 "File",
                 "image." + image.getExtension(),
@@ -85,19 +83,19 @@ public class ImageRepository implements IImageRepository {
 
         api.postDrawing(image.getEventId(), file, image.getDrawersName(), image.getDrawersAge()).enqueue(new retrofit2.Callback<Void>() {
             @Override
-            public void onResponse(@NonNull Call<Void> call, @NonNull Response<Void> response) {
+            public void onResponse(@NonNull Call<Void> call, @NonNull retrofit2.Response<Void> response) {
                 if (response.isSuccessful()) {
-                    callback.onComplete(ResponseStatus.SUCCESS);
+                    callback.onComplete(Response.SUCCESS);
                 } else if (response.code() == 400) {
-                    callback.onComplete(ResponseStatus.INVALID_EVENT_ID);
-                }else {
-                    callback.onComplete(ResponseStatus.ERROR);
+                    callback.onComplete(Response.INVALID_EVENT_ID);
+                } else {
+                    callback.onComplete(Response.ERROR);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<Void> call, @NonNull Throwable t) {
-                callback.onComplete(ResponseStatus.ERROR);
+                callback.onComplete(Response.ERROR);
             }
         });
 

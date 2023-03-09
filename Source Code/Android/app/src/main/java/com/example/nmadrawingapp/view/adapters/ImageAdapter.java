@@ -17,8 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
-import com.example.nmadrawingapp.model.Item;
-import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.model.enums.Image;
+import com.example.nmadrawingapp.model.enums.Item;
 import com.example.nmadrawingapp.view.components.CustomCheckBox;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private final int EVENT_TYPE = 0;
     private final int IMAGE_TYPE = 1;
 
-    private List<Item> items = new ArrayList<>();
+    private List<com.example.nmadrawingapp.model.Item> items = new ArrayList<>();
     private final MutableLiveData<ArrayList<Integer>> selected = new MutableLiveData<>(new ArrayList<>());
 
     public ImageAdapter(GridLayoutManager layoutManager) {
@@ -38,7 +38,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (items.get(position).getType() == ItemType.Event) {
+                if (items.get(position).getType() == Item.EVENT) {
                     return COLUMN_COUNT;
                 } else {
                     return 1;
@@ -53,6 +53,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private final ImageView imageView;
         private final CustomCheckBox checkBox;
         private final ProgressBar spinner;
+        private final ConstraintLayout error;
 
         public ImageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -60,6 +61,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             imageView = itemView.findViewById(R.id.image);
             checkBox = itemView.findViewById(R.id.image_checkbox);
             spinner = itemView.findViewById(R.id.spinner);
+            error = itemView.findViewById(R.id.img_error);
         }
 
         public ImageView getImageView() {
@@ -77,6 +79,10 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public ProgressBar getSpinner() {
             return spinner;
         }
+
+        public ConstraintLayout getError() {
+            return error;
+        }
     }
 
     public static class EventViewHolder extends RecyclerView.ViewHolder {
@@ -92,15 +98,15 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             this.error = itemView.findViewById(R.id.id_error);
         }
 
-        private TextView getEventId() {
+        public TextView getEventId() {
             return eventId;
         }
 
-        private TextView getEventLabel() {
+        public TextView getEventLabel() {
             return eventLabel;
         }
 
-        private ConstraintLayout getError() {
+        public ConstraintLayout getError() {
             return error;
         }
     }
@@ -108,7 +114,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public int getItemViewType(int position) {
         // based on you list you will return the ViewType
-        if (items.get(position).getType() == ItemType.Event) {
+        if (items.get(position).getType() == Item.EVENT) {
             return EVENT_TYPE;
         } else {
             return IMAGE_TYPE;
@@ -176,13 +182,20 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 updateSelectedList(imageHolder, image); // update selected list
             });
 
-            // loading spinner
-            if (image.isUploading()) {
+            // display system status
+            if (image.getStatus() == Image.UPLOADING) {
                 imageHolder.getSpinner().setVisibility(View.VISIBLE);
                 imageHolder.getCheckBox().setVisibility(View.GONE);
-            } else {
+                imageHolder.getError().setVisibility(View.GONE);
+            }
+            else if (image.getStatus() == Image.DEFAULT) {
                 imageHolder.getSpinner().setVisibility(View.GONE);
                 imageHolder.getCheckBox().setVisibility(View.VISIBLE);
+            }
+            else {
+                imageHolder.getSpinner().setVisibility(View.GONE);
+                imageHolder.getCheckBox().setVisibility(View.VISIBLE);
+                imageHolder.getError().setVisibility(View.VISIBLE);
             }
 
         }
@@ -193,8 +206,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         int count = 0;
 
-        for (Item item : items) {
-            if (item.getType() == ItemType.Image) {
+        for (com.example.nmadrawingapp.model.Item item : items) {
+            if (item.getType() == Item.IMAGE) {
                 count ++;
             }
         }
@@ -207,7 +220,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return items.size();
     }
 
-    public void setImages(List<Item> items) {
+    public void setImages(List<com.example.nmadrawingapp.model.Item> items) {
         this.items = items;
         setToSelectedOnLoad(items); // select all images on load
         notifyDataSetChanged();
@@ -217,11 +230,11 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return selected;
     }
 
-    private void setToSelectedOnLoad(List<Item> items) {
+    private void setToSelectedOnLoad(List<com.example.nmadrawingapp.model.Item> items) {
         ArrayList<Integer> selectedImages = new ArrayList<>();
 
-        for (Item img : items) {
-            if (img.getType() == ItemType.Image) {
+        for (com.example.nmadrawingapp.model.Item img : items) {
+            if (img.getType() == Item.IMAGE) {
                 selectedImages.add(img.toImage().getId());
             }
         }
@@ -233,15 +246,15 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         for (int i = 0; i < items.size(); i++) {
 
-            Item it = items.get(i);
+            com.example.nmadrawingapp.model.Item it = items.get(i);
 
-            if (it.getType() == ItemType.Image) {
+            if (it.getType() == Item.IMAGE) {
 
                 // find the image by id
                 if (it.toImage().getId() == imageId) {
 
                     // check if its the last view in that event, if so remove the event view as well
-                    if (items.get(i - 1).getType() == ItemType.Event && items.get(i + 1).getType() == ItemType.Event) {
+                    if (items.get(i - 1).getType() == Item.EVENT && items.get(i + 1).getType() == Item.EVENT) {
                         items.remove(it); // remove image
                         items.remove(i - 1); // remove event view
                         notifyItemRangeRemoved(i - 1, 2); // update recycler view
@@ -283,14 +296,14 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
     }
 
-    public void setImageLoadingStatus(int id, boolean bool) {
+    public void setImageLoadingStatus(int id, Image status) {
 
         DisplayImage image = getImageById(id);
 
         if (image != null) {
 
             int index = items.indexOf(image);
-            image.setUploading(bool);
+            image.setStatus(status);
 
             notifyItemChanged(index);
 
@@ -300,8 +313,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private DisplayImage getImageById(int id) {
 
-        for (Item i : items) {
-            if (i.getType() == ItemType.Image && i.getId() == id) {
+        for (com.example.nmadrawingapp.model.Item i : items) {
+            if (i.getType() == Item.IMAGE && i.getId() == id) {
                 return i.toImage();
             }
         }
@@ -311,8 +324,8 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private Event getEventById(int id) {
 
-        for (Item i : items) {
-            if (i.getType() == ItemType.Event && i.getId() == id) {
+        for (com.example.nmadrawingapp.model.Item i : items) {
+            if (i.getType() == Item.EVENT && i.getId() == id) {
                 return i.toEvent();
             }
         }
