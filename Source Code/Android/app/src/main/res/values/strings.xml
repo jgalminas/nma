@@ -20,4 +20,10 @@
     <string name="event_code_input_can_t_be_empty">Event code input can\'t be empty</string>
     <string name="enter_your_name">Enter your name</string>
     <string name="enter_valid_name">Name field cannot be empty or contain numbers</string>
+    <string name="upload_error">Upload Error</string>
+    <string name="upload_failed_message">Upload failed. An event with this ID does not exist. Please change it and try again.</string>
+    <string name="network_error">Network Error</string>
+    <string name="confirm_action">Confirm Action</string>
+    <string name="confirm_delete">Are you sure you want to delete selected drawings?</string>
+    <string name="delete">Delete</string>
 </resources>

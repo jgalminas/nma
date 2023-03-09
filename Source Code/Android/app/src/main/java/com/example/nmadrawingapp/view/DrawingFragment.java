@@ -21,12 +21,22 @@ import android.widget.EditText;
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
+import com.example.nmadrawingapp.model.data_sources.network.RetrofitClient;
+import com.example.nmadrawingapp.model.data_sources.network.services.DrawingService;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
+
+import java.util.Arrays;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 @AndroidEntryPoint
 public class DrawingFragment extends Fragment {
