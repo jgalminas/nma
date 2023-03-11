@@ -126,7 +126,7 @@
         android:ems="10"
         android:fontFamily="@font/poppins_medium"
         android:inputType="textPersonName"
-        android:text="enter your name here"
+        android:hint="enter your name here"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/input_label_name" />

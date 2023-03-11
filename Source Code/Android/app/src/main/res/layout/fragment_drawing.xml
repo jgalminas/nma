@@ -33,7 +33,7 @@
         <RadioGroup
             android:id="@+id/radioGroupDrawTypeSelection"
             android:orientation="horizontal"
-            android:layout_width="100dp"
+            android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
@@ -48,7 +48,7 @@
                 android:id="@+id/radioButtonLineDraw"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/draw_type_splodge_stroke"
+                android:background="@drawable/draw_type_stroke_selector"
                 />
 
             <RadioButton
@@ -56,51 +56,75 @@
                 android:id="@+id/radioButtonFillDraw"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:background="@drawable/draw_type_splodge_fill"
+                android:background="@drawable/draw_type_fill_selector"
+                />
+
+            <RadioButton
+                android:button="@null"
+                android:id="@+id/radioButtonEraser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/draw_type_erase_selector"
+
                 />
 
         </RadioGroup>
 
         <RadioGroup
             android:id="@+id/radioGroupStrokeSelection"
-            android:orientation="horizontal"
             android:layout_width="250dp"
             android:layout_height="50dp"
-            android:layout_marginStart="369dp"
+            android:layout_marginStart="200dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="318dp"
             android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/save_drawing_button"
-            app:layout_constraintStart_toEndOf="@+id/radioGroupDrawTypeSelection"
-            app:layout_constraintTop_toTopOf="parent" >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <RadioButton
                 android:id="@+id/radioButtonThinnestStroke"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                />
+                android:button="@drawable/stroke_thickness_selector_3"
+
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
             <RadioButton
                 android:id="@+id/radioButtonThinStroke"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                />
+                android:button="@drawable/stroke_thickness_selector_6"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
             <RadioButton
                 android:id="@+id/radioButtonMediumStroke"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                />
+                android:button="@drawable/stroke_thickness_selector_9"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
             <RadioButton
                 android:id="@+id/radioButtonThickStroke"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                />
+                android:button="@drawable/stroke_thickness_selector_12"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
             <RadioButton
                 android:id="@+id/radioButtonThickestStroke"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                />
+                android:button="@drawable/stroke_thickness_selector_15"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
         </RadioGroup>
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
