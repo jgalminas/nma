@@ -83,45 +83,7 @@ public class DrawingFragment extends Fragment {
 
         colorSelection.setOnCheckedChangeListener((radioGroup, i) -> {
             RetrieveColor(i);
-//            switch(i){
-//                case R.id.radioButtonRed:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red));
-//                    break;
-//                case R.id.radioButtonOrange:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.orange));
-//                    break;
-//                case R.id.radioButtonYellow:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow));
-//                    break;
-//                case R.id.radioButtonYellowGreen:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow_green));
-//                    break;
-//                case R.id.radioButtonGreen:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.green));
-//                    break;
-//                case R.id.radioButtonBlueGreen:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue_green));
-//                    break;
-//                case R.id.radioButtonLightBlue:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.light_blue));
-//                    break;
-//                case R.id.radioButtonBlue:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
-//                    break;
-//                case R.id.radioButtonPurple:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.purple));
-//                    break;
-//                case R.id.radioButtonRedViolet:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red_violet));
-//                    break;
-//                case R.id.radioButtonBrown:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.brown));
-//                    break;
-//                case R.id.radioButtonBlack:
-//                    binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.black));
-//                    break;
-//
-//            }
+
         });
 
         drawTypeSelection = (RadioGroup) getView().findViewById(R.id.radioGroupDrawTypeSelection);
@@ -214,7 +176,7 @@ public class DrawingFragment extends Fragment {
 
         EditText ageInput = dialog.findViewById(R.id.age_input);
 
-        EditText nameInput = dialog.findViewById(R.id.name_input);
+        
 
         // register on cancel listener
         dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
@@ -282,7 +244,7 @@ public class DrawingFragment extends Fragment {
 
 
     private void RetrieveBrushType(int i){
-        if (i==2131362352){
+        if (i==R.id.radioButtonEraser){
 
         }else{
             drawTypeSelection.check(R.id.radioButtonLineDraw);
@@ -290,7 +252,7 @@ public class DrawingFragment extends Fragment {
     }
 
     public void RetrieveBrushTypeForColorChange(int i){
-        if (i==2131362352){
+        if (i==R.id.radioButtonEraser){
             drawTypeSelection.check(R.id.radioButtonLineDraw);
         }
     }
