@@ -1,0 +1,1 @@
+./init_data.sh & /opt/mssql/bin/sqlservr
