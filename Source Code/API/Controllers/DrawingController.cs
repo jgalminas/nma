@@ -19,7 +19,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
+        public async Task<IActionResult> UploadDrawing([FromForm] DrawingNewDTO data)
         {
 
             try
@@ -31,21 +31,19 @@ namespace API.Controllers
                     Message = "OK"
                 });
             }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
             catch (Exception e)
             {
-                if (e is NotFound)
+                return StatusCode(500, new GenericResponse()
                 {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                } else
-                {
-                    return StatusCode(500, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
+                    Message = e.Message
+                });
             }
 
         }
@@ -78,31 +76,27 @@ namespace API.Controllers
                 DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
+            catch (NotFound e)
+            {
+                return NotFound(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+            catch (BadRequest e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
             catch (Exception e)
             {
-                if (e is NotFound)
+                return StatusCode(500, new GenericResponse()
                 {
-                    return NotFound(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
-                else if (e is BadRequest)
-                {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
-                else
-                {
-                    return StatusCode(500, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
+                    Message = e.Message
+                });
             }
-            
         }
 
         [HttpPatch]
@@ -132,23 +126,21 @@ namespace API.Controllers
             {
                 await _drawingService.DeleteDrawingAsync(id);
                 return Ok();
-            } catch (Exception e)
-            {
-                if (e is NotFound)
-                {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                } 
-                else
-                {
-                    return StatusCode(500, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
             }
-          }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+        }
     }
 }
