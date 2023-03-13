@@ -3,6 +3,7 @@ using API.Models.DTOs;
 using API.Models.Responses;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -18,13 +19,22 @@ namespace API.Controllers
             _drawingService = drawingService;
         }
 
+
+
+        /// <summary>
+        /// Upload a drawing file with associated metadata.
+        /// </summary>
         [HttpPost]
-        public async Task<IActionResult> UploadDrawing([FromForm] DrawingNewDTO data)
+        [SwaggerResponse(StatusCodes.Status200OK, "TrailID", typeof(int))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
         {
 
             try
             {
                 var drawingId = await _drawingService.UploadDrawingAsync(data);
+                // TODO: this should be 201 not 200!
                 return Ok(new IdResponse()
                 {
                     Id = drawingId,
@@ -40,7 +50,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse()
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
                 {
                     Message = e.Message
                 });
@@ -48,8 +58,13 @@ namespace API.Controllers
 
         }
 
+        /// <summary>
+        /// Get drawing metadata and file URL by ID.
+        /// </summary>
         [HttpGet]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "DrawingDTO", typeof(DrawingDTO))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetDrawing(int id)
         {
             try
@@ -66,11 +81,17 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get a drawing image file by file ID.
+        /// </summary>
         [HttpGet]
         [Route("Image/{fileId}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "FileStreamResult", typeof(FileStreamResult))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status404NotFound)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetImage(string fileId)
         {
-
             try
             {
                 DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
@@ -92,15 +113,20 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse()
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
                 {
                     Message = e.Message
                 });
             }
         }
 
+        /// <summary>
+        /// Modify a drawing metadata with a given ID.
+        /// </summary>
         [HttpPatch]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateDrawing(int id, [FromBody] DrawingUpdateDTO data)
         {
             try
@@ -118,8 +144,14 @@ namespace API.Controllers
 
         }
 
+        /// <summary>
+        /// Delete a drawing with a given ID.
+        /// </summary>
         [HttpDelete]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> DeleteDrawing(int id)
         {
             try
@@ -136,7 +168,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse()
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
                 {
                     Message = e.Message
                 });
