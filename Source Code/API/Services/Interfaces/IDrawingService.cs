@@ -7,8 +7,8 @@ namespace API.Services.Interfaces
     {
         Task<DrawingStreamDTO> GetDrawingByIdAsync(string fileId);
         Task DeleteDrawingAsync(int id);
-        Task<int> UploadDrawingAsync(NewDrawingDTO data);
+        Task<int> UploadDrawingAsync(DrawingNewDTO data);
         Task UpdateDrawingAsync(int id, DrawingUpdateDTO data);
-        Task <DrawingDTO> GetDrawingByIdAsync(int id);
+        Task<DrawingDTO> GetDrawingByIdAsync(int id);
     }
 }

@@ -41,21 +41,19 @@ namespace API.Controllers
                     Message = "OK"
                 });
             }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
             catch (Exception e)
             {
-                if (e is NotFound)
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
                 {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                } else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
+                    Message = e.Message
+                });
             }
 
         }
@@ -99,31 +97,27 @@ namespace API.Controllers
                 DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
+            catch (NotFound e)
+            {
+                return NotFound(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+            catch (BadRequest e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
             catch (Exception e)
             {
-                if (e is NotFound)
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
                 {
-                    return NotFound(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
-                else if (e is BadRequest)
-                {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
+                    Message = e.Message
+                });
             }
-            
         }
 
         /// <summary>
@@ -164,23 +158,21 @@ namespace API.Controllers
             {
                 await _drawingService.DeleteDrawingAsync(id);
                 return Ok();
-            } catch (Exception e)
-            {
-                if (e is NotFound)
-                {
-                    return BadRequest(new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                } 
-                else
-                {
-                    return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
-                    {
-                        Message = e.Message
-                    });
-                }
             }
-          }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse()
+                {
+                    Message = e.Message
+                });
+            }
+        }
     }
 }

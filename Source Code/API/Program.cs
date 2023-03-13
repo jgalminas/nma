@@ -10,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Backblaze Client
-builder.Services.AddSingleton<IStorageClient>(o => {
+builder.Services.AddSingleton<IStorageClient>(o =>
+{
     var client = new BackblazeClient();
     client.Connect(
             builder.Configuration["Backblaze:keyID"],

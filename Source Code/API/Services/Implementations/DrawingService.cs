@@ -58,7 +58,8 @@ namespace API.Services.Implementations
             try
             {
                 await _db.SaveChangesAsync();
-            } catch (DbUpdateException)
+            }
+            catch (DbUpdateException)
             {
                 throw new ServerError();
             }
@@ -106,7 +107,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         public async Task<DrawingDTO> GetDrawingByIdAsync(int id)
         {
-            
+
             var drawing = await _db.Drawings.Select(d => new DrawingDTO()
             {
                 // map drawing data
@@ -169,7 +170,8 @@ namespace API.Services.Implementations
             try
             {
                 await _db.SaveChangesAsync();
-            } catch (ReferenceConstraintException)
+            }
+            catch (ReferenceConstraintException)
             {
                 throw new NotFound($"Event with id {data.EventId} doesn't exist");
             }
@@ -183,7 +185,7 @@ namespace API.Services.Implementations
         /// <returns> The ID of the Drawing record if successful </returns>
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
-        public async Task<int> UploadDrawingAsync(NewDrawingDTO data)
+        public async Task<int> UploadDrawingAsync(DrawingNewDTO data)
         {
 
             // check if event with specified ID exists
@@ -230,7 +232,8 @@ namespace API.Services.Implementations
                     throw new ServerError("Couldn't save drawing data to the database");
                 }
 
-            } else
+            }
+            else
             {
                 throw new ServerError("Couldn't upload drawing to cloud");
             }
