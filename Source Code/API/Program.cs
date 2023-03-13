@@ -1,3 +1,4 @@
+using System.Reflection;
 using API.Contexts;
 using API.Services.Implementations;
 using API.Services.Interfaces;
@@ -31,7 +32,11 @@ builder.Services.AddScoped<IDrawingService, DrawingService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    string? xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
