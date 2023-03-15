@@ -10,7 +10,7 @@ public class DisplayImage extends com.example.nmadrawingapp.model.Item {
     private final Bitmap image;
     private final int id;
     private Image status = Image.DEFAULT;
-    private final int eventId;
+    private int eventId;
 
     public DisplayImage(ItemType type, int id, Bitmap image, int eventId) {
         super(id, type);
@@ -37,5 +37,9 @@ public class DisplayImage extends com.example.nmadrawingapp.model.Item {
 
     public int getEventId() {
         return eventId;
+    }
+
+    public void setEventId(int id) {
+        this.eventId = id;
     }
 }

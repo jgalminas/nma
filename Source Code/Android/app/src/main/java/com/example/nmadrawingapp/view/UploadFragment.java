@@ -64,7 +64,7 @@ public class UploadFragment extends Fragment {
 
         // set up image recycler view
         GridLayoutManager layoutManager = new GridLayoutManager(requireContext(), COLUMN_COUNT);
-        ImageAdapter adapter = new ImageAdapter(layoutManager);
+        ImageAdapter adapter = new ImageAdapter(uploadViewModel, layoutManager, createDialog(R.layout.dialog_change_event_id));
         binding.imagesRecycler.setLayoutManager(layoutManager);
         binding.imagesRecycler.setItemAnimator(new DefaultItemAnimator());
         binding.imagesRecycler.setAdapter(adapter);
@@ -149,22 +149,22 @@ public class UploadFragment extends Fragment {
 
     private void onDeleteButtonClick(ImageAdapter adapter, UploadViewModel uploadViewModel) {
         binding.deleteButton.setOnClickListener(button -> {
-            showDialog(adapter, uploadViewModel);
+            showDialog(R.layout.dialog_confirm_delete, adapter, uploadViewModel);
         });
     }
 
-    private Dialog createDialog() {
+    private Dialog createDialog(int layout) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         LayoutInflater inflater = this.getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.dialog_confirm_delete, null));
+        builder.setView(inflater.inflate(layout, null));
 
         return builder.create();
     }
 
-    private void showDialog(ImageAdapter adapter, UploadViewModel uploadViewModel) {
+    private void showDialog(int layout, ImageAdapter adapter, UploadViewModel uploadViewModel) {
 
-        dialog = createDialog();
+        dialog = createDialog(layout);
 
         // make background transparent
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -172,12 +172,12 @@ public class UploadFragment extends Fragment {
         dialog.show(); // must show dialog before registering listeners
 
         // register on cancel listener
-        dialog.findViewById(R.id.confirm_cancel_button).setOnClickListener(button -> {
+        dialog.findViewById(R.id.negative_button).setOnClickListener(button -> {
             dialog.cancel();
         });
 
         // register on confirm listener
-        dialog.findViewById(R.id.confirm_delete_button).setOnClickListener(button -> {
+        dialog.findViewById(R.id.positive_button).setOnClickListener(button -> {
 
             uploadViewModel.deleteImages(Objects.requireNonNull(adapter.getSelectedImages().getValue()));
 

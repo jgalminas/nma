@@ -2,10 +2,20 @@ package com.example.nmadrawingapp.view.adapters;
 
 import static com.example.nmadrawingapp.view.UploadFragment.COLUMN_COUNT;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
@@ -20,7 +30,9 @@ import com.example.nmadrawingapp.model.Event;
 import com.example.nmadrawingapp.model.Item;
 import com.example.nmadrawingapp.model.enums.Image;
 import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.utils.NumberUtil;
 import com.example.nmadrawingapp.view.components.CustomCheckBox;
+import com.example.nmadrawingapp.viewmodel.UploadViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +44,13 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private List<Item> items = new ArrayList<>();
     private final MutableLiveData<ArrayList<Integer>> selected = new MutableLiveData<>(new ArrayList<>());
+    private final Dialog dialog;
+    private final UploadViewModel viewModel;
 
-    public ImageAdapter(GridLayoutManager layoutManager) {
+    public ImageAdapter(UploadViewModel viewModel, GridLayoutManager layoutManager, Dialog dialog) {
+
+        this.viewModel = viewModel;
+        this.dialog = dialog;
 
         // Make event items span full width
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -91,12 +108,14 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         private final TextView eventId;
         private final TextView eventLabel;
         private final ConstraintLayout error;
+        private final ImageButton options;
 
         public EventViewHolder(@NonNull View itemView) {
             super(itemView);
             this.eventId = itemView.findViewById(R.id.event_id);
             this.eventLabel = itemView.findViewById(R.id.event_label);
             this.error = itemView.findViewById(R.id.id_error);
+            this.options = itemView.findViewById(R.id.event_options);
         }
 
         public TextView getEventId() {
@@ -110,6 +129,11 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         public ConstraintLayout getError() {
             return error;
         }
+
+        public ImageButton getOptions() {
+            return options;
+        }
+
     }
 
     @Override
@@ -155,6 +179,26 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             } else {
                 eventHolder.getError().setVisibility(View.GONE);
             }
+
+            // inflate options menu
+            eventHolder.getOptions().setOnClickListener(button -> {
+                PopupMenu menu = new PopupMenu(button.getContext(), button, Gravity.END);
+                MenuInflater inflater = menu.getMenuInflater();
+                inflater.inflate(R.menu.event_options, menu.getMenu());
+                menu.show();
+
+                // menu item click handle
+                menu.setOnMenuItemClickListener(item -> {
+                    switch (item.getItemId()) {
+                        case R.id.change_id:
+                            showDialog(items.get(position));
+                            return true;
+                        default:
+                            return false;
+                    }
+                });
+
+            });
 
         } else if (type == IMAGE_TYPE) {
 
@@ -349,4 +393,77 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
     }
+
+    private void showDialog(Item item) {
+
+        // make background transparent
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        dialog.show(); // must show dialog before registering listeners
+
+        EditText idInput = dialog.findViewById(R.id.event_id_input);
+
+        // register on cancel listener
+        dialog.findViewById(R.id.negative_button).setOnClickListener(button -> {
+            dialog.cancel();
+        });
+
+        // register on submit listener
+        dialog.findViewById(R.id.positive_button).setOnClickListener(button -> {
+
+            int newId = NumberUtil.parseNumber(idInput.getText().toString());
+
+            // if new ID is valid
+            if (newId > 0 && idInput.getText().length() > 0) {
+
+                // update IDs in SQLite
+                viewModel.changeEventId(item.getId(), newId);
+
+                // update IDs in the adapter's dataset
+                updateEventIdsByEventId(item.getId(), newId);
+
+                // update event ID in adapter's dataset
+                item.toEvent().setId(newId);
+                notifyItemChanged(items.indexOf(item));
+
+                // close dialog
+                dialog.cancel();
+
+            }
+            else {
+                dialog.findViewById(R.id.error_message).setVisibility(View.VISIBLE);
+            }
+
+        });
+
+        // validate input on text change
+        idInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable text) {
+                if (text.length() > 0) {
+                    dialog.findViewById(R.id.error_message).setVisibility(View.GONE);
+                } else {
+                    dialog.findViewById(R.id.error_message).setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+    }
+
+    private void updateEventIdsByEventId(int oldId, int newId) {
+
+        for (Item i : items) {
+            if (i.getType() == ItemType.IMAGE && i.toImage().getEventId() == oldId) {
+                i.toImage().setEventId(newId);
+            }
+        }
+
+    }
+
 }

@@ -30,4 +30,6 @@ interface ImageDao {
     @Query("SELECT COUNT(id) FROM image")
     Integer getCount();
 
+    @Query("UPDATE image SET eventId = (:newId) WHERE eventId == (:currentId)")
+    void changeEventId(int currentId, int newId);
 }

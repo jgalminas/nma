@@ -26,4 +26,10 @@
     <string name="confirm_action">Confirm Action</string>
     <string name="confirm_delete">Are you sure you want to delete selected drawings?</string>
     <string name="delete">Delete</string>
+    <string name="change_id">Change ID</string>
+    <string name="change_event_id">Change Event ID</string>
+    <string name="new_id">New ID</string>
+    <string name="enter_new_event_id">Enter new event ID</string>
+    <string name="change">Change</string>
+    <string name="id_error">ID field cannot be empty</string>
 </resources>

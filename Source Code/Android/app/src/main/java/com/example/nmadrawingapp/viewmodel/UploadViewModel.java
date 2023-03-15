@@ -31,6 +31,10 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
+    public void changeEventId(int currentId, int newId) {
+        imageRepository.changeEventId(currentId, newId);
+    }
+
     public LiveData<List<Item>> getAllImages() {
 
         MutableLiveData<List<Item>> data = new MutableLiveData<>();

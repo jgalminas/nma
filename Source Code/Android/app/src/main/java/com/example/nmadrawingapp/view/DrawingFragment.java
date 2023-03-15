@@ -24,6 +24,7 @@ import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.data_sources.network.RetrofitClient;
 import com.example.nmadrawingapp.model.data_sources.network.services.DrawingService;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
+import com.example.nmadrawingapp.utils.NumberUtil;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
 
 import java.util.Arrays;
@@ -107,7 +108,7 @@ public class DrawingFragment extends Fragment {
         // register on save listener
         dialog.findViewById(R.id.save_button).setOnClickListener(button -> {
 
-            int age = parseAge(ageInput.getText().toString());
+            int age = NumberUtil.parseNumber(ageInput.getText().toString());
             String name = nameInput.getText().toString();
             boolean ageIsValid = validateAge(age);
             boolean nameIsValid = validateName(name);
@@ -145,7 +146,7 @@ public class DrawingFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable text) {
-                if (validateAge(parseAge(text.toString()))) {
+                if (validateAge(NumberUtil.parseNumber(text.toString()))) {
                     dialog.findViewById(R.id.age_error_message).setVisibility(View.GONE);
                 } else {
                     dialog.findViewById(R.id.age_error_message).setVisibility(View.VISIBLE);
@@ -190,14 +191,6 @@ public class DrawingFragment extends Fragment {
         }
 
          return true;
-    }
-
-    private int parseAge(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
     }
 
 }

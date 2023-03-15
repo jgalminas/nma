@@ -106,4 +106,9 @@ public class ImageRepository implements IImageRepository {
         Database.executor.execute(() -> imageDao.deleteById(id));
     }
 
+    @Override
+    public void changeEventId(int currentId, int newId) {
+        Database.executor.execute(() -> imageDao.changeEventId(currentId, newId));
+    }
+
 }

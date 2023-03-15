@@ -15,5 +15,6 @@ public interface IImageRepository {
     void deleteImage(Image image);
     void uploadImage(Image image, Callback<Response> callback);
     void deleteById(int id);
+    void changeEventId(int currentId, int newId);
 
 }
