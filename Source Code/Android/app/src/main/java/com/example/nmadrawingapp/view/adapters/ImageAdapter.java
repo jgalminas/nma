@@ -174,8 +174,15 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
             eventHolder.getEventId().setText(String.valueOf(event.getId()));
 
+            // display event Id error
             if (event.isShowError()) {
                 eventHolder.getError().setVisibility(View.VISIBLE);
+
+                // handle on "Change ID" button click
+                eventHolder.getError().findViewById(R.id.id_change_button).setOnClickListener(button -> {
+                    showDialog(items.get(position));
+                });
+
             } else {
                 eventHolder.getError().setVisibility(View.GONE);
             }
@@ -422,8 +429,9 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 // update IDs in the adapter's dataset
                 updateEventIdsByEventId(item.getId(), newId);
 
-                // update event ID in adapter's dataset
+                // update event ID in adapter's dataset & remove error
                 item.toEvent().setId(newId);
+                item.toEvent().setShowError(false);
                 notifyItemChanged(items.indexOf(item));
 
                 // close dialog
