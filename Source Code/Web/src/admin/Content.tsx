@@ -1,4 +1,5 @@
 import { Children } from '../types/global.types';
+import TextAreaInput from './primitives/TextAreaInput';
 
 export interface ContentProps {
 	children: Children
@@ -10,6 +11,8 @@ export default function Content({ children }: ContentProps) {
 
 			{ children }
 			
+			<TextAreaInput onChange={(e) => console.log(e)}/>
+
 		</div>
 	)
 }

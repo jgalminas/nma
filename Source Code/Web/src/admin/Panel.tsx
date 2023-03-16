@@ -20,9 +20,8 @@ export default function Panel({ children }: PanelProps) {
 		isDOMLoaded ? createPortal(
 			<div className='w-[400px] xl:w-[450px] h-full border-l border-gray-200 bg-white absolute top-0 right-0'>
 
-				
-
 				{ children }
+				
 			</div>,
 			parent
 		)
