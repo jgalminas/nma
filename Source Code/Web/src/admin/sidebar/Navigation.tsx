@@ -1,4 +1,4 @@
-import { Route } from '../types/admin.types'
+import { Route } from '../../types/admin.types'
 import NavItem from './NavItem';
 import { Squares2X2Icon, CalendarDaysIcon, MapPinIcon, PhoneIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 

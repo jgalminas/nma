@@ -1,4 +1,4 @@
-﻿import Sidebar from './admin/Sidebar';
+﻿import Sidebar from './admin/sidebar/Sidebar';
 import Content from './admin/Content';
 import Header from './admin/Header';
 import { Outlet } from 'react-router';
