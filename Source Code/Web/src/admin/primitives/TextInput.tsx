@@ -11,7 +11,7 @@ export default function TextInput({ label, name, onChange }: TextInputProps) {
 	const inputId = name ?? useId();
 	
 	return (
-		<div>
+		<div className='flex flex-col'>
 
 			{ label &&
 				<label htmlFor={inputId} className='text-gray-600 mb-1'>

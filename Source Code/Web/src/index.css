@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Override default calendar picker icon */
+::-webkit-calendar-picker-indicator {
+	background-image: url('/src/assets/ArrowDown.svg');
+  }
