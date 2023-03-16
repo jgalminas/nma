@@ -1,1 +1,1 @@
-export type Children = JSX.Element[] | JSX.Element | null
+export type Children = JSX.Element[] | JSX.Element | null | string;
