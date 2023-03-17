@@ -1,7 +1,7 @@
-import { Children } from '../../types/global.types';
+import { ReactNode } from 'react';
 
 export interface TableProps {
-	children: Children
+	children: ReactNode
 }
 
 // HTML <table/> component
@@ -16,7 +16,7 @@ export default function Table({ children }: TableProps) {
 
 // HTML <thead/> component
 interface HeadProps {
-	children: Children
+	children: ReactNode
 }
 
 function Head({ children }: HeadProps) {
@@ -29,7 +29,7 @@ function Head({ children }: HeadProps) {
 
 // HTML <th/> component
 interface HeaderProps {
-	children: Children
+	children: ReactNode
 }
 
 function Header({ children }: HeaderProps) {
@@ -42,7 +42,7 @@ function Header({ children }: HeaderProps) {
 
 // HTML <tr/> component
 interface RowProps {
-	children: Children
+	children: ReactNode
 }
 
 function Row({ children }: RowProps) {
@@ -55,7 +55,7 @@ function Row({ children }: RowProps) {
 
 // HTML <tbody/> component
 interface BodyProps {
-	children: Children
+	children: ReactNode
 }
 
 function Body({ children }: BodyProps) {
@@ -68,7 +68,7 @@ function Body({ children }: BodyProps) {
 
 // HTML <td/> component
 interface DataProps {
-	children: Children
+	children: ReactNode
 }
 
 function Data({ children }: DataProps) {

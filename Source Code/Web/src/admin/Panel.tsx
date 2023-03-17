@@ -1,10 +1,9 @@
-import { Children } from '../types/global.types';
 import { createPortal } from 'react-dom';
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { PAGE_ID } from './constants';
 
 export interface PanelProps {
-	children: Children
+	children: ReactNode
 }
 
 export default function Panel({ children }: PanelProps) {

@@ -1,14 +1,14 @@
 export interface TextButtonProps {
-	text: string
-	onClick: () => void
+	children?: string
+	onClick?: () => void
 }
 
-export default function TextButton({ text, onClick }: TextButtonProps) {
+export default function TextButton({ children, onClick }: TextButtonProps) {
 	return (
 		<button
-		className='text-sm font-medium text-gray-600 px-6 py-2 rounded hover:bg-gray-100 focus:ring focus:ring-gray-200'
+		className='text-sm font-medium text-gray-600 px-6 py-2 rounded hover:bg-gray-100'
 		onClick={onClick}>
-			{ text }
+			{ children }
 		</button>
 	)
 }

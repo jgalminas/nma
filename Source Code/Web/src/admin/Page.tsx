@@ -1,13 +1,13 @@
-import { Children } from '../types/global.types';
+import { ReactNode } from 'react';
 import { PAGE_ID } from './constants';
 
 export interface PageProps {
-	children: Children
+	children: ReactNode
 }
 
 export default function Page({ children }: PageProps) {
 	return (
-		<div id={PAGE_ID} className='bg-gray-50 w-full py-5 px-10 relative overflow-auto flex justify-center'>
+		<div id={PAGE_ID} className='bg-gray-50 w-full py-7 px-10 relative overflow-auto flex justify-center'>
 			{ children }
 		</div>
 	)
