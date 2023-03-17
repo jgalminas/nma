@@ -6,10 +6,8 @@ export interface ContentProps {
 
 export default function Content({ children }: ContentProps) {
 	return (
-		<div id='content' className='bg-gray-50 w-full p-5 relative overflow-auto'>
-
+		<div className='max-w-[120rem] w-full'>
 			{ children }
-
 		</div>
 	)
 }
