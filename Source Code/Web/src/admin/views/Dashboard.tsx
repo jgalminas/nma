@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Card from '../Card';
 import Content from '../Content';
 import DashboardStat from '../DashboardStat';
@@ -89,7 +90,9 @@ export default function Dashboard() {
 									<Table.Row key={d.id}>
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
-										<Table.Data> { d.event.name } </Table.Data>
+										<Table.Data>
+											<Link to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
+										</Table.Data>
 										<Table.Data> { d.createdAt } </Table.Data>
 									</Table.Row>
 								)

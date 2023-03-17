@@ -18,7 +18,7 @@ export default function Panel({ children }: PanelProps) {
 
 	return (
 		isDOMLoaded ? createPortal(
-			<div className='w-[25rem] xl:w-[28rem] h-full border-l border-gray-200 bg-white absolute top-0 right-0'>
+			<div className='p-5 w-[25rem] xl:w-[28rem] h-full border-l border-gray-200 bg-white absolute top-0 right-0'>
 
 				{ children }
 				
