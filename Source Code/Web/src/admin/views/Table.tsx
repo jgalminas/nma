@@ -15,11 +15,11 @@ export default function Table({ children }: TableProps) {
 
 
 // HTML <thead/> component
-interface HeadProps {
+export interface HeadProps {
 	children: ReactNode
 }
 
-function Head({ children }: HeadProps) {
+export function Head({ children }: HeadProps) {
 	return (
 		<thead className='bg-gray-100'>
 			{ children }
@@ -28,24 +28,24 @@ function Head({ children }: HeadProps) {
 }
 
 // HTML <th/> component
-interface HeaderProps {
+export interface HeadingProps {
 	children: ReactNode
 }
 
-function Header({ children }: HeaderProps) {
+export function Heading({ children }: HeadingProps) {
 	return (
-		<th className='text-left p-2 font-medium'>
+		<th className='text-left p-2 font-medium px-4'>
 			{ children }
 		</th>
 	)
 }
 
 // HTML <tr/> component
-interface RowProps {
+export interface RowProps {
 	children: ReactNode
 }
 
-function Row({ children }: RowProps) {
+export function Row({ children }: RowProps) {
 	return (
 		<tr>
 			{ children }
@@ -54,11 +54,11 @@ function Row({ children }: RowProps) {
 }
 
 // HTML <tbody/> component
-interface BodyProps {
+export interface BodyProps {
 	children: ReactNode
 }
 
-function Body({ children }: BodyProps) {
+export function Body({ children }: BodyProps) {
 	return (
 		<tbody className='divide-y'>
 			{ children }
@@ -67,13 +67,13 @@ function Body({ children }: BodyProps) {
 }
 
 // HTML <td/> component
-interface DataProps {
+export interface DataProps {
 	children: ReactNode
 }
 
-function Data({ children }: DataProps) {
+export function Data({ children }: DataProps) {
 	return (
-		<td className='p-2'>
+		<td className='py-2 px-4'>
 			{ children }
 		</td>
 	)
@@ -82,5 +82,5 @@ function Data({ children }: DataProps) {
 Table.Head = Head;
 Table.Row = Row;
 Table.Body = Body;
-Table.Header = Header;
+Table.Heading = Heading;
 Table.Data = Data;
