@@ -26,7 +26,7 @@ namespace API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "TrailID", typeof(int))]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> UploadDrawing([FromForm] NewDrawingDTO data)
+        public async Task<IActionResult> UploadDrawing([FromForm] DrawingNewDTO data)
         {
 
             try
