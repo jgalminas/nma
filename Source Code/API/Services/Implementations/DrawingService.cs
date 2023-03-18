@@ -148,6 +148,15 @@ namespace API.Services.Implementations
         }
 
         /// <summary>
+        /// Get the count of drawings in the database
+        /// </summary>
+        /// <returns> numer of drawings </returns>
+        public async Task<int> GetDrawingCountAsync()
+        {
+            return await _db.Drawings.CountAsync();
+        }
+
+        /// <summary>
         /// Update some drawing values - drawers name, age and the event id.
         /// </summary>
         /// <param name="id"></param>

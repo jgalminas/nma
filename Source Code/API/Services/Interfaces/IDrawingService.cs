@@ -10,5 +10,6 @@ namespace API.Services.Interfaces
         Task<int> UploadDrawingAsync(DrawingNewDTO data);
         Task UpdateDrawingAsync(int id, DrawingUpdateDTO data);
         Task<DrawingDTO> GetDrawingByIdAsync(int id);
+        Task<int> GetDrawingCountAsync();
     }
 }

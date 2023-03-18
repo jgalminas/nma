@@ -138,5 +138,14 @@ namespace API.Services.Implementations
                 throw new NotFound($"Event with id {id} doesn't exist");
             }
         }
+
+        /// <summary>
+        /// Gets the total number of events in the database
+        /// </summary>
+        /// <returns> number of events </returns>
+        public async Task<int> GetEventCountAsync()
+        {
+            return await _db.Events.CountAsync();
+        }
     }
 }

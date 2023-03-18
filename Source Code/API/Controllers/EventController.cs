@@ -93,5 +93,22 @@ namespace API.Controllers
                 return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
         }
+
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetEventCountAsync()
+        {
+            try
+            {
+                var count = await _eventService.GetEventCountAsync();
+                return Ok(new CountDTO() { Count = count });
+
+            } catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
+
+
     }
 }

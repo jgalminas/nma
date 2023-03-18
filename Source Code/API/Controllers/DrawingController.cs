@@ -174,5 +174,22 @@ namespace API.Controllers
                 });
             }
         }
+
+        [HttpGet]
+        [Route("count")]
+        public async Task<IActionResult> GetDrawingCountAsync()
+        {
+            try
+            {
+                var count = await _drawingService.GetDrawingCountAsync();
+                return Ok(new CountDTO() { Count = count });
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
+
     }
 }
