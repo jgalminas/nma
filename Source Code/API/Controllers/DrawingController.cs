@@ -19,8 +19,6 @@ namespace API.Controllers
             _drawingService = drawingService;
         }
 
-
-
         /// <summary>
         /// Upload a drawing file with associated metadata.
         /// </summary>
