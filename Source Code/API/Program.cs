@@ -29,6 +29,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 // Services
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IDrawingService, DrawingService>();
 
 builder.Services.AddControllers();
