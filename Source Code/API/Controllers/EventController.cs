@@ -44,7 +44,7 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse() { Message = e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse() { Message = e.Message });
             }
         }
 

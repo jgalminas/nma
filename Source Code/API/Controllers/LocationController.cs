@@ -1,9 +1,11 @@
 using API.Exceptions;
 using API.Models;
 using API.Models.DTOs;
+using API.Models.Entities;
 using API.Models.Responses;
 using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -19,7 +21,13 @@ namespace API.Controllers
             _locationService = locationService;
         }
 
+        /// <summary>
+        /// Create a Location object in the database.
+        /// </summary>
         [HttpPost]
+        [SwaggerResponse(StatusCodes.Status200OK, "LocationID", typeof(int))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> CreateLocation([FromForm] LocationDTO data)
         {
             try
@@ -36,18 +44,27 @@ namespace API.Controllers
             }
             catch (Exception e)
             {
-                return StatusCode(500, new GenericResponse() { Message = e.Message });
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse() { Message = e.Message });
             }
         }
 
+        /// <summary>
+        /// Get all Location objects in the database.
+        /// </summary>
         [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, "Locations", typeof(Location[]))]
         public async Task<IActionResult> GetLocations()
         {
             return Ok(await _locationService.GetLocationsAsync());
         }
 
+        /// <summary>
+        /// Get a Location object by ID.
+        /// </summary>
         [HttpGet]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Location", typeof(Location))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetLocation(int id)
         {
             try
@@ -60,8 +77,13 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Update a Location object in the database by ID.
+        /// </summary>
         [HttpPatch]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateLocation(int id, [FromForm] LocationDTO data)
         {
             try
@@ -75,8 +97,14 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Delete a Location object in the database by ID.
+        /// </summary>        
         [HttpDelete]
         [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> DeleteLocation(int id)
         {
             try
