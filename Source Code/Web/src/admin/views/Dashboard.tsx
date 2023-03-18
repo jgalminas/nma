@@ -1,3 +1,4 @@
+import { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import Card from '../Card';
 import Content from '../Content';
@@ -19,6 +20,8 @@ type Drawing = {
 }
 
 export default function Dashboard() {
+	
+	const columns: ReactNode[] = ["Drawer's Name", "Drawer's Age", "Event Name", "Date Added"];
 
 	const drawings: Drawing[] = [
 		{ id: 1, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
@@ -70,18 +73,13 @@ export default function Dashboard() {
 				<Table>
 					<Table.Head>
 						<Table.Row>
-							<Table.Heading>
-								Drawer's Name
-							</Table.Heading>
-							<Table.Heading>
-								Drawer's Age
-							</Table.Heading>
-							<Table.Heading>
-								Event Name
-							</Table.Heading>
-							<Table.Heading>
-								Date Added
-							</Table.Heading>
+							{ columns.map((c) => {
+								return (
+									<Table.Heading>
+										{ c }
+									</Table.Heading>
+								)
+							}) }
 						</Table.Row>
 					</Table.Head>
 					<Table.Body>
