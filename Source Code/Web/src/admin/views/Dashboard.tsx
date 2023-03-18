@@ -73,10 +73,10 @@ export default function Dashboard() {
 				<Table>
 					<Table.Head>
 						<Table.Row>
-							{ columns.map((c) => {
+							{ columns.map((col, key) => {
 								return (
-									<Table.Heading>
-										{ c }
+									<Table.Heading key={key}>
+										{ col }
 									</Table.Heading>
 								)
 							}) }
