@@ -22,7 +22,7 @@ export default function Dashboard() {
 	const { data: event } = useQuery('eventCount', fetchEventCount);
 	const { data: location } = useQuery('locationCount', fetchLocationCount);
 	const { data: drawing } = useQuery('drawingCount', fetchDrawingCount);
-	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
+	const { data: drawings, isLoading } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
 
 	return (
 		<Content>
@@ -31,7 +31,7 @@ export default function Dashboard() {
 			
 			<div className='flex w-full gap-7 mt-7 flex-wrap'>
 
-				<Card className='w-80'>
+				<Card className='min-w-[18rem] w-80 flex-grow xl:flex-grow-0'>
 					<DashboardStat label='Events' number={event?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
@@ -40,7 +40,7 @@ export default function Dashboard() {
 					</Card.Actions>
 				</Card>
 
-				<Card className='w-80'>
+				<Card className='min-w-[18rem] w-80 flex-grow xl:flex-grow-0'>
 					<DashboardStat label='Locations' number={location?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
@@ -49,7 +49,7 @@ export default function Dashboard() {
 					</Card.Actions>
 				</Card>
 
-				<Card className='w-80'>
+				<Card className='min-w-[18rem] w-80 flex-grow xl:flex-grow-0'>
 					<DashboardStat label='Drawings' number={drawing?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
@@ -60,7 +60,7 @@ export default function Dashboard() {
 
 			</div>
 
-			<div className='mt-10'>
+			<div className='mt-10 pb-10'>
 				<h2 className='text-2xl text-gray-800 font-medium mb-5'> Recent Drawings </h2>
 
 				<Table>
@@ -82,7 +82,7 @@ export default function Dashboard() {
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data>
-											<Link to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
+											<Link className='underline' to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
 									</Table.Row>
