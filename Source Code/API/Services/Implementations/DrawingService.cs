@@ -17,6 +17,61 @@ namespace API.Services.Implementations
         private readonly IStorageClient _storageClient;
         private readonly ApplicationDbContext _db;
 
+        private IQueryable<DrawingDTO> GetDrawing()
+        {
+            return _db.Drawings.Select(d => new DrawingDTO()
+            {
+                // map drawing data
+                Id = d.DrawingId,
+                Event = new EventDTO()
+                {
+                    Id = d.EventId,
+                    Name = d.Event.EventName ?? string.Empty
+                },
+                CreatedAt = d.CreatedAt,
+                DrawersAge = d.DrawersAge,
+                DrawersName = d.DrawersName,
+                ImageUrl = $"/api/drawing/image/{d.FileId}"
+            });
+        }
+        private IQueryable<DrawingDTO> GetDrawingWithScores()
+        {
+            return _db.Drawings.Select(d => new DrawingDTO()
+            {
+                // map drawing data
+                Id = d.DrawingId,
+                Event = new EventDTO()
+                {
+                    Id = d.EventId,
+                    Name = d.Event.EventName ?? string.Empty,
+                },
+                CreatedAt = d.CreatedAt,
+                DrawersAge = d.DrawersAge,
+                DrawersName = d.DrawersName,
+                ImageUrl = $"/api/drawing/image/{d.FileId}",
+
+                // map score data
+                Scores = d.Scores.Select(s => new ScoreDTO()
+                {
+                    ScoreId = s.ScoreId,
+                    Breadth = s.TopicScores.Count(),
+                    ScoredAt = s.ScoredAt,
+                    ScoredBy = s.Scorer.Username ?? string.Empty,
+                    Notes = s.Notes,
+
+                    //map scores for each topic
+                    TopicScores = s.TopicScores.Select(ts => new TopicScoreDTO()
+                    {
+                        TopicScoreId = ts.TopicScoreId,
+                        Depth = ts.Depth,
+                        Extent = ts.Extent
+                    }).ToArray()
+
+                }).ToArray()
+
+            });
+        }
+
         public DrawingService(ApplicationDbContext db, IConfiguration config, IStorageClient storageClient)
         {
             _db = db;
@@ -105,39 +160,17 @@ namespace API.Services.Implementations
         /// <param name="id"></param>
         /// <returns> Drawing data </returns>
         /// <exception cref="NotFound"></exception>
-        public async Task<DrawingDTO> GetDrawingByIdAsync(int id)
+        public async Task<DrawingDTO> GetDrawingByIdAsync(int id, bool withScores)
         {
+            DrawingDTO drawing;
 
-            var drawing = await _db.Drawings.Select(d => new DrawingDTO()
+            if (withScores)
             {
-                // map drawing data
-                Id = d.DrawingId,
-                EventId = d.EventId,
-                CreatedAt = d.CreatedAt,
-                DrawersAge = d.DrawersAge,
-                DrawersName = d.DrawersName,
-                ImageUrl = $"/api/drawing/image/{d.FileId}",
-
-                // map score data
-                Scores = d.Scores.Select(s => new ScoreDTO()
-                {
-                    ScoreId = s.ScoreId,
-                    Breadth = s.TopicScores.Count(),
-                    ScoredAt = s.ScoredAt,
-                    ScoredBy = s.Scorer.Username,
-                    Notes = s.Notes,
-
-                    //map scores for each topic
-                    TopicScores = s.TopicScores.Select(ts => new TopicScoreDTO()
-                    {
-                        TopicScoreId = ts.TopicScoreId,
-                        Depth = ts.Depth,
-                        Extent = ts.Extent
-                    }).ToArray()
-
-                }).ToArray()
-
-            }).FirstOrDefaultAsync(d => d.Id == id);
+                drawing = await GetDrawing().FirstOrDefaultAsync(d => d.Id == id);
+            } else
+            {
+                drawing = await GetDrawingWithScores().FirstOrDefaultAsync(d => d.Id == id);
+            }
 
             if (drawing == null)
             {
@@ -245,6 +278,42 @@ namespace API.Services.Implementations
             else
             {
                 throw new ServerError("Couldn't upload drawing to cloud");
+            }
+
+        }
+
+
+        /// <summary>
+        /// Get drawings
+        /// </summary>
+        /// <param name="count"></param>
+        /// <param name="unscoredOnly"></param>
+        /// <returns> array of drawings </returns>
+        public async Task<ICollection<DrawingDTO>> GetDrawingsAsync(int count, bool unscoredOnly)
+        {
+            if (unscoredOnly)
+            {
+                return await _db.Drawings
+                    .Where(d => !d.Scores.Any())
+                    .Select(d => new DrawingDTO()
+                    {
+                        // map drawing data
+                        Id = d.DrawingId,
+                        Event = new EventDTO()
+                        {
+                            Id = d.EventId,
+                            Name = d.Event.EventName ?? string.Empty,
+                        },
+                        CreatedAt = d.CreatedAt,
+                        DrawersAge = d.DrawersAge,
+                        DrawersName = d.DrawersName,
+                        ImageUrl = $"/api/drawing/image/{d.FileId}",
+                    })
+                    .Take(count)
+                    .ToArrayAsync();
+            } else
+            {
+                return await GetDrawing().Take(count).ToArrayAsync();
             }
 
         }

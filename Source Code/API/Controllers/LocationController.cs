@@ -95,7 +95,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("count")]
+        [Route("Count")]
         public async Task<IActionResult> GetLocationCountAsync()
         {
             try

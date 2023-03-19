@@ -63,13 +63,13 @@ namespace API.Controllers
         /// </summary>
         [HttpGet]
         [Route("{id:int}")]
-        [SwaggerResponse(StatusCodes.Status200OK, "DrawingDTO", typeof(DrawingDTO))]
+        [SwaggerResponse(StatusCodes.Status200OK, "Drawing", typeof(DrawingDTO))]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetDrawing(int id)
+        public async Task<IActionResult> GetDrawing(int id, [FromQuery] bool withScores = false)
         {
             try
             {
-                var drawing = await _drawingService.GetDrawingByIdAsync(id);
+                var drawing = await _drawingService.GetDrawingByIdAsync(id, withScores);
                 return Ok(drawing);
             }
             catch (NotFound e)
@@ -176,13 +176,30 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("count")]
+        [Route("Count")]
         public async Task<IActionResult> GetDrawingCountAsync()
         {
             try
             {
                 var count = await _drawingService.GetDrawingCountAsync();
                 return Ok(new CountDTO() { Count = count });
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("/Api/Drawings")]
+        public async Task<IActionResult> GetDrawings([FromQuery] int count = 10, [FromQuery] bool unscoredOnly = true)
+        {
+            try
+            {
+                return Ok(
+                    await _drawingService.GetDrawingsAsync(count, unscoredOnly)
+                    );
 
             }
             catch (Exception e)

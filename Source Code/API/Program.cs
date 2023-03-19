@@ -20,11 +20,18 @@ builder.Services.AddSingleton<IStorageClient>(o =>
     return client;
 });
 
-
 // Db Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:DB"]);
+    options.UseSqlServer(
+        builder.Environment.IsProduction()
+        ? builder.Configuration["ConnectionStrings:DB"]
+        : builder.Configuration["ConnectionStrings:DB_DEV"]
+        , options =>
+    {
+        options.EnableRetryOnFailure();
+    });
+
     options.UseExceptionProcessor();
 });
 

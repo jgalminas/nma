@@ -95,7 +95,7 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        [Route("count")]
+        [Route("Count")]
         public async Task<IActionResult> GetEventCountAsync()
         {
             try
@@ -108,7 +108,5 @@ namespace API.Controllers
                 return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
         }
-
-
     }
 }
