@@ -30,7 +30,7 @@ export default function EventPanel({ mode = PANEL_MODE.VIEW }: EventPanelProps) 
 				<TextAreaInput label='Notes' onChange={() => console.log(1)}/>
 			</div>
 
-			<div className='flex justify-end gap-3 mt-auto'>
+			<div className='flex justify-end gap-3 pt-5 mt-auto'>
 				<TextButton onClick={() => navigate('/admin/events')}> Cancel </TextButton>
 				{ mode == PANEL_MODE.CREATE && <PrimaryButton> Create Event </PrimaryButton> }
 				{ mode == PANEL_MODE.EDIT && <PrimaryButton> Edit Event </PrimaryButton> }
