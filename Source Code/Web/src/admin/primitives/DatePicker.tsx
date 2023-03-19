@@ -2,8 +2,8 @@ import { useId } from 'react';
 
 export interface DatePickerProps {
 	label?: string
-	value: Date,
-	onChange: (d: Date | null) => void
+	value?: string,
+	onChange: (d: string | null) => void
 }
 
 export default function DatePicker({ value, onChange, label }: DatePickerProps) {
@@ -20,8 +20,9 @@ export default function DatePicker({ value, onChange, label }: DatePickerProps) 
 
 			<input
 			type="date"
-			className="rounded w-fit bg-transparent text-gray-700 focus:outline-none font-medium"
-			onChange={(e) => onChange(e.target.valueAsDate)}/>
+			value={value}
+			className="rounded w-fit bg-transparent text-gray-700 focus:outline-none"
+			onChange={(e) => onChange(e.target.value)}/>
 
 		</div> 
 	)
