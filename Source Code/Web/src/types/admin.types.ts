@@ -1,3 +1,5 @@
+export type Ref = React.RefObject<HTMLElement>;
+
 export type Route = {
 	text: string,
 	route: string,

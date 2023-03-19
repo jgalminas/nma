@@ -21,8 +21,10 @@ export default function EventPanel({ mode = PANEL_MODE.VIEW }: EventPanelProps) 
 	// react query test
 	const { isLoading, isSuccess, data } = useQuery(`event-${id}`, () => fetchEventById(Number(id)));
 
+	const navigateBack = () => navigate('/admin/events');
+
 	return (
-		<Panel>
+		<Panel onClose={navigateBack}>
 			<div className='flex flex-col gap-5'>
 				<TextInput label='Name' onChange={() => console.log()}/>
 				<DatePicker label='Start Date' onChange={() => console.log()}/>
@@ -31,7 +33,7 @@ export default function EventPanel({ mode = PANEL_MODE.VIEW }: EventPanelProps) 
 			</div>
 
 			<div className='flex justify-end gap-3 pt-5 mt-auto'>
-				<TextButton onClick={() => navigate('/admin/events')}> Cancel </TextButton>
+				<TextButton onClick={navigateBack}> Cancel </TextButton>
 				{ mode == PANEL_MODE.CREATE && <PrimaryButton> Create Event </PrimaryButton> }
 				{ mode == PANEL_MODE.EDIT && <PrimaryButton> Edit Event </PrimaryButton> }
 			</div>
