@@ -9,7 +9,7 @@ export interface NavItemProps {
 export default function NavItem({ route }: NavItemProps) {
 
 	const location = useLocation();
-	const isActive = location.pathname == route.route;
+	const isActive = location.pathname.includes(route.route);
 
 	return (
 		<Link to={route.route}>
