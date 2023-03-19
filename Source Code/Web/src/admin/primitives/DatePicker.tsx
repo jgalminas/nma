@@ -14,7 +14,7 @@ export default function DatePicker({ value, onChange, label }: DatePickerProps) 
 		<div className='flex flex-col'>
 
 			{ label &&
-				<label htmlFor={inputId} className='text-gray-600 mb-1'>
+				<label htmlFor={inputId} className='text-gray-600 mb-1 text-sm'>
 				{ label }
 				</label> }
 

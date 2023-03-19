@@ -9,10 +9,10 @@ export type Route = {
 export type Event = {
 	eventId: number,
 	locationId: number,
-	eventName: number,
+	eventName: string,
 	notes: string,
-	startTime: string | null,
-	finishTime: string | null
+	startTime: string,
+	finishTime: string
 }
 
 export type Count = {

@@ -4,9 +4,10 @@ export interface TextInputProps {
 	name?: string,
 	onChange: (v: string) => void,
 	label?: string
+	value?: string
 }
 
-export default function TextInput({ label, name, onChange }: TextInputProps) {
+export default function TextInput({ label, name, value, onChange }: TextInputProps) {
 	
 	const inputId = name ?? useId();
 	
@@ -14,7 +15,7 @@ export default function TextInput({ label, name, onChange }: TextInputProps) {
 		<div className='flex flex-col'>
 
 			{ label &&
-				<label htmlFor={inputId} className='text-gray-600 mb-1'>
+				<label htmlFor={inputId} className='text-gray-600 mb-1 text-sm'>
 				{ label }
 				</label> }
 
@@ -23,6 +24,7 @@ export default function TextInput({ label, name, onChange }: TextInputProps) {
 				focus:ring ring-blue-300 ring-opacity-40 w-full'
 			name={name}
 			type='text'
+			value={value}
 			onChange={(e) => onChange(e.target.value)}/>
 
 		</div>
