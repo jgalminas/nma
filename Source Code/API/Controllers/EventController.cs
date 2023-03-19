@@ -121,5 +121,20 @@ namespace API.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse() { Message = e.Message });
             }
         }
+
+        [HttpGet]
+        [Route("Count")]
+        public async Task<IActionResult> GetEventCountAsync()
+        {
+            try
+            {
+                var count = await _eventService.GetEventCountAsync();
+                return Ok(new CountDTO() { Count = count });
+
+            } catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
     }
 }

@@ -10,5 +10,6 @@ namespace API.Services.Interfaces
         Task<int> CreateEventAsync(EventNewDTO data);
         Task UpdateEventAsync(int id, EventUpdateDTO data);
         Task DeleteEventAsync(int id);
+        Task<int> GetEventCountAsync();
     }
 }

@@ -1,7 +1,7 @@
-import { Children } from '../types/global.types';
+import { ReactNode } from 'react';
 
 export interface ContentProps {
-	children: Children
+	children: ReactNode
 }
 
 export default function Content({ children }: ContentProps) {

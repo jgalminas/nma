@@ -44,6 +44,15 @@ namespace API.Services.Implementations
         }
 
         /// <summary>
+        /// Get the count of locations in the database
+        /// </summary>
+        /// <returns> numer of locations </returns>
+        public async Task<int> GetLocationCountAsync()
+        {
+            return await _db.Locations.CountAsync();
+        }
+
+        /// <summary>
         /// Add a location to the database
         /// </summary>
         /// <param name="data"></param>

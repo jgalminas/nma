@@ -10,5 +10,6 @@ namespace API.Services.Interfaces
         Task<int> CreateLocationAsync(LocationDTO data);
         Task UpdateLocationAsync(int id, LocationDTO data);
         Task DeleteLocationAsync(int id);
+        Task<int> GetLocationCountAsync();
     }
 }

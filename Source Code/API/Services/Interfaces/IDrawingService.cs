@@ -9,6 +9,8 @@ namespace API.Services.Interfaces
         Task DeleteDrawingAsync(int id);
         Task<int> UploadDrawingAsync(DrawingNewDTO data);
         Task UpdateDrawingAsync(int id, DrawingUpdateDTO data);
-        Task<DrawingDTO> GetDrawingByIdAsync(int id);
+        Task<DrawingDTO> GetDrawingByIdAsync(int id, bool withScores);
+        Task<int> GetDrawingCountAsync();
+        Task<ICollection<DrawingDTO>> GetDrawingsAsync(int count, bool unscoredOnly);
     }
 }
