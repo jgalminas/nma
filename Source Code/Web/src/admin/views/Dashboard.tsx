@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { fetchDrawingCount } from '../../api/drawing';
+import { fetchDrawingCount, fetchRecentDrawings } from '../../api/drawing';
 import { fetchEventCount } from '../../api/event';
 import { fetchLocationCount } from '../../api/location';
 import Card from '../Card';
@@ -10,34 +10,19 @@ import DashboardStat from '../DashboardStat';
 import Heading from '../primitives/Heading';
 import LinkButton from '../primitives/LinkButton';
 import PrimaryButton from '../primitives/PrimaryButton';
+import { getFriendlyDate } from '../utils/date';
 import Table from './Table';
-
-type Drawing = {
-	id: number,
-	event: {
-		id: number,
-		name: string
-	},
-	createdAt: string,
-	drawersName: string,
-	drawersAge: number
-}
 
 export default function Dashboard() {
 	
 	const columns: ReactNode[] = ["Drawer's Name", "Drawer's Age", "Event Name", "Date Added"];
 
-	const drawings: Drawing[] = [
-		{ id: 1, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
-		{ id: 2, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
-		{ id: 3, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
-		{ id: 4, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
-		{ id: 5, event: { id: 1, name: 'Event Name' }, createdAt: '25-2-2022', drawersName: 'Joe', drawersAge: 8 },
-	];
+	const NUM_OF_DRAWINGS = 10;
 
 	const { data: event } = useQuery('eventCount', fetchEventCount);
 	const { data: location } = useQuery('locationCount', fetchLocationCount);
 	const { data: drawing } = useQuery('drawingCount', fetchDrawingCount);
+	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
 
 	return (
 		<Content>
@@ -91,7 +76,7 @@ export default function Dashboard() {
 						</Table.Row>
 					</Table.Head>
 					<Table.Body>
-						{ drawings.map((d) => {
+						{ drawings?.map((d) => {
 								return (
 									<Table.Row key={d.id}>
 										<Table.Data> { d.drawersName } </Table.Data>
@@ -99,7 +84,7 @@ export default function Dashboard() {
 										<Table.Data>
 											<Link to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
-										<Table.Data> { d.createdAt } </Table.Data>
+										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
 									</Table.Row>
 								)
 							}) }

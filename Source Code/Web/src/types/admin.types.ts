@@ -16,3 +16,14 @@ export type Event = {
 export type Count = {
 	count: number
 }
+
+export type Drawing = {
+	id: number,
+	event: {
+		id: number,
+		name: string
+	},
+	createdAt: string,
+	drawersName: string,
+	drawersAge: number
+}
