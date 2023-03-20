@@ -2,11 +2,8 @@ import { useNavigate, useParams } from 'react-router';
 import Panel from './Panel';
 import { useQuery } from 'react-query';
 import { fetchEventById } from '../api/event';
-import TextInput from './primitives/TextInput';
-import DatePicker from './primitives/DatePicker';
-import TextAreaInput from './primitives/TextAreaInput';
 import { useEffect, useState } from 'react';
-import { Event } from '../types/admin.types';
+import { DropdownOptions, Event } from '../types/admin.types';
 import Text from './primitives/Text';
 
 export default function ViewEventPanel() {
@@ -25,14 +22,26 @@ export default function ViewEventPanel() {
 		finishTime: ''
 	});
 
+	const options: DropdownOptions[] = [
+		{ name: 'Edit', onClick: () => navigateToEdit() },
+		{ name: 'Delete', onClick: () => deleteEvent() }
+	];
+
 	useEffect(() => {
 		setEvent(data!);
 	}, [isLoading])
 
+	const deleteEvent = () => {
+		//TO DO - delete
+		navigateBack();
+	} 
+	const navigateToEdit = () => navigate(`/admin/events/edit/${event.eventId}`);
 	const navigateBack = () => navigate('/admin/events');
 
 	return (
 		<Panel onClose={navigateBack}>
+			
+			<Panel.Header options={options}> Event Details </Panel.Header>
 			<div className='flex flex-col gap-5'>
 				<Text label='Name'> { event?.eventName ?? '-' } </Text>
 				<Text label='Start Date'> { event?.startTime ?? '-' } </Text>

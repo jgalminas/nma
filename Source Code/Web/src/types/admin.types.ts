@@ -29,3 +29,8 @@ export type Drawing = {
 	drawersName: string,
 	drawersAge: number
 }
+
+export type DropdownOptions = {
+	name: string,
+	onClick: () => void
+}

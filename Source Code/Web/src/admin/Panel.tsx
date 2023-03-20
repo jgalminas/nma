@@ -1,7 +1,10 @@
 import { createPortal } from 'react-dom';
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { PANEL_PARENT_ID } from './constants';
 import useClickOutside from './hooks/clickOutside';
+import { DropdownOptions } from '../types/admin.types';
+import Dropdown from './primitives/Dropdown';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 export interface PanelProps {
 	children: ReactNode,
@@ -33,3 +36,23 @@ export default function Panel({ children, onClose }: PanelProps) {
 		: null
 	)
 }
+
+interface HeaderProps {
+	children: string,
+	options: DropdownOptions[]
+}
+
+function Header({ children, options }: HeaderProps) {
+	return (
+		<Fragment>
+			<div className='flex items-center'>
+				<h2 className='text-xl font-medium text-gray-700 mr-auto'> { children } </h2>
+				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
+			</div>
+
+			<hr className='my-5'/>
+		</Fragment>
+	)
+}
+
+Panel.Header = Header;
