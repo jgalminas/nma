@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from './Panel';
+import Panel from '../../Panel';
 import { useQuery } from 'react-query';
-import { fetchEventById } from '../api/event';
+import { fetchEventById } from '../../../../api/event';
 import { useEffect, useState } from 'react';
-import { DropdownOptions, Event } from '../types/admin.types';
-import Text from './primitives/Text';
+import { DropdownOptions, Event } from '../../../../types/admin.types';
+import Text from '../../primitives/Text';
 
 export default function ViewEventPanel() {
 

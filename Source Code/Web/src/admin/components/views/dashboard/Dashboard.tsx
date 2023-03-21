@@ -1,17 +1,17 @@
 import { ReactNode } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { fetchDrawingCount, fetchRecentDrawings } from '../../api/drawing';
-import { fetchEventCount } from '../../api/event';
-import { fetchLocationCount } from '../../api/location';
-import Card from '../Card';
-import Content from '../Content';
-import DashboardStat from '../DashboardStat';
-import Heading from '../primitives/Heading';
-import LinkButton from '../primitives/LinkButton';
-import PrimaryButton from '../primitives/PrimaryButton';
-import { getFriendlyDate } from '../utils/date';
-import Table from './Table';
+import { fetchDrawingCount, fetchRecentDrawings } from '../../../../api/drawing';
+import { fetchEventCount } from '../../../../api/event';
+import { fetchLocationCount } from '../../../../api/location';
+import Card from '../../Card';
+import Content from '../../Content';
+import DashboardStat from './DashboardStat';
+import Heading from '../../primitives/Heading';
+import LinkButton from '../../primitives/LinkButton';
+import PrimaryButton from '../../primitives/PrimaryButton';
+import { getFriendlyDate } from '../../../utils/date';
+import Table from '../../Table';
 
 export default function Dashboard() {
 	

@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import EventPanel from './admin/ViewEventPanel';
-import Dashboard from './admin/views/Dashboard';
-import Drawings from './admin/views/Drawings';
-import Events from './admin/views/Events';
-import Export from './admin/views/Export';
-import Locations from './admin/views/Locations';
+import EventPanel from './admin/components/views/events/ViewEventPanel';
+import Dashboard from './admin/components/views/dashboard/Dashboard';
+import Drawings from './admin/components/views/Drawings';
+import Events from './admin/components/views/events/Events';
+import Export from './admin/components/views/Export';
+import Locations from './admin/components/views/Locations';
 import AdminApp from './AdminApp';
 import DrawingApp from './DrawingApp';
 import './index.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import PANEL_MODE from './admin/enums/panel';
-import ViewEventPanel from './admin/ViewEventPanel';
+import ViewEventPanel from './admin/components/views/events/ViewEventPanel';
 
 const queryClient = new QueryClient();
 

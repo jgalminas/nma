@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { PANEL_PARENT_ID } from './constants';
+import { PANEL_PARENT_ID } from '../constants';
 
 export interface PageProps {
 	children: ReactNode

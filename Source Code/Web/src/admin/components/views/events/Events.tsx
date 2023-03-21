@@ -2,13 +2,13 @@ import { Outlet, useNavigate } from 'react-router';
 import { ReactNode } from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import { fetchRecentDrawings } from '../../api/drawing';
-import Content from '../Content';
-import Heading from '../primitives/Heading';
-import PrimaryButton from '../primitives/PrimaryButton';
-import { getFriendlyDate } from '../utils/date';
-import Table from './Table';
-import SearchInput from '../primitives/SearchInput';
+import { fetchRecentDrawings } from '../../../../api/drawing';
+import Content from '../../Content';
+import Heading from '../../primitives/Heading';
+import PrimaryButton from '../../primitives/PrimaryButton';
+import { getFriendlyDate } from '../../../utils/date';
+import Table from '../../Table';
+import SearchInput from '../../primitives/SearchInput';
 
 export default function Events() {
 

@@ -1,6 +1,6 @@
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom'
-import { Route } from '../../types/admin.types';
+import { Route } from '../../../types/admin.types';
 
 export interface NavItemProps {
 	route: Route
