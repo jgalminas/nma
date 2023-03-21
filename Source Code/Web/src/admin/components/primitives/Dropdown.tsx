@@ -25,7 +25,7 @@ export default function Dropdown({ button, options }: DropdownProps) {
 						return (
 							<Menu.Item key={key}>
 								{({ active }) => (
-									<button className={`${active && 'bg-gray-50'} px-8 py-1`} onClick={opt.onClick}>
+									<button className={`${active && 'bg-gray-50'} text-left px-3 py-1`} onClick={opt.onClick}>
 										{ opt.name }
 									</button>
 								)}

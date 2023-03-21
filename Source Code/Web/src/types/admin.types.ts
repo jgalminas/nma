@@ -7,8 +7,16 @@ export type Route = {
 }
 
 export type Event = {
-	eventId?: number,
-	locationId: number | null,
+	eventId: number,
+	locationId: number,
+	eventName: string,
+	notes: string,
+	startTime: string | null,
+	finishTime: string | null
+}
+
+export type EventState = {
+	location: SelectOption,
 	eventName: string,
 	notes: string,
 	startTime: string | null,
