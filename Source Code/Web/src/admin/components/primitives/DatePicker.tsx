@@ -19,7 +19,7 @@ export default function DatePicker({ value, onChange, label }: DatePickerProps) 
 				</label> }
 
 			<input
-			type="date"
+			type="datetime-local"
 			value={value}
 			className="rounded w-fit bg-transparent text-gray-700 focus:outline-none"
 			onChange={(e) => onChange(e.target.value)}/>

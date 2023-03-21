@@ -3,7 +3,7 @@ import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { PANEL_PARENT_ID } from '../constants';
 import useClickOutside from '../hooks/clickOutside';
 import { DropdownOptions } from '../../types/admin.types';
-import Dropdown from './primitives/Dropdown';
+import Dropdown from './primitives/Options';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 export interface PanelProps {
@@ -38,16 +38,16 @@ export default function Panel({ children, onClose }: PanelProps) {
 }
 
 interface HeaderProps {
-	children: string,
-	options: DropdownOptions[]
+	title: string,
+	children?: ReactNode,
 }
 
-function Header({ children, options }: HeaderProps) {
+function Header({ children, title }: HeaderProps) {
 	return (
 		<Fragment>
 			<div className='flex items-center'>
-				<h2 className='text-xl font-medium text-gray-700 mr-auto'> { children } </h2>
-				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
+				<h2 className='text-xl font-medium text-gray-700 mr-auto'> { title } </h2>
+				{ children }
 			</div>
 
 			<hr className='my-5'/>

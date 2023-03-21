@@ -23,9 +23,9 @@ export default function Dropdown({ button, options }: DropdownProps) {
 				<Menu.Items className='flex flex-col text-gray-500 rounded right-0 border absolute bg-white border-gray-200 w-fit min-w-[10rem]'>
 					{ options.map((opt, key) => {
 						return (
-							<Menu.Item>
+							<Menu.Item key={key}>
 								{({ active }) => (
-									<button key={key} className={`${active && 'bg-gray-50'} px-8 py-1`} onClick={opt.onClick}>
+									<button className={`${active && 'bg-gray-50'} px-8 py-1`} onClick={opt.onClick}>
 										{ opt.name }
 									</button>
 								)}

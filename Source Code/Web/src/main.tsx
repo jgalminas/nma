@@ -13,6 +13,7 @@ import './index.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import PANEL_MODE from './admin/enums/panel';
 import ViewEventPanel from './admin/components/views/events/ViewEventPanel';
+import CreateEventPanel from './admin/components/views/events/CreateEventPanel';
 
 const queryClient = new QueryClient();
 
@@ -28,7 +29,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path='events' element={ <Events/> }>
               <Route path='view/:id' element={ <ViewEventPanel/> }/>
               {/* <Route path='edit/:id' element={ <ViewEventPanel/> }/> */}
-              {/* <Route path='create' element={ <EventPanel mode={PANEL_MODE.CREATE}/> }/> */}
+              <Route path='create' element={ <CreateEventPanel/> }/>
               <Route path='view' element={ <Navigate to="/admin/events" replace /> }/>
               <Route path='edit' element={ <Navigate to="/admin/events" replace /> }/>
             </Route>
