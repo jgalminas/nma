@@ -24,7 +24,12 @@ interface ImageDao {
     @Delete
     void delete(Image image);
 
+    @Query("DELETE FROM image WHERE id == (:id)")
+    void deleteById(int id);
+
     @Query("SELECT COUNT(id) FROM image")
     Integer getCount();
 
+    @Query("UPDATE image SET eventId = (:newId) WHERE eventId == (:currentId)")
+    void changeEventId(int currentId, int newId);
 }

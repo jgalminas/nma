@@ -1,7 +1,10 @@
-using API.Contexts;
-using API.Models;
+using API.Exceptions;
+using API.Models.DTOs;
 using API.Models.Entities;
+using API.Models.Responses;
+using API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers
 {
@@ -10,59 +13,128 @@ namespace API.Controllers
     [Produces("application/json")]
     public class EventController : ControllerBase
     {
-        // TODO: Swagger annotations
+        private readonly IEventService _eventService;
 
-        private readonly ApplicationDbContext _db;
-
-        public EventController(ApplicationDbContext db)
+        public EventController(IEventService eventService)
         {
-            _db = db;
+            _eventService = eventService;
         }
 
+        /// <summary>
+        /// Create an event in the database.
+        /// </summary>
         [HttpPost]
-        public IActionResult Post([FromBody] Event ev)
+        [SwaggerResponse(StatusCodes.Status200OK, "EventID", typeof(int))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        [HttpPost]
+        public async Task<IActionResult> CreateEvent([FromForm] EventNewDTO data)
         {
-            return Ok(ev);
-/*            return new StatusCodeResult(_context.CreateEvent(ev).ToStatus());
-*/        }
+            try
+            {
+                return Ok(new IdResponse()
+                {
+                    Id = await _eventService.CreateEventAsync(data),
+                    Message = "OK",
+                });
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse() { Message = e.Message });
+            }
+        }
 
-
-        // cant have two paths with the same name
-/*        [HttpGet]
-        public IActionResult Get()
+        /// <summary>
+        /// Get all events in the database.
+        /// </summary>
+        [HttpGet]
+        [SwaggerResponse(StatusCodes.Status200OK, "Events", typeof(Event[]))]
+        public async Task<IActionResult> GetEvents()
         {
-            return new JsonResult(_context.GetEvents()) { StatusCode = StatusCodes.Status200OK };
-        }*/
+            return Ok(await _eventService.GetEventsAsync());
+        }
+
+        /// <summary>
+        /// Get an event object by ID.
+        /// </summary>
+        [HttpGet]
+        [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK, "Event", typeof(Event))]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetEvent(int id)
+        {
+            try
+            {
+                return Ok(await _eventService.GetEventByIdAsync(id));
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse() { Message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Update an event object in the database by ID.
+        /// </summary>
+        [HttpPatch]
+        [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateEvent(int id, [FromForm] EventUpdateDTO data)
+        {
+            try
+            {
+                await _eventService.UpdateEventAsync(id, data);
+                return Ok();
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse() { Message = e.Message });
+            }
+        }
+
+        /// <summary>
+        /// Delete an event object in the database by ID.
+        /// </summary>        
+        [HttpDelete]
+        [Route("{id:int}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status400BadRequest)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteEvent(int id)
+        {
+            try
+            {
+                await _eventService.DeleteEventAsync(id);
+                return Ok();
+            }
+            catch (NotFound e)
+            {
+                return BadRequest(new GenericResponse() { Message = e.Message });
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse() { Message = e.Message });
+            }
+        }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] int id)
+        [Route("Count")]
+        public async Task<IActionResult> GetEventCountAsync()
         {
-            //db test
-            var res = _db.Topics.Where(t => t.TopicName == "test").ToArray();
-
-            return Ok(res);
-/*            if (_context.GetEvent(id) is Event ev)
+            try
             {
-                return new JsonResult(ev) { StatusCode = StatusCodes.Status200OK };
+                var count = await _eventService.GetEventCountAsync();
+                return Ok(new CountDTO() { Count = count });
+
+            } catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
-            else
-            {
-                return new StatusCodeResult(StatusCodes.Status404NotFound);
-            }*/
         }
-
-        [HttpPut]
-        public IActionResult Put([FromBody] Event ev)
-        {
-            return Ok();
-/*            return new StatusCodeResult(_context.UpdateEvent(ev).ToStatus());
-*/        }
-
-        [HttpDelete]
-        public IActionResult Delete([FromQuery] int id)
-        {
-            return Ok();
-/*            return new StatusCodeResult(_context.DeleteEvent(id).ToStatus());
-*/        }
     }
 }

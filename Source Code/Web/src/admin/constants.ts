@@ -1,0 +1,1 @@
+export const PAGE_ID: string = 'page';

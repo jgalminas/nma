@@ -2,21 +2,29 @@ package com.example.nmadrawingapp.model;
 
 import com.example.nmadrawingapp.model.enums.ItemType;
 
-public class Event extends Item {
+public class Event extends com.example.nmadrawingapp.model.Item {
 
-    private int eventId;
+    private int Id;
+    private boolean showError = false;
 
-    public Event(ItemType type, int eventId) {
-        super(type);
-        this.eventId = eventId;
+    public Event(ItemType type, int Id) {
+        super(Id, type);
+        this.Id = Id;
     }
 
-    public int getEventId() {
-        return eventId;
+    public int getId() {
+        return Id;
     }
 
-    public void setEventId(int eventId) {
-        this.eventId = eventId;
+    public void setId(int id) {
+        this.Id = id;
     }
 
+    public boolean isShowError() {
+        return showError;
+    }
+
+    public void setShowError(boolean showError) {
+        this.showError = showError;
+    }
 }

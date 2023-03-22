@@ -9,8 +9,11 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.nmadrawingapp.model.DisplayImage;
 import com.example.nmadrawingapp.model.Event;
+import com.example.nmadrawingapp.model.Item;
+import com.example.nmadrawingapp.model.UploadingResponse;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
 import com.example.nmadrawingapp.model.enums.ItemType;
+import com.example.nmadrawingapp.model.enums.Response;
 import com.example.nmadrawingapp.utils.Callback;
 import com.example.nmadrawingapp.model.repositories.IImageRepository;
 import java.util.ArrayList;
@@ -28,38 +31,40 @@ public class UploadViewModel extends ViewModel {
         this.imageRepository = imageRepository;
     }
 
-    public LiveData<List<Object>> getAllImages() {
+    public void changeEventId(int currentId, int newId) {
+        imageRepository.changeEventId(currentId, newId);
+    }
 
-        MutableLiveData<List<Object>> data = new MutableLiveData<>();
+    public LiveData<List<Item>> getAllImages() {
 
-        imageRepository.getAllImages(new Callback<List<Image>>() {
-            @Override
-            public void onComplete(List<Image> result) {
+        MutableLiveData<List<Item>> data = new MutableLiveData<>();
 
-                final List<Object> items = new ArrayList<>();
+        imageRepository.getAllImages(result -> {
 
-                for (Image i : result) {
+            final List<Item> items = new ArrayList<>();
 
-                    // group by event Id
-                    if (!containsEvent(items, i.getEventId())) {
-                        items.add(new Event(ItemType.Event, i.getEventId()));
-                    }
+            for (Image i : result) {
 
-                    items.add(new DisplayImage(ItemType.Image, i.getId(), toBitmap(i)));
-
+                // group by event Id
+                if (!containsEvent(items, i.getEventId())) {
+                    items.add(new Event(ItemType.EVENT, i.getEventId()));
                 }
 
-                data.postValue(items);
+                items.add(new DisplayImage(ItemType.IMAGE, i.getId(), toBitmap(i), i.getEventId()));
+
             }
+
+            data.postValue(items);
+
         });
 
         return data;
     }
 
-    private boolean containsEvent(List<Object> items, int id) {
+    private boolean containsEvent(List<Item> items, int id) {
 
-        for (Object item : items) {
-            if (item instanceof Event && ((Event) item).getEventId() == id) {
+        for (Item item : items) {
+            if (item instanceof Event && ((Event) item).getId() == id) {
                 return true;
             }
         }
@@ -76,6 +81,44 @@ public class UploadViewModel extends ViewModel {
         int h = (int)(w * 0.5625);
 
         return Bitmap.createScaledBitmap(b, w, h, false);
+    }
+
+    public LiveData<UploadingResponse> uploadImage(int id) {
+
+        MutableLiveData<UploadingResponse> status = new MutableLiveData<>(new UploadingResponse(id, Response.LOADING));
+
+        imageRepository.getImageById(id, new Callback<Image>() {
+            @Override
+            public void onComplete(Image image) {
+
+                imageRepository.uploadImage(image, new Callback<Response>() {
+                    @Override
+                    public void onComplete(Response result) {
+
+                        if (result == Response.SUCCESS) {
+                            status.postValue(new UploadingResponse(id, Response.SUCCESS));
+                            imageRepository.deleteImage(image);
+                        } else if (result == Response.INVALID_EVENT_ID) {
+                            status.postValue(new UploadingResponse(id, Response.INVALID_EVENT_ID));
+                        } else {
+                            status.postValue(new UploadingResponse(id, Response.ERROR));
+                        }
+
+                    }
+                });
+
+            }
+        });
+
+        return status;
+    }
+
+    public void deleteImages(List<Integer> imageIds) {
+
+        for (int id : imageIds) {
+            imageRepository.deleteById(id);
+        }
+
     }
 
 }

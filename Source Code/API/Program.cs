@@ -1,3 +1,4 @@
+using System.Reflection;
 using API.Contexts;
 using API.Services.Implementations;
 using API.Services.Interfaces;
@@ -9,7 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 // Backblaze Client
-builder.Services.AddSingleton<IStorageClient>(o => {
+builder.Services.AddSingleton<IStorageClient>(o =>
+{
     var client = new BackblazeClient();
     client.Connect(
             builder.Configuration["Backblaze:keyID"],
@@ -18,20 +20,35 @@ builder.Services.AddSingleton<IStorageClient>(o => {
     return client;
 });
 
-
 // Db Context
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration["ConnectionStrings:DB"]);
+    options.UseSqlServer(
+        builder.Environment.IsProduction()
+        ? builder.Configuration["ConnectionStrings:DB"]
+        : builder.Configuration["ConnectionStrings:DB_DEV"]
+        , options =>
+    {
+        options.EnableRetryOnFailure();
+    });
+
     options.UseExceptionProcessor();
 });
 
 // Services
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IDrawingService, DrawingService>();
+builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<ILocationService, LocationService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    string? xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
