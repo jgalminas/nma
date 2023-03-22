@@ -10,10 +10,11 @@ export interface PaginationProps {
 
 export default function Pagination({ current, setPage, count, size = 10 }: PaginationProps) {
 
-	const range = usePagination(current, count, size);
+	var currentPage = current + 1;
+	const range = usePagination(currentPage, count, size);
 
-	const next = () => current < range[range.length - 1] && setPage(current + 1);
-	const previous = () => current > range[0] && setPage(current - 1);
+	const next = () => currentPage < range[range.length - 1] && setPage(current + 1);
+	const previous = () => currentPage > range[0] && setPage(current - 1);
 
 	return (
 		<div className='flex justify-center gap-8 items-center py-3'>
@@ -22,7 +23,7 @@ export default function Pagination({ current, setPage, count, size = 10 }: Pagin
 			<div>
 				{ range.map((p, key) => {
 					return (
-						<button className={`${(p) === '...' ? '': (p) === current ? 'bg-blue-500 text-white': 'bg-gray-200'} py-0.5 px-2.5 text-gray-800 rounded mx-1`}
+						<button className={`${(p) === '...' ? '': (p) === currentPage ? 'bg-blue-500 text-white': 'bg-gray-200'} py-0.5 px-2.5 text-gray-700 rounded mx-1`}
 						key={key}>
 							{ p }
 						</button>

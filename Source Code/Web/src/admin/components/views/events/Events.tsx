@@ -7,18 +7,23 @@ import PrimaryButton from '../../primitives/PrimaryButton';
 import { getFriendlyDate } from '../../../utils/date';
 import Table from '../../Table';
 import SearchInput from '../../primitives/SearchInput';
-import { fetchEvents } from '../../../../api/event';
+import { fetchEventCount, fetchEvents } from '../../../../api/event';
 import Pagination from '../../Pagination';
 
 export default function Events() {
 
+	const RECORDS_PER_PAGE = 15;
+	const [page, setPage] = useState<number>(0);
+
 	const navigate = useNavigate();
 
 	const columns: ReactNode[] = ["ID", "Name", "Start Time", "Finish Time", "Location"];
+	
+	const { data: eventCount } = useQuery('eventCount', fetchEventCount);
 
-	const [currentPage, setPage] = useState<number>(1);
-
-	const { data: drawings } = useQuery('events', fetchEvents);
+	const { data: events } = useQuery(['events', page], () => fetchEvents(page, RECORDS_PER_PAGE), {
+		keepPreviousData: true
+	});	
 
 	return (
 		<Content>
@@ -45,7 +50,7 @@ export default function Events() {
 						</Table.Row>
 					</Table.Head>
 					<Table.Body>
-						{ drawings?.map((d, key) => {
+						{ Array.isArray(events) &&  events?.map((d, key) => {
 								return (
 									<Table.Row key={key}>
 										<Table.Data> { d.eventId } </Table.Data>
@@ -59,10 +64,9 @@ export default function Events() {
 					</Table.Body>
 				</Table>
 							
-
 			</div>
 			
-			<Pagination current={currentPage} count={100} setPage={setPage}/>
+			<Pagination current={page} count={eventCount?.count ?? 0} size={RECORDS_PER_PAGE} setPage={setPage}/>
 
 			<Outlet/>
 		</Content>

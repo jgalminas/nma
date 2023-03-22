@@ -11,8 +11,8 @@ export async function fetchEventCount(): Promise<Count> {
 	return res.json();
 }
 
-export async function fetchEvents(): Promise<Event[]> {
-	const res = await fetch(`${BASE_URL}/event`);
+export async function fetchEvents(page: number, count?: number): Promise<Event[]> {
+	const res = await fetch(`${BASE_URL}/event?page=${page}&count=${count ?? 10}`);
 	return res.json();
 }
 
