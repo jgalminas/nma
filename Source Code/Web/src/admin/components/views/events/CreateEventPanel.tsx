@@ -41,7 +41,7 @@ export default function CreateEventPanel() {
 
 			<div className='flex flex-col gap-5'>
 				<TextInput value={event.eventName ?? ''} label='Name' onChange={setName}/>
-				<Select value={event.location} options={locations} onChange={setLocation}/>
+				<Select value={event.location} options={locations} label='Location' onChange={setLocation}/>
 				<DatePicker value={event.startTime ?? ''} label='Start Time' onChange={setStartTime}/>
 				<DatePicker value={event.finishTime ?? ''} label='Finish Time' onChange={setFinishTime}/>
 				<TextAreaInput value={event.notes} label='Notes' onChange={setNotes}/>
