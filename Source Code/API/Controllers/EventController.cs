@@ -28,7 +28,7 @@ namespace API.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromForm] EventNewDTO data)
+        public async Task<IActionResult> CreateEvent([FromBody] EventNewDTO data)
         {
             try
             {

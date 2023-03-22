@@ -136,5 +136,14 @@ namespace API.Services.Implementations
                 throw new NotFound($"Location with id {id} doesn't exist");
             }
         }
+
+        public Task<LocationIdNameDTO[]> GetLocationListAsync()
+        {
+            return _db.Locations.Select(l => new LocationIdNameDTO()
+            {
+                Id = l.LocationId,
+                Name = l.LocationName
+            }).ToArrayAsync();
+        }
     }
 }
