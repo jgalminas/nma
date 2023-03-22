@@ -122,6 +122,9 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the total number of events
+        /// </summary>
         [HttpGet]
         [Route("Count")]
         public async Task<IActionResult> GetEventCountAsync()

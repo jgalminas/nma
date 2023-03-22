@@ -8,7 +8,10 @@ export type Route = {
 
 export type Event = {
 	eventId?: number,
-	locationId: number,
+	location: {
+		id: number,
+		name: string
+	},
 	eventName: string,
 	notes: string,
 	startTime: string,

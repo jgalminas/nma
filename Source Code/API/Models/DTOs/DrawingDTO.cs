@@ -3,7 +3,7 @@
     public class DrawingDTO
     {
         public int Id { get; set; }
-        public EventDTO Event { get; set;}
+        public EventIdNameDTO Event { get; set;}
         public DateTime? CreatedAt { get; set; }
         public int? DrawersAge { get; set; }
         public string? DrawersName { get; set; }
