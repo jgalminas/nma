@@ -6,8 +6,16 @@ export type Route = {
 	icon: JSX.Element
 }
 
+export type CreateEvent = {
+	locationId: number,
+	eventName: string,
+	notes: string,
+	startTime: string,
+	finishTime: string
+}
+
 export type Event = {
-	eventId?: number,
+	eventId: number,
 	location: {
 		id: number,
 		name: string

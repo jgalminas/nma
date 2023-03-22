@@ -1,4 +1,4 @@
-import { Count, Event } from '../types/admin.types';
+import { Count, CreateEvent, Event } from '../types/admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchEventById(id: number): Promise<Event> {
@@ -16,7 +16,7 @@ export async function fetchEvents(page: number, count?: number): Promise<Event[]
 	return res.json();
 }
 
-export async function createEvent(event: Event): Promise<Response> {
+export async function createEvent(event: CreateEvent): Promise<Response> {
 
 	const res = await fetch(`${BASE_URL}/event`, {
 		method: 'POST',

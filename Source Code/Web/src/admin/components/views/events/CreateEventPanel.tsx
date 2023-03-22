@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import Panel from '../../Panel';
 import { useEffect, useState } from 'react';
-import { Event, EventState, SelectOption } from '../../../../types/admin.types';
+import { CreateEvent, Event, EventState, SelectOption } from '../../../../types/admin.types';
 import TextInput from '../../primitives/TextInput';
 import DatePicker from '../../primitives/DatePicker';
 import TextAreaInput from '../../primitives/TextAreaInput';
@@ -18,7 +18,7 @@ export default function CreateEventPanel() {
 	
 	const { data: locationsList } = useQuery('locationList', fetchLocationList);
 	const [locations, setLoations] = useState<SelectOption[]>([]);
-	const mutation = useMutation((event: Event) => createEvent(event));
+	const mutation = useMutation((event: CreateEvent) => createEvent(event));
 
 
 	useEffect(() => {
