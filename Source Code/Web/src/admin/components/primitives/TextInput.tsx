@@ -1,16 +1,18 @@
-import { useId } from 'react';
+import { ChangeEvent, useId } from 'react';
 
 export interface TextInputProps {
 	name?: string,
 	onChange: (v: string) => void,
-	label?: string
+	label?: string,
 	value?: string
 }
 
 export default function TextInput({ label, name, value, onChange }: TextInputProps) {
 	
 	const inputId = name ?? useId();
-	
+
+	const onInputChange = (e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value);
+
 	return (
 		<div className='flex flex-col'>
 
@@ -25,7 +27,7 @@ export default function TextInput({ label, name, value, onChange }: TextInputPro
 			name={name}
 			type='text'
 			value={value}
-			onChange={(e) => onChange(e.target.value)}/>
+			onChange={onInputChange}/>
 
 		</div>
 	)

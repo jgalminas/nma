@@ -3,7 +3,7 @@ import { useId } from 'react';
 export interface DatePickerProps {
 	label?: string
 	value?: string,
-	onChange: (d: string | null) => void
+	onChange: (d: string) => void
 }
 
 export default function DatePicker({ value, onChange, label }: DatePickerProps) {

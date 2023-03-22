@@ -1,24 +1,24 @@
 import { Outlet, useNavigate } from 'react-router';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
-import { fetchRecentDrawings } from '../../../../api/drawing';
 import Content from '../../Content';
 import Heading from '../../primitives/Heading';
 import PrimaryButton from '../../primitives/PrimaryButton';
 import { getFriendlyDate } from '../../../utils/date';
 import Table from '../../Table';
 import SearchInput from '../../primitives/SearchInput';
+import { fetchEvents } from '../../../../api/event';
+import Pagination from '../../Pagination';
 
 export default function Events() {
 
 	const navigate = useNavigate();
 
-	const columns: ReactNode[] = ["Drawer's Name", "Drawer's Age", "Event Name", "Date Added"];
+	const columns: ReactNode[] = ["ID", "Name", "Start Time", "Finish Time", "Location"];
 
-	const NUM_OF_DRAWINGS = 10;
+	const [currentPage, setPage] = useState<number>(1);
 
-	const { data: drawings, isLoading } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
+	const { data: drawings } = useQuery('events', fetchEvents);
 
 	return (
 		<Content>
@@ -30,7 +30,7 @@ export default function Events() {
 				<PrimaryButton onClick={() => navigate('create')}> Create Event </PrimaryButton>
 			</div>
 
-			<div className='mt-5 pb-10'>
+			<div className='mt-5'>
 
 				<Table>
 					<Table.Head>
@@ -45,23 +45,25 @@ export default function Events() {
 						</Table.Row>
 					</Table.Head>
 					<Table.Body>
-						{ drawings?.map((d) => {
+						{ drawings?.map((d, key) => {
 								return (
-									<Table.Row key={d.id}>
-										<Table.Data> { d.drawersName } </Table.Data>
-										<Table.Data> { d.drawersAge } </Table.Data>
-										<Table.Data>
-											<Link className='underline' to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
-										</Table.Data>
-										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
+									<Table.Row key={key}>
+										<Table.Data> { d.eventId } </Table.Data>
+										<Table.Data> { d.eventName } </Table.Data>
+										<Table.Data> { getFriendlyDate(d.startTime) } </Table.Data>
+										<Table.Data> { getFriendlyDate(d.finishTime) } </Table.Data>
+										<Table.Data> { d.locationId } </Table.Data>
 									</Table.Row>
 								)
 							}) }
 					</Table.Body>
 				</Table>
+							
 
 			</div>
 			
+			<Pagination current={currentPage} count={100} setPage={setPage}/>
+
 			<Outlet/>
 		</Content>
 	)

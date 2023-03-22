@@ -7,20 +7,20 @@ export type Route = {
 }
 
 export type Event = {
-	eventId: number,
+	eventId?: number,
 	locationId: number,
 	eventName: string,
 	notes: string,
-	startTime: string | null,
-	finishTime: string | null
+	startTime: string,
+	finishTime: string
 }
 
 export type EventState = {
 	location: SelectOption,
 	eventName: string,
 	notes: string,
-	startTime: string | null,
-	finishTime: string | null
+	startTime: string,
+	finishTime: string
 }
 
 export type Count = {
@@ -46,4 +46,9 @@ export type DropdownOptions = {
 export type SelectOption = {
 	id: number,
 	value: string
+}
+
+export type LocationIdName = {
+	id: number,
+	name: string
 }
