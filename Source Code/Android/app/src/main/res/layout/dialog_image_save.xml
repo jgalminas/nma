@@ -124,9 +124,54 @@
         android:hint="@string/enter_your_age"
         android:inputType="number"
         android:maxLength="3"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.52"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/input_label" />
+        app:layout_constraintTop_toBottomOf="@+id/input_label_age" />
+
+    <Button
+        android:id="@+id/save_button"
+        style="@style/PrimaryButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="@+id/cancel_button"
+        app:layout_constraintEnd_toEndOf="@+id/age_input"
+        app:layout_constraintStart_toEndOf="@+id/cancel_button"
+        app:layout_constraintTop_toTopOf="@+id/cancel_button"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        style="@style/TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="35dp"
+        android:text="@string/cancel"
+        android:textColor="@color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/save_button"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="@+id/age_input"
+        app:layout_constraintTop_toBottomOf="@+id/age_input"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/input_label_age"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="24dp"
+        android:fontFamily="sans-serif"
+        android:text="@string/enter_your_age"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dialog_divider" />
 
     <TextView
         style="@style/ErrorText"

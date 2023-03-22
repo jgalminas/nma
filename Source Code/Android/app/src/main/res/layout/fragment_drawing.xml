@@ -15,6 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/save_drawing_button"
             style="@style/PrimaryButton"
@@ -29,15 +30,208 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
+        <RadioGroup
+            android:id="@+id/radioGroupDrawTypeSelection"
+            android:orientation="horizontal"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.51" >
+
+            <RadioButton
+                android:button="@null"
+                android:id="@+id/radioButtonLineDraw"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/draw_type_stroke_selector"
+                />
+
+            <RadioButton
+                android:button="@null"
+                android:id="@+id/radioButtonFillDraw"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/draw_type_fill_selector"
+                />
+
+            <RadioButton
+                android:button="@null"
+                android:id="@+id/radioButtonEraser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:background="@drawable/draw_type_erase_selector"
+
+                />
+
+        </RadioGroup>
+
+        <RadioGroup
+            android:id="@+id/radioGroupStrokeSelection"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="200dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <RadioButton
+                android:id="@+id/radioButtonThinnestStroke"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:button="@drawable/stroke_thickness_selector_3"
+
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
+            <RadioButton
+                android:id="@+id/radioButtonThinStroke"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:button="@drawable/stroke_thickness_selector_6"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
+            <RadioButton
+                android:id="@+id/radioButtonMediumStroke"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:button="@drawable/stroke_thickness_selector_9"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
+            <RadioButton
+                android:id="@+id/radioButtonThickStroke"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:button="@drawable/stroke_thickness_selector_12"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+
+            <RadioButton
+                android:id="@+id/radioButtonThickestStroke"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:button="@drawable/stroke_thickness_selector_15"
+                android:buttonTint="#00000000"
+                android:buttonTintMode="add" />
+        </RadioGroup>
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.example.nmadrawingapp.view.components.CanvasView
         android:id="@+id/canvas"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="1228dp"
+        android:layout_height="716dp"
+
+        android:layout_marginStart="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/drawing_header" />
+        app:layout_constraintTop_toBottomOf="@+id/drawing_header"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupColorSelector"
+        android:layout_width="50dp"
+        android:layout_height="600dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/drawing_header">
+
+        <RadioButton
+            android:id="@+id/radioButtonRed"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/red" />
+
+        <RadioButton
+            android:id="@+id/radioButtonOrange"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/orange" />
+
+        <RadioButton
+            android:id="@+id/radioButtonYellow"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/yellow" />
+
+        <RadioButton
+            android:id="@+id/radioButtonYellowGreen"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/yellow_green" />
+
+        <RadioButton
+            android:id="@+id/radioButtonGreen"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/green" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlueGreen"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/blue_green" />
+
+        <RadioButton
+            android:id="@+id/radioButtonLightBlue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/light_blue" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlue"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/blue" />
+
+        <RadioButton
+            android:id="@+id/radioButtonPurple"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/purple" />
+
+        <RadioButton
+            android:id="@+id/radioButtonRedViolet"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/red_violet" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBrown"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/brown" />
+
+        <RadioButton
+            android:id="@+id/radioButtonBlack"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:button="@drawable/color_selector"
+            app:buttonTint="@color/black" />
+    </RadioGroup>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
