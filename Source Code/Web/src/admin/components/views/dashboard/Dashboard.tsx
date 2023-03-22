@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 import { useQuery } from 'react-query';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchDrawingCount, fetchRecentDrawings } from '../../../../api/drawing';
 import { fetchEventCount } from '../../../../api/event';
 import { fetchLocationCount } from '../../../../api/location';
@@ -8,13 +8,15 @@ import Card from '../../Card';
 import Content from '../../Content';
 import DashboardStat from './DashboardStat';
 import Heading from '../../primitives/Heading';
-import LinkButton from '../../primitives/LinkButton';
-import PrimaryButton from '../../primitives/PrimaryButton';
+import LinkTextButton from '../../primitives/LinkTextButton';
 import { getFriendlyDate } from '../../../utils/date';
 import Table from '../../Table';
+import LinkPrimaryButton from '../../primitives/LinkPrimaryButton';
 
 export default function Dashboard() {
 	
+	const navigate = useNavigate();
+
 	const columns: ReactNode[] = ["Drawer's Name", "Drawer's Age", "Event Name", "Date Added"];
 
 	const NUM_OF_DRAWINGS = 10;
@@ -22,7 +24,9 @@ export default function Dashboard() {
 	const { data: event } = useQuery('eventCount', fetchEventCount);
 	const { data: location } = useQuery('locationCount', fetchLocationCount);
 	const { data: drawing } = useQuery('drawingCount', fetchDrawingCount);
-	const { data: drawings, isLoading } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
+	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
+
+	const viewDrawing = (id: number) => navigate(`/admin/drawings/view/${id}`);
 
 	return (
 		<Content>
@@ -35,8 +39,8 @@ export default function Dashboard() {
 					<DashboardStat label='Events' number={event?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkButton to='/admin/events'> View All </LinkButton>
-						<PrimaryButton> Create Event </PrimaryButton>
+						<LinkTextButton to='/admin/events'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/admin/events/create'> Create Event </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -44,8 +48,8 @@ export default function Dashboard() {
 					<DashboardStat label='Locations' number={location?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkButton to='/admin/locations'> View All </LinkButton>
-						<PrimaryButton> Add Location </PrimaryButton>
+						<LinkTextButton to='/admin/locations'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/admin/locations/create'> Add Location </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -53,8 +57,8 @@ export default function Dashboard() {
 					<DashboardStat label='Drawings' number={drawing?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkButton to='/admin/drawings'> View All </LinkButton>
-						<PrimaryButton> Score Drawings </PrimaryButton>
+						<LinkTextButton to='/admin/drawings'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/admin/drawings/score'> Score Drawings </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -78,7 +82,10 @@ export default function Dashboard() {
 					<Table.Body>
 						{ drawings?.map((d) => {
 								return (
-									<Table.Row key={d.id}>
+									<Table.Row
+										className='hover:bg-gray-100 cursor-pointer'
+										key={d.id}
+										onClick={() => d.id && viewDrawing(d.id)}>
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data>

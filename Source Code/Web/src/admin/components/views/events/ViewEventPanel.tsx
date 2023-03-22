@@ -34,6 +34,7 @@ export default function ViewEventPanel() {
 			</Panel.Header>
 
 			<div className='flex flex-col gap-5'>
+				<Text label='ID'> { event?.eventId ?? '-' } </Text>
 				<Text label='Name'> { event?.eventName ?? '-' } </Text>
 				<Text label='Start Time'> { event?.startTime ?? '-' } </Text>
 				<Text label='Finish Time'> { event?.finishTime ?? '-' } </Text>

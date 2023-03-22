@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 export interface TableProps {
 	children: ReactNode
@@ -42,12 +42,14 @@ export function Heading({ children }: HeadingProps) {
 
 // HTML <tr/> component
 export interface RowProps {
+	onClick?: () => void,
+	className?: string,
 	children: ReactNode
 }
 
-export function Row({ children }: RowProps) {
+export function Row({ onClick, className, children }: RowProps) {
 	return (
-		<tr>
+		<tr className={className} onClick={onClick && onClick}>
 			{ children }
 		</tr>
 	)

@@ -9,6 +9,7 @@ import Table from '../../Table';
 import SearchInput from '../../primitives/SearchInput';
 import { fetchEventCount, fetchEvents } from '../../../../api/event';
 import Pagination from '../../Pagination';
+import { Link } from 'react-router-dom';
 
 export default function Events() {
 
@@ -24,6 +25,8 @@ export default function Events() {
 	const { data: events } = useQuery(['events', page], () => fetchEvents(page, RECORDS_PER_PAGE), {
 		keepPreviousData: true
 	});	
+
+	const viewEvent = (id: number) => navigate(`view/${id}`);
 
 	return (
 		<Content>
@@ -52,12 +55,16 @@ export default function Events() {
 					<Table.Body>
 						{ Array.isArray(events) &&  events?.map((d, key) => {
 								return (
-									<Table.Row key={key}>
+									<Table.Row className='hover:bg-gray-100 cursor-pointer'
+									key={key}
+									onClick={() => d.eventId && viewEvent(d.eventId)}>
 										<Table.Data> { d.eventId } </Table.Data>
 										<Table.Data> { d.eventName } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.startTime) } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.finishTime) } </Table.Data>
-										<Table.Data> { d.locationId } </Table.Data>
+										<Table.Data>
+											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/admin/locations/view/${d.location.id}`}> { d.location.name } </Link>
+										</Table.Data>
 									</Table.Row>
 								)
 							}) }
