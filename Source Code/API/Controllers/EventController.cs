@@ -53,9 +53,9 @@ namespace API.Controllers
         /// </summary>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "Events", typeof(Event[]))]
-        public async Task<IActionResult> GetEvents()
+        public async Task<IActionResult> GetEvents([FromQuery] int page = 0, [FromQuery] int count = 10)
         {
-            return Ok(await _eventService.GetEventsAsync());
+            return Ok(await _eventService.GetEventsAsync(page, count));
         }
 
         /// <summary>

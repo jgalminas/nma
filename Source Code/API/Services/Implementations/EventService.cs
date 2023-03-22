@@ -38,9 +38,9 @@ namespace API.Services.Implementations
         /// Get all events
         /// </summary>
         /// <returns> An array of event object </returns>
-        public async Task<Event[]> GetEventsAsync()
+        public async Task<Event[]> GetEventsAsync(int page, int count)
         {
-            return await _db.Events.ToArrayAsync();
+            return await _db.Events.Skip(page * count).Take(count).ToArrayAsync();
         }
 
         /// <summary>
