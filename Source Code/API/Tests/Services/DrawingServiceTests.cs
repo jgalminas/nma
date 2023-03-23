@@ -70,7 +70,6 @@ namespace Tests
         public async Task GetDrawingByIdWithScoresOk()
         {
             var dr = await _drawingService.GetDrawingByIdAsync(1, true);
-            Console.WriteLine("{0}", dr.Scores.Count);
             Assert.AreEqual(dr.Scores.Count, 1);
             Assert.AreEqual(dr.Scores.ElementAt(0).ScoreId, 1);
         }
@@ -98,5 +97,52 @@ namespace Tests
         {
             Assert.AreEqual(await _drawingService.GetDrawingCountAsync(), 2);
         }
+
+        // UploadDrawingAsync
+
+        // TODO
+
+        // UpdateDrawingAsync
+
+        [TestMethod]
+        public async Task UpdateDrawingOk()
+        {
+            var dto = new DrawingUpdateDTO(){
+                DrawersName = "New name",
+                EventId = 2,
+            };
+            await _drawingService.UpdateDrawingAsync(1, dto);
+
+            var dr = await _drawingService.GetDrawingByIdAsync(1, false);
+            Assert.AreEqual(dr.DrawersName, "New name");
+        }
+
+        [TestMethod]
+        public async Task UpdateDrawingNotFoundDrawing()
+        {
+            await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.UpdateDrawingAsync(999, null));
+        }
+
+        [TestMethod]
+        public async Task UpdateDrawingNotFoundEvent()
+        {
+            var dto = new DrawingUpdateDTO() { EventId = 999 };
+            await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.UpdateDrawingAsync(1, dto));
+        }
+
+        // DeleteDrawingAsync
+
+        [TestMethod]
+        public async Task DeleteDrawingOk()
+        {
+            await _drawingService.DeleteDrawingAsync(1);
+            await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.GetDrawingByIdAsync(1, false));
+        }
+
+        [TestMethod]
+        public async Task DeleteDrawingNotFound()
+        {
+            await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.DeleteDrawingAsync(999));
+        }        
     }
 }
