@@ -63,8 +63,3 @@ export type LocationIdName = {
 	id: number,
 	name: string
 }
-
-export type Validation = {
-	message: string,
-	isValid: boolean
-}
