@@ -6,6 +6,7 @@ import { DropdownOptions } from '../../../../types/admin.types';
 import Text from '../../primitives/Text';
 import Dropdown from '../../primitives/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { getFriendlyDate } from '../../../utils/date';
 
 export default function ViewEventPanel() {
 
@@ -36,8 +37,8 @@ export default function ViewEventPanel() {
 			<div className='flex flex-col gap-5'>
 				<Text label='ID'> { event?.eventId ?? '-' } </Text>
 				<Text label='Name'> { event?.eventName ?? '-' } </Text>
-				<Text label='Start Time'> { event?.startTime ?? '-' } </Text>
-				<Text label='Finish Time'> { event?.finishTime ?? '-' } </Text>
+				<Text label='Start Time'> { event && getFriendlyDate(event?.startTime)  } </Text>
+				<Text label='Finish Time'> { event && getFriendlyDate(event?.finishTime)  } </Text>
 				<Text label='Notes'> { event?.notes ?? '-' } </Text>
 			</div>
 

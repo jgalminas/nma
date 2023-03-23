@@ -23,7 +23,7 @@ export default function Pagination({ current, setPage, count, size = 10 }: Pagin
 			<div>
 				{ range.map((p, key) => {
 					return (
-						<button className={`${(p) === '...' ? '': (p) === currentPage ? 'bg-blue-500 text-white': 'bg-gray-200'} py-0.5 px-2.5 text-gray-700 rounded mx-1`}
+						<button className={`${(p) === '...' ? '': (p) === currentPage ? 'bg-blue-500': 'bg-gray-200'} py-0.5 px-2.5 text-gray-700 rounded mx-1`}
 						key={key}
 						onClick={() => typeof p === 'number' && setPage(p - 1)}>
 							<span className={p  === currentPage ? 'text-white': ''}> { p } </span>
