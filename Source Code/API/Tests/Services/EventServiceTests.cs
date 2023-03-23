@@ -20,7 +20,7 @@ namespace Tests
         public void Initialize()
         {
             var _contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
-                .UseInMemoryDatabase("BloggingControllerTest")
+                .UseInMemoryDatabase("EventServiceTests")
                 .ConfigureWarnings(b => b.Ignore(InMemoryEventId.TransactionIgnoredWarning))
                 .Options;
 
