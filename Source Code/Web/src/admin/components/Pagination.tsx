@@ -10,7 +10,7 @@ export interface PaginationProps {
 
 export default function Pagination({ current, setPage, count, size = 10 }: PaginationProps) {
 
-	var currentPage = current + 1;
+	let currentPage = current + 1;
 	const range = usePagination(currentPage, count, size);
 
 	const next = () => currentPage < range[range.length - 1] && setPage(current + 1);
@@ -26,7 +26,7 @@ export default function Pagination({ current, setPage, count, size = 10 }: Pagin
 						<button className={`${(p) === '...' ? '': (p) === currentPage ? 'bg-blue-500 text-white': 'bg-gray-200'} py-0.5 px-2.5 text-gray-700 rounded mx-1`}
 						key={key}
 						onClick={() => typeof p === 'number' && setPage(p - 1)}>
-							{ p }
+							<span className={p  === currentPage ? 'text-white': ''}> { p } </span>
 						</button>
 					)
 				}) }

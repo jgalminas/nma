@@ -20,22 +20,22 @@ export default function usePagination(current: number, count: number, size: numb
 	
 		if (!showLeftDots && showRightDots) {
 	
-			var leftItemCount = 3 + 2;
-			var leftRange = range(1, leftItemCount);
+			let leftItemCount = 3 + 2;
+			let leftRange = range(1, leftItemCount);
 	  
 			return [...leftRange, '...', PAGE_COUNT];
 		  }
 	
 		if (showLeftDots && !showRightDots) {
 		
-			var rightItemCount = 3 + 2;
-			var rightRange = range(PAGE_COUNT - rightItemCount + 1, PAGE_COUNT);
+			let rightItemCount = 3 + 2;
+			let rightRange = range(PAGE_COUNT - rightItemCount + 1, PAGE_COUNT);
 	
 			return [1, '...', ...rightRange];
 		}
 	
 		if (showLeftDots && showRightDots) {
-			var middleRange = range(leftSiblingIndex, rightSiblingIndex);
+			let middleRange = range(leftSiblingIndex, rightSiblingIndex);
 			return [1, '...', ...middleRange, '...', PAGE_COUNT];
 		}
 

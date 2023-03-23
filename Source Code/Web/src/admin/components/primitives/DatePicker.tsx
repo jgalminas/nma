@@ -1,12 +1,14 @@
 import { useId } from 'react';
+import { Validation } from '../../../types/admin.types';
 
 export interface DatePickerProps {
 	label?: string
 	value?: string,
-	onChange: (d: string) => void
+	onChange: (d: string) => void,
+	validation?: Validation
 }
 
-export default function DatePicker({ value, onChange, label }: DatePickerProps) {
+export default function DatePicker({ validation, value, onChange, label }: DatePickerProps) {
 
 	const inputId = label ?? useId();
 
@@ -23,6 +25,10 @@ export default function DatePicker({ value, onChange, label }: DatePickerProps) 
 			value={value}
 			className="rounded w-fit bg-transparent text-gray-700 focus:outline-none"
 			onChange={(e) => onChange(e.target.value)}/>
+
+			{ !validation?.isValid &&
+				<p className='ml-auto text-sm text-red-600'> { validation?.message } </p> 
+			}
 
 		</div> 
 	)
