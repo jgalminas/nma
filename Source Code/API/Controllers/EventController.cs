@@ -84,7 +84,7 @@ namespace API.Controllers
         [Route("{id:int}")]
         [SwaggerResponse(StatusCodes.Status200OK)]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEvent(int id, [FromForm] EventUpdateDTO data)
+        public async Task<IActionResult> UpdateEvent(int id, [FromBody] EventUpdateDTO data)
         {
             try
             {

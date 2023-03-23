@@ -1,5 +1,7 @@
+import { ReactNode } from 'react';
+
 export interface PrimaryButtonProps {
-	children?: string
+	children?: ReactNode
 	onClick?: () => void
 }
 

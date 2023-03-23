@@ -1,22 +1,25 @@
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Panel from '../../Panel';
 import { useEffect, useState } from 'react';
-import { CreateEvent, EventState, SelectOption } from '../../../../types/admin.types';
+import { CreateUpdateEvent, EventState, SelectOption } from '../../../../types/admin.types';
 import TextInput from '../../primitives/TextInput';
 import DatePicker from '../../primitives/DatePicker';
 import TextAreaInput from '../../primitives/TextAreaInput';
 import PrimaryButton from '../../primitives/PrimaryButton';
 import TextButton from '../../primitives/TextButton';
 import Select from '../../primitives/Select';
-import { createEvent } from '../../../../api/event';
-import { useMutation, useQuery } from 'react-query';
+import { createEvent, fetchEventById, updateEvent } from '../../../../api/event';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { fetchLocationList } from '../../../../api/location';
 import { validateLength } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 
-export default function CreateEventPanel() {
+export default function CreateEditEventPanel() {
 
+	const queryClient = useQueryClient();
 	const navigate = useNavigate();
+	const { id } = useParams();	
+
 	
 	const { data: locationsList } = useQuery('locationList', fetchLocationList);
 	const [locations, setLoations] = useState<SelectOption[]>([]);
@@ -28,7 +31,9 @@ export default function CreateEventPanel() {
 		finishTime: ''
 	});
 
-	const mutation = useMutation((event: CreateEvent) => createEvent(event));
+	const mutation = useMutation(id
+		? (event: CreateUpdateEvent) => updateEvent(Number(id), event)
+		: (event: CreateUpdateEvent) => createEvent(event));
 
 	// validation
 	const { name, startTime, finishTime } = useValidation({
@@ -36,6 +41,25 @@ export default function CreateEventPanel() {
 		"startTime": { message: 'Start date/time must be selected', isValid: true, validator: validateLength },
 		"finishTime": { message: 'Finish date/time must be selected', isValid: true, validator: validateLength },
 	});	
+
+	// fetch event when editing
+	useEffect(() => {
+
+		if (id) {
+
+			queryClient.fetchQuery(["event", id], () => fetchEventById(Number(id)))
+			.then((data) => {
+				setEvent({
+					location: { id: data.location.id, value: data.location.name },
+					eventName: data.eventName,
+					notes: data.notes,
+					startTime: data.startTime,
+					finishTime: data.finishTime
+				});
+			})			
+		}
+
+	}, [id])
 
 	useEffect(() => {
 
@@ -73,7 +97,7 @@ export default function CreateEventPanel() {
 	};
 
 	// on submit
-	const createNewEvent = () => {
+	const submit = () => {
 		
 		if (name.validate(event.finishTime)
 			&& startTime.validate(event.startTime)
@@ -88,7 +112,11 @@ export default function CreateEventPanel() {
 				finishTime: event.finishTime
 			});
 
-			navigateBack();
+			if (id) {
+				navigate(`/admin/events/view/${id}`);
+			} else {
+				navigateBack();
+			}
 		}
 
 	};
@@ -109,7 +137,7 @@ export default function CreateEventPanel() {
 			
 			<div className='flex justify-end gap-3 pt-5 mt-auto'>
 				<TextButton onClick={navigateBack}> Cancel </TextButton>
-				<PrimaryButton onClick={createNewEvent}> Create Event </PrimaryButton>
+				<PrimaryButton onClick={submit}> { id ? 'Update Event' : 'Create Event' } </PrimaryButton>
 			</div>
 		</Panel>
 	)

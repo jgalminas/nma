@@ -2,9 +2,6 @@ import { createPortal } from 'react-dom';
 import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { PANEL_PARENT_ID } from '../constants';
 import useClickOutside from '../hooks/clickOutside';
-import { DropdownOptions } from '../../types/admin.types';
-import Dropdown from './primitives/Options';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 
 export interface PanelProps {
 	children: ReactNode,
