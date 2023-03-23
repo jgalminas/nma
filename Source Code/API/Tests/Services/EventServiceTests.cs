@@ -34,8 +34,8 @@ namespace Tests
                 new Event { EventId = 2, EventName = "Event 2" },
                 new Event { EventId = 3, EventName = "Event 3" },
 
-                new Location{ LocationId = 1, LocationName = "Location 1" },
-                new Location{ LocationId = 2, LocationName = "Location 2" }
+                new Location { LocationId = 1, LocationName = "Location 1" },
+                new Location { LocationId = 2, LocationName = "Location 2" }
             );
 
             _context.SaveChanges();
@@ -87,7 +87,8 @@ namespace Tests
         [TestMethod]
         public async Task CreateEventOk()
         {
-            var dto = new EventNewDTO(){
+            var dto = new EventNewDTO()
+            {
                 LocationId = 1,
                 EventName = "Event X",
             };
@@ -101,7 +102,7 @@ namespace Tests
         [TestMethod]
         public async Task CreateEventNotFound()
         {
-            var dto = new EventNewDTO(){ LocationId = 999 };
+            var dto = new EventNewDTO() { LocationId = 999 };
             await Assert.ThrowsExceptionAsync<NotFound>(() => _eventService.CreateEventAsync(dto));
         }
 
@@ -110,7 +111,8 @@ namespace Tests
         [TestMethod]
         public async Task UpdateEventOk()
         {
-            var dto = new EventUpdateDTO(){
+            var dto = new EventUpdateDTO()
+            {
                 LocationId = 2,
                 EventName = "New name",
             };

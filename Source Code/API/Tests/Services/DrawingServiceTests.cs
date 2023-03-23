@@ -107,7 +107,8 @@ namespace Tests
         [TestMethod]
         public async Task UpdateDrawingOk()
         {
-            var dto = new DrawingUpdateDTO(){
+            var dto = new DrawingUpdateDTO()
+            {
                 DrawersName = "New name",
                 EventId = 2,
             };
@@ -143,6 +144,6 @@ namespace Tests
         public async Task DeleteDrawingNotFound()
         {
             await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.DeleteDrawingAsync(999));
-        }        
+        }
     }
 }

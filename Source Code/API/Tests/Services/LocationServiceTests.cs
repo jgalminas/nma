@@ -30,8 +30,8 @@ namespace Tests
             _context.Database.EnsureCreated();
 
             _context.AddRange(
-                new Location{ LocationId = 1, LocationName = "Location 1" },
-                new Location{ LocationId = 2, LocationName = "Location 2" }
+                new Location { LocationId = 1, LocationName = "Location 1" },
+                new Location { LocationId = 2, LocationName = "Location 2" }
             );
 
             _context.SaveChanges();
@@ -83,7 +83,7 @@ namespace Tests
         [TestMethod]
         public async Task CreateLocationOk()
         {
-            var dto = new LocationDTO(){ LocationName = "Location X" };
+            var dto = new LocationDTO() { LocationName = "Location X" };
             var id = await _locationService.CreateLocationAsync(dto);
             Assert.AreEqual(id, 3);
 
@@ -96,7 +96,7 @@ namespace Tests
         [TestMethod]
         public async Task UpdateLocationOk()
         {
-            var dto = new LocationDTO(){ LocationName = "New name" };
+            var dto = new LocationDTO() { LocationName = "New name" };
             await _locationService.UpdateLocationAsync(1, dto);
 
             var loc = await _locationService.GetLocationByIdAsync(1);
