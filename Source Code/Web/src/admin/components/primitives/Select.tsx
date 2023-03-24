@@ -2,15 +2,17 @@ import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Fragment, useId } from 'react';
 import { SelectOption } from '../../../types/admin.types';
+import { Validation } from '../../hooks/validation';
 
 export interface SelectProps {
 	options: SelectOption[],
 	value: SelectOption,
 	onChange: (selected: SelectOption) => void,
-	label?: string
+	label?: string,
+	validation?: Validation
 }
 
-export default function Select({ label, value, onChange, options }: SelectProps) {
+export default function Select({ label, value, onChange, options, validation }: SelectProps) {
 
 	const inputId = label ?? useId();
 
@@ -46,6 +48,10 @@ export default function Select({ label, value, onChange, options }: SelectProps)
 				</Transition>
 
 			</Listbox>
+
+			{ !validation?.isValid &&
+				<p className='ml-auto text-sm text-red-600'> { validation?.message } </p> 
+			}
 
 		</div>
 	)

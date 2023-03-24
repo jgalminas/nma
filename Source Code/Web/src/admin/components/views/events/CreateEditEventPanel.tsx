@@ -11,7 +11,7 @@ import Select from '../../primitives/Select';
 import { createEvent, fetchEventById, updateEvent } from '../../../../api/event';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { fetchLocationList } from '../../../../api/location';
-import { validateLength } from '../../../utils/validation';
+import { validateLength, validateLocation } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 
 export default function CreateEditEventPanel() {
@@ -36,10 +36,11 @@ export default function CreateEditEventPanel() {
 		: (event: CreateUpdateEvent) => createEvent(event));
 
 	// validation
-	const { name, startTime, finishTime } = useValidation({
+	const { name, startTime, finishTime, location } = useValidation({
 		"name": { message: 'Name cannot be empty', isValid: true, validator: validateLength },
 		"startTime": { message: 'Start date/time must be selected', isValid: true, validator: validateLength },
 		"finishTime": { message: 'Finish date/time must be selected', isValid: true, validator: validateLength },
+		"location": { message: 'Location cannot be empty', isValid: true, validator: validateLocation },
 	});	
 
 	// fetch event when editing
@@ -78,8 +79,12 @@ export default function CreateEditEventPanel() {
 	const navigateBack = () => navigate('/admin/events');
 
 	// update state
-	const setLocation = (selected: SelectOption) => setEvent({ ...event, location: selected });
 	const setNotes = (notes: string) => setEvent({ ...event, notes: notes });
+
+	const setLocation = (selected: SelectOption) => {
+		location.validate(selected);
+		setEvent({ ...event, location: selected })
+	};
 
 	const setName = (value: string) => {
 		name.validate(value);
@@ -99,7 +104,8 @@ export default function CreateEditEventPanel() {
 	// on submit
 	const submit = () => {
 		
-		if (name.validate(event.finishTime)
+		if (name.validate(event.eventName)
+			&& location.validate(event.location)
 			&& startTime.validate(event.startTime)
 			&& finishTime.validate(event.finishTime)) {
 			
@@ -113,7 +119,7 @@ export default function CreateEditEventPanel() {
 			});
 
 			if (id) {
-				navigate(`/admin/events/view/${id}`);
+				navigate(`/admin/events/${id}`);
 			} else {
 				navigateBack();
 			}
@@ -128,7 +134,7 @@ export default function CreateEditEventPanel() {
 
 			<div className='flex flex-col gap-5'>
 				<TextInput value={event.eventName ?? ''} label='Name' onChange={setName} validation={name.validation}/>
-				<Select value={event.location} options={locations} label='Location' onChange={setLocation}/>
+				<Select value={event.location} options={locations} label='Location' onChange={setLocation} validation={location.validation}/>
 				<DatePicker value={event.startTime ?? ''} label='Start Time' onChange={setStartTime} validation={startTime.validation}/>
 				<DatePicker value={event.finishTime ?? ''} label='Finish Time' onChange={setFinishTime} validation={finishTime.validation}/>
 				<TextAreaInput value={event.notes} label='Notes' onChange={setNotes}/>
