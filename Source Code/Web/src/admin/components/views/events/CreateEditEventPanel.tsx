@@ -124,7 +124,7 @@ export default function CreateEditEventPanel() {
 
 	return (
 		<Fragment>
-			<Panel.Header title='Create Event'/>
+			<Panel.Header title={`${id ? 'Edit' : 'Create'} Event`}/>
 
 			<div className='flex flex-col gap-5'>
 				<TextInput value={event.eventName ?? ''} label='Name' onChange={setName} validation={name.validation}/>
