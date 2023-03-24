@@ -75,7 +75,7 @@ export interface DataProps {
 
 export function Data({ children }: DataProps) {
 	return (
-		<td className='py-2 px-4'>
+		<td data-ignored className='py-2 px-4'>
 			{ children }
 		</td>
 	)
