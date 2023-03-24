@@ -7,6 +7,7 @@ import Text from '../../primitives/Text';
 import Dropdown from '../../primitives/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { getFriendlyDate } from '../../../utils/date';
+import { Fragment } from 'react';
 
 export default function ViewEventPanel() {
 
@@ -24,12 +25,11 @@ export default function ViewEventPanel() {
 		//TO DO - delete
 		navigateBack();
 	} 
-	const navigateToEdit = () => navigate(`/admin/events/edit/${event?.eventId}`);
+	const navigateToEdit = () => navigate(`edit`);
 	const navigateBack = () => navigate('/admin/events');
 
 	return (
-		<Panel onClose={navigateBack}>
-			
+		<Fragment>
 			<Panel.Header title='Event Details'>
 				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
 			</Panel.Header>
@@ -41,7 +41,6 @@ export default function ViewEventPanel() {
 				<Text label='Finish Time'> { event && getFriendlyDate(event?.finishTime)  } </Text>
 				<Text label='Notes'> { event?.notes ?? '-' } </Text>
 			</div>
-
-		</Panel>
+		</Fragment>
 	)
 }

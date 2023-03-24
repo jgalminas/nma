@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Dashboard from './admin/components/views/dashboard/Dashboard';
 import Drawings from './admin/components/views/Drawings';
 import Events from './admin/components/views/events/Events';
@@ -11,7 +11,8 @@ import DrawingApp from './DrawingApp';
 import './index.css'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import ViewEventPanel from './admin/components/views/events/ViewEventPanel';
-import CreateEventPanel from './admin/components/views/events/CreateEditEventPanel';
+import CreateEditEventPanel from './admin/components/views/events/CreateEditEventPanel';
+import Panel from './admin/components/Panel';
 
 const queryClient = new QueryClient();
 
@@ -25,11 +26,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <Route index element={ <Navigate to="dashboard" replace /> }/>
             <Route path='dashboard' element={ <Dashboard/> }/>
             <Route path='events' element={ <Events/> }>
-              <Route path='view/:id' element={ <ViewEventPanel/> }/>
-              <Route path='edit/:id' element={ <CreateEventPanel/> }/>
-              <Route path='create' element={ <CreateEventPanel/> }/>
-              <Route path='view' element={ <Navigate to="/admin/events" replace /> }/>
-              <Route path='edit' element={ <Navigate to="/admin/events" replace /> }/>
+            <Route path=':id' element={ <Panel onClose='/admin/events'> <Outlet/> </Panel> }>
+              <Route index element={ <ViewEventPanel/> }/>
+              <Route path='edit' element={ <CreateEditEventPanel/> }/>
+            </Route>
+              <Route path='create' element={ <Panel onClose='/admin/events'> <CreateEditEventPanel/> </Panel>  }/>
             </Route>
             <Route path='locations' element={ <Locations/> }/>
             <Route path='drawings' element={ <Drawings/> }/>

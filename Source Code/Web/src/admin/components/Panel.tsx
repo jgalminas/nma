@@ -2,18 +2,23 @@ import { createPortal } from 'react-dom';
 import { Fragment, ReactNode, useEffect, useRef, useState } from 'react';
 import { PANEL_PARENT_ID } from '../constants';
 import useClickOutside from '../hooks/clickOutside';
+import { useNavigate } from 'react-router';
 
 export interface PanelProps {
 	children: ReactNode,
-	onClose: () => void
+	onClose: string | (() => void)
 }
 
 export default function Panel({ children, onClose }: PanelProps) {
 
 	const [isDOMLoaded, setDOMLoaded] = useState<boolean>(false);
+	const navigate = useNavigate();
+
+	// what to do when clicked outside based on the prop type
+	const action = typeof onClose === 'string' ? () => navigate(onClose): () => onClose(); 
 
 	const ref = useRef<HTMLDivElement>(null);
-	useClickOutside(ref, onClose);
+	useClickOutside(ref, action);
 
 	useEffect(() => {
 		setDOMLoaded(true);

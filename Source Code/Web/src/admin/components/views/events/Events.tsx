@@ -26,7 +26,7 @@ export default function Events() {
 		keepPreviousData: true
 	});	
 
-	const viewEvent = (id: number) => navigate(`view/${id}`);
+	const viewEvent = (id: number) => navigate(`${id}`);
 
 	return (
 		<Content>

@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import Panel from '../../Panel';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { CreateUpdateEvent, EventState, SelectOption } from '../../../../types/admin.types';
 import TextInput from '../../primitives/TextInput';
 import DatePicker from '../../primitives/DatePicker';
@@ -123,8 +123,7 @@ export default function CreateEditEventPanel() {
 	
 
 	return (
-		<Panel onClose={navigateBack}>
-
+		<Fragment>
 			<Panel.Header title='Create Event'/>
 
 			<div className='flex flex-col gap-5'>
@@ -139,6 +138,6 @@ export default function CreateEditEventPanel() {
 				<TextButton onClick={navigateBack}> Cancel </TextButton>
 				<PrimaryButton onClick={submit}> { id ? 'Update Event' : 'Create Event' } </PrimaryButton>
 			</div>
-		</Panel>
+		</Fragment>
 	)
 }
