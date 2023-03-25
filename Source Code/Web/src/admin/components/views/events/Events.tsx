@@ -1,6 +1,6 @@
 import { Outlet, useNavigate } from 'react-router';
 import { ReactNode, useState } from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import Content from '../../Content';
 import Heading from '../../primitives/Heading';
 import PrimaryButton from '../../primitives/PrimaryButton';
@@ -12,7 +12,7 @@ import Pagination from '../../Pagination';
 import { Link } from 'react-router-dom';
 
 export default function Events() {
-
+	
 	const RECORDS_PER_PAGE = 15;
 	const [page, setPage] = useState<number>(0);
 
@@ -20,7 +20,7 @@ export default function Events() {
 
 	const columns: ReactNode[] = ["ID", "Name", "Start Time", "Finish Time", "Location"];
 	
-	const { data: eventCount } = useQuery('eventCount', fetchEventCount);
+	const { data: eventCount } = useQuery(['eventCount'], fetchEventCount);
 
 	const { data: events } = useQuery(['events', page], () => fetchEvents(page, RECORDS_PER_PAGE), {
 		keepPreviousData: true

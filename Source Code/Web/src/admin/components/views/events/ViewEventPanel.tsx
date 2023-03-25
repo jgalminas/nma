@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router';
 import Panel from '../../Panel';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchEventById } from '../../../../api/event';
 import { DropdownOptions } from '../../../../types/admin.types';
 import Text from '../../primitives/Text';
@@ -14,7 +14,7 @@ export default function ViewEventPanel() {
 	const { id } = useParams();
 	const navigate = useNavigate();
 
-	const { data: event } = useQuery(`event-${id}`, () => fetchEventById(Number(id)));
+	const { data: event } = useQuery(['event', Number(id)], () => fetchEventById(Number(id)));
 	
 	const options: DropdownOptions[] = [
 		{ name: 'Edit', onClick: () => navigateToEdit() },

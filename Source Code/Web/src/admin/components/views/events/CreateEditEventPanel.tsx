@@ -1,7 +1,7 @@
 import { useNavigate, useParams } from 'react-router';
 import Panel from '../../Panel';
 import { Fragment, useEffect, useState } from 'react';
-import { CreateUpdateEvent, EventState, SelectOption } from '../../../../types/admin.types';
+import { CreateUpdateEvent, Event, EventState, SelectOption } from '../../../../types/admin.types';
 import TextInput from '../../primitives/TextInput';
 import DatePicker from '../../primitives/DatePicker';
 import TextAreaInput from '../../primitives/TextAreaInput';
@@ -9,10 +9,11 @@ import PrimaryButton from '../../primitives/PrimaryButton';
 import TextButton from '../../primitives/TextButton';
 import Select from '../../primitives/Select';
 import { createEvent, fetchEventById, updateEvent } from '../../../../api/event';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchLocationList } from '../../../../api/location';
 import { validateLength, validateLocation } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
+import { findItemInCacheArray } from '../../../utils/query';
 
 export default function CreateEditEventPanel() {
 
@@ -20,8 +21,7 @@ export default function CreateEditEventPanel() {
 	const navigate = useNavigate();
 	const { id } = useParams();	
 
-	
-	const { data: locationsList } = useQuery('locationList', fetchLocationList);
+	const { data: locationsList } = useQuery(['locationList'], fetchLocationList);
 	const [locations, setLoations] = useState<SelectOption[]>([]);
 	const [event, setEvent] = useState<EventState>({
 		location: { id: -1, value: 'Select location' },
@@ -48,7 +48,7 @@ export default function CreateEditEventPanel() {
 
 		if (id) {
 
-			queryClient.fetchQuery(["event", id], () => fetchEventById(Number(id)))
+			queryClient.fetchQuery(["event", Number(id)], () => fetchEventById(Number(id)))
 			.then((data) => {
 				setEvent({
 					location: { id: data.location.id, value: data.location.name },
@@ -116,13 +116,41 @@ export default function CreateEditEventPanel() {
 				notes: event.notes,
 				startTime: event.startTime,
 				finishTime: event.finishTime
+			},
+			{
+				onSuccess: () => {	
+					
+					// find query cache which has the item
+					const { queryKey, itemIndex } = findItemInCacheArray<Event>(queryClient, 'events', (i: Event) => i.eventId === Number(id))
+
+					// update query cache
+					if (queryKey && itemIndex) {
+						queryClient.setQueryData(queryKey, (prev: any) => {
+	
+							return [
+								...prev.slice(0, itemIndex),
+								{
+									eventId: Number(id),
+									location: event.location,
+									eventName: event.eventName,
+									notes: event.notes,
+									startTime: event.startTime,
+									finishTime: event.finishTime
+								},
+								...prev.slice(itemIndex + 1)	
+							]
+						})
+					}
+
+					// navigate back
+					if (id) {
+						navigate(`/admin/events/${id}`);
+					} else {
+						navigateBack();
+					}
+				}
 			});
 
-			if (id) {
-				navigate(`/admin/events/${id}`);
-			} else {
-				navigateBack();
-			}
 		}
 
 	};
@@ -131,6 +159,13 @@ export default function CreateEditEventPanel() {
 	return (
 		<Fragment>
 			<Panel.Header title={`${id ? 'Edit' : 'Create'} Event`}/>
+
+			<button onClick={() => {
+			
+				console.log()
+				
+
+			}}> test </button>
 
 			<div className='flex flex-col gap-5'>
 				<TextInput value={event.eventName ?? ''} label='Name' onChange={setName} validation={name.validation}/>
@@ -147,3 +182,4 @@ export default function CreateEditEventPanel() {
 		</Fragment>
 	)
 }
+

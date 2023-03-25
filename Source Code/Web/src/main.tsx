@@ -9,10 +9,11 @@ import Locations from './admin/components/views/Locations';
 import AdminApp from './AdminApp';
 import DrawingApp from './DrawingApp';
 import './index.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import ViewEventPanel from './admin/components/views/events/ViewEventPanel';
 import CreateEditEventPanel from './admin/components/views/events/CreateEditEventPanel';
 import Panel from './admin/components/Panel';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </Route>
         </Routes>
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false}/>
     </QueryClientProvider>
   </React.StrictMode>
 )

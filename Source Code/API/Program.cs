@@ -40,7 +40,10 @@ var AllowAny = "allowAny";
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: AllowAny, policy => policy.AllowAnyOrigin());
+    options.AddPolicy(name: AllowAny, policy => policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+    );
 });
 
 
