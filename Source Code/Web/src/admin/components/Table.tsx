@@ -21,7 +21,7 @@ export interface HeadProps {
 
 export function Head({ children }: HeadProps) {
 	return (
-		<thead className='bg-gray-100'>
+		<thead className='bg-gray-50'>
 			{ children }
 		</thead>
 	)
@@ -62,7 +62,7 @@ export interface BodyProps {
 
 export function Body({ children }: BodyProps) {
 	return (
-		<tbody className='divide-y'>
+		<tbody className='divide-y bg-white'>
 			{ children }
 		</tbody>
 	)
