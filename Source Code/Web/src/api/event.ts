@@ -43,3 +43,15 @@ export async function updateEvent(id: number, event: CreateUpdateEvent): Promise
 
 	return res;
 }
+
+export async function deleteEventById(id: number): Promise<Response> {
+	const res = await fetch(`${BASE_URL}/event/${id}`, {
+		method: 'DELETE',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+	});
+
+	return res;
+}
