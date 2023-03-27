@@ -21,6 +21,7 @@ export default function CreateEditEventPanel() {
 	const navigate = useNavigate();
 	const { id } = useParams();	
 
+	const [error, setError] = useState<boolean>(false);
 	const { data: locationsList } = useQuery(['locationList'], fetchLocationList);
 	const [locations, setLoations] = useState<SelectOption[]>([]);
 	const [event, setEvent] = useState<EventState>({
@@ -43,7 +44,7 @@ export default function CreateEditEventPanel() {
 		"location": { message: 'Location cannot be empty', isValid: true, validator: validateLocation },
 	});	
 
-	// fetch event when editing
+	// fetch event data when editing
 	useEffect(() => {
 
 		if (id) {
@@ -104,11 +105,15 @@ export default function CreateEditEventPanel() {
 	// on submit
 	const submit = () => {
 		
+		setError(false);		
+
 		if (name.validate(event.eventName)
 			&& location.validate(event.location)
 			&& startTime.validate(event.startTime)
 			&& finishTime.validate(event.finishTime)) {
 			
+			mutation.reset();
+
 			// sent network request
 			mutation.mutate({
 				locationId: event.location.id,
@@ -118,7 +123,7 @@ export default function CreateEditEventPanel() {
 				finishTime: event.finishTime
 			},
 			{
-				onSuccess: () => {	
+				onSuccess: () => {
 					
 					// find query cache which has the item
 					const { queryKey, itemIndex } = findItemInCacheArray<Event>(queryClient, 'events', (i: Event) => i.eventId === Number(id))
@@ -148,6 +153,10 @@ export default function CreateEditEventPanel() {
 					} else {
 						navigateBack();
 					}
+
+				},
+				onError: () => {
+					setError(true);				
 				}
 			});
 
@@ -168,10 +177,20 @@ export default function CreateEditEventPanel() {
 				<TextAreaInput value={event.notes} label='Notes' onChange={setNotes}/>
 			</div>
 			
-			<div className='flex justify-end gap-3 pt-5 mt-auto'>
-				<TextButton onClick={navigateBack}> Cancel </TextButton>
-				<PrimaryButton onClick={submit}> { id ? 'Update Event' : 'Create Event' } </PrimaryButton>
+
+			<div className='mt-auto'>
+				{ error && 
+					<p className='w-full mt-auto text-right text-red-600'>
+						Server Error. Could not create event.
+					</p>
+				}
+				
+				<div className='flex justify-end gap-3 pt-5'>
+					<TextButton onClick={navigateBack}> Cancel </TextButton>
+					<PrimaryButton disabled={mutation.isLoading} onClick={submit}> { id ? 'Update Event' : 'Create Event' } </PrimaryButton>
+				</div>
 			</div>
+
 		</Fragment>
 	)
 }
