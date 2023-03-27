@@ -4,13 +4,32 @@ export type Route = {
 	icon: JSX.Element
 }
 
+export type CreateUpdateEvent = {
+	locationId: number,
+	eventName: string,
+	notes: string,
+	startTime: string,
+	finishTime: string
+}
+
 export type Event = {
 	eventId: number,
-	locationId: number,
-	eventName: number,
+	location: {
+		id: number,
+		name: string
+	},
+	eventName: string,
 	notes: string,
-	startTime: string | null,
-	finishTime: string | null
+	startTime: string,
+	finishTime: string
+}
+
+export type EventState = {
+	location: SelectOption,
+	eventName: string,
+	notes: string,
+	startTime: string,
+	finishTime: string
 }
 
 export type Count = {
@@ -26,4 +45,19 @@ export type Drawing = {
 	createdAt: string,
 	drawersName: string,
 	drawersAge: number
+}
+
+export type DropdownOptions = {
+	name: string,
+	onClick: () => void
+}
+
+export type SelectOption = {
+	id: number,
+	value: string
+}
+
+export type LocationIdName = {
+	id: number,
+	name: string
 }

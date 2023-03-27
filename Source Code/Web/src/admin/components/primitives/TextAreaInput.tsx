@@ -4,10 +4,11 @@ export interface TextAreaInputProps {
 	name?: string,
 	onChange: (v: string) => void
 	rows?: number,
-	label?: string
+	label?: string,
+	value?: string
 }
 
-export default function TextAreaInput({ label, rows, name, onChange }: TextAreaInputProps) {
+export default function TextAreaInput({ label, rows, name, value, onChange }: TextAreaInputProps) {
 
 	const rowCount = rows ?? 3;
 	const inputId = name ?? useId();
@@ -16,7 +17,7 @@ export default function TextAreaInput({ label, rows, name, onChange }: TextAreaI
 		<div className='flex flex-col'>
 
 			{ label &&
-				<label htmlFor={inputId} className='text-gray-600 mb-1'>
+				<label htmlFor={inputId} className='text-gray-600 mb-1 text-sm'>
 				{ label }
 				</label> }
 
@@ -25,6 +26,7 @@ export default function TextAreaInput({ label, rows, name, onChange }: TextAreaI
 				focus:ring ring-blue-300 ring-opacity-40 min-h-[38px]'
 			name={inputId}
 			rows={rowCount}
+			value={value}
 			onChange={(e) => onChange(e.target.value)}/>
 			
 		</div>

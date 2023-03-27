@@ -35,6 +35,18 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseExceptionProcessor();
 });
 
+
+var AllowAny = "allowAny";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: AllowAny, policy => policy.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+    );
+});
+
+
 // Services
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
@@ -55,6 +67,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseCors(AllowAny);
 
 app.UseHttpsRedirection();
 

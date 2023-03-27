@@ -1,17 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import EventPanel from './admin/EventPanel';
-import Dashboard from './admin/views/Dashboard';
-import Drawings from './admin/views/Drawings';
-import Events from './admin/views/Events';
-import Export from './admin/views/Export';
-import Locations from './admin/views/Locations';
+import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import Dashboard from './admin/components/views/dashboard/Dashboard';
+import Drawings from './admin/components/views/Drawings';
+import Events from './admin/components/views/events/Events';
+import Export from './admin/components/views/Export';
+import Locations from './admin/components/views/Locations';
 import AdminApp from './AdminApp';
 import DrawingApp from './DrawingApp';
 import './index.css'
-import { QueryClient, QueryClientProvider } from 'react-query'
-import PANEL_MODE from './admin/enums/panel';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import ViewEventPanel from './admin/components/views/events/ViewEventPanel';
+import CreateEditEventPanel from './admin/components/views/events/CreateEditEventPanel';
+import Panel from './admin/components/Panel';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const queryClient = new QueryClient();
 
@@ -25,11 +27,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <Route index element={ <Navigate to="dashboard" replace /> }/>
             <Route path='dashboard' element={ <Dashboard/> }/>
             <Route path='events' element={ <Events/> }>
-              <Route path='view/:id' element={ <EventPanel/> }/>
-              <Route path='edit/:id' element={ <EventPanel mode={PANEL_MODE.EDIT}/> }/>
-              <Route path='create' element={ <EventPanel mode={PANEL_MODE.CREATE}/> }/>
-              <Route path='view' element={ <Navigate to="/admin/events" replace /> }/>
-              <Route path='edit' element={ <Navigate to="/admin/events" replace /> }/>
+            <Route path=':id' element={ <Panel onClose='/admin/events'> <Outlet/> </Panel> }>
+              <Route index element={ <ViewEventPanel/> }/>
+              <Route path='edit' element={ <CreateEditEventPanel/> }/>
+            </Route>
+              <Route path='create' element={ <Panel onClose='/admin/events'> <CreateEditEventPanel/> </Panel>  }/>
             </Route>
             <Route path='locations' element={ <Locations/> }/>
             <Route path='drawings' element={ <Drawings/> }/>
@@ -37,6 +39,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           </Route>
         </Routes>
       </BrowserRouter>
+      <ReactQueryDevtools initialIsOpen={false}/>
     </QueryClientProvider>
   </React.StrictMode>
 )

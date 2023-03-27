@@ -138,5 +138,18 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("List")]
+        public async Task<IActionResult> GetLocationListAsync()
+        {
+            try
+            {
+                return Ok(await _locationService.GetLocationListAsync());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
     }
 }

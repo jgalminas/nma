@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { MouseEvent, ReactNode } from 'react';
 
 export interface TableProps {
 	children: ReactNode
@@ -21,7 +21,7 @@ export interface HeadProps {
 
 export function Head({ children }: HeadProps) {
 	return (
-		<thead className='bg-gray-100'>
+		<thead className='bg-gray-50'>
 			{ children }
 		</thead>
 	)
@@ -42,12 +42,14 @@ export function Heading({ children }: HeadingProps) {
 
 // HTML <tr/> component
 export interface RowProps {
+	onClick?: () => void,
+	className?: string,
 	children: ReactNode
 }
 
-export function Row({ children }: RowProps) {
+export function Row({ onClick, className, children }: RowProps) {
 	return (
-		<tr>
+		<tr className={className} onClick={onClick && onClick}>
 			{ children }
 		</tr>
 	)
@@ -60,7 +62,7 @@ export interface BodyProps {
 
 export function Body({ children }: BodyProps) {
 	return (
-		<tbody className='divide-y'>
+		<tbody className='divide-y bg-white'>
 			{ children }
 		</tbody>
 	)
@@ -73,7 +75,7 @@ export interface DataProps {
 
 export function Data({ children }: DataProps) {
 	return (
-		<td className='py-2 px-4'>
+		<td data-ignored className='py-2 px-4'>
 			{ children }
 		</td>
 	)

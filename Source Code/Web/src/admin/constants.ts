@@ -1,1 +1,1 @@
-export const PAGE_ID: string = 'page';
+export const PANEL_PARENT_ID: string = 'page';

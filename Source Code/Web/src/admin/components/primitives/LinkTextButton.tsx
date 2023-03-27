@@ -5,7 +5,7 @@ export interface LinkButtonProps {
 	children: string
 }
 
-export default function LinkButton({ to, children }: LinkButtonProps) {
+export default function LinkTextButton({ to, children }: LinkButtonProps) {
 	return (
 		<Link
 		to={to}

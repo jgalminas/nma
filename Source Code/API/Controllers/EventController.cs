@@ -28,7 +28,7 @@ namespace API.Controllers
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(StatusCodes.Status500InternalServerError)]
         [HttpPost]
-        public async Task<IActionResult> CreateEvent([FromForm] EventNewDTO data)
+        public async Task<IActionResult> CreateEvent([FromBody] EventNewDTO data)
         {
             try
             {
@@ -53,9 +53,9 @@ namespace API.Controllers
         /// </summary>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "Events", typeof(Event[]))]
-        public async Task<IActionResult> GetEvents()
+        public async Task<IActionResult> GetEvents([FromQuery] int page = 0, [FromQuery] int count = 10)
         {
-            return Ok(await _eventService.GetEventsAsync());
+            return Ok(await _eventService.GetEventsAsync(page, count));
         }
 
         /// <summary>
@@ -84,7 +84,7 @@ namespace API.Controllers
         [Route("{id:int}")]
         [SwaggerResponse(StatusCodes.Status200OK)]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateEvent(int id, [FromForm] EventUpdateDTO data)
+        public async Task<IActionResult> UpdateEvent(int id, [FromBody] EventUpdateDTO data)
         {
             try
             {
@@ -122,6 +122,9 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Get the total number of events
+        /// </summary>
         [HttpGet]
         [Route("Count")]
         public async Task<IActionResult> GetEventCountAsync()

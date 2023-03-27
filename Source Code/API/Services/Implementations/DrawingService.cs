@@ -23,7 +23,7 @@ namespace API.Services.Implementations
             {
                 // map drawing data
                 Id = d.DrawingId,
-                Event = new EventDTO()
+                Event = new EventIdNameDTO()
                 {
                     Id = d.EventId,
                     Name = d.Event.EventName ?? string.Empty
@@ -40,7 +40,7 @@ namespace API.Services.Implementations
             {
                 // map drawing data
                 Id = d.DrawingId,
-                Event = new EventDTO()
+                Event = new EventIdNameDTO()
                 {
                     Id = d.EventId,
                     Name = d.Event.EventName ?? string.Empty,
@@ -299,7 +299,7 @@ namespace API.Services.Implementations
                     {
                         // map drawing data
                         Id = d.DrawingId,
-                        Event = new EventDTO()
+                        Event = new EventIdNameDTO()
                         {
                             Id = d.EventId,
                             Name = d.Event.EventName ?? string.Empty,
