@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
+import { HashRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Dashboard from './admin/components/views/dashboard/Dashboard';
 import Drawings from './admin/components/views/Drawings';
 import Events from './admin/components/views/events/Events';
@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route path='/' element={ <DrawingApp/> }/>
           <Route path='admin' element={ <AdminApp/> }>
@@ -38,8 +38,10 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             <Route path='export' element={ <Export/> }/>
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
       <ReactQueryDevtools initialIsOpen={false}/>
     </QueryClientProvider>
   </React.StrictMode>
 )
+
+postMessage({ payload: 'removeLoading' }, '*')
