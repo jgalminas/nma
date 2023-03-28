@@ -28,7 +28,7 @@ namespace API.Controllers
         [SwaggerResponse(StatusCodes.Status200OK, "LocationID", typeof(int))]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
         [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> CreateLocation([FromForm] LocationDTO data)
+        public async Task<IActionResult> CreateLocation([FromBody] LocationDTO data)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace API.Controllers
         [Route("{id:int}")]
         [SwaggerResponse(StatusCodes.Status200OK)]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateLocation(int id, [FromForm] LocationDTO data)
+        public async Task<IActionResult> UpdateLocation(int id, [FromBody] LocationDTO data)
         {
             try
             {
