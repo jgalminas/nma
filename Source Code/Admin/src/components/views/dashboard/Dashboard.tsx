@@ -26,7 +26,7 @@ export default function Dashboard() {
 	const { data: drawing } = useQuery(['drawingCount'], fetchDrawingCount);
 	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
 
-	const viewDrawing = (id: number) => navigate(`/admin/drawings/view/${id}`);
+	const viewDrawing = (id: number) => navigate(`/drawings/${id}/view`);
 
 	return (
 		<Content>
