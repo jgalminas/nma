@@ -77,7 +77,7 @@ export default function CreateEditEventPanel() {
 
 	}, [locationsList])
 
-	const navigateBack = () => navigate('/admin/events');
+	const navigateBack = () => navigate(-1);
 
 	// update state
 	const setNotes = (notes: string) => setEvent({ ...event, notes: notes });
@@ -149,7 +149,7 @@ export default function CreateEditEventPanel() {
 
 					// navigate back
 					if (id) {
-						navigate(`/admin/events/${id}`);
+						navigate(`/events/${id}`);
 					} else {
 						navigateBack();
 					}

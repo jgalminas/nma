@@ -62,9 +62,13 @@ export type LocationIdName = {
 	name: string
 }
 
-export type Location = {
-	locationId: number,
+export interface LocationState {
 	city: string,
 	country: string,
 	locationName: string
 }
+
+export interface Location extends LocationState {
+	locationId: number
+}
+

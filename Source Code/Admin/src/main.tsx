@@ -14,6 +14,8 @@ import Panel from './components/Panel';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import './index.css'
+import ViewLocationPanel from './components/views/locations/ViewLocationPanel';
+import CreateEditLocationPanel from './components/views/locations/CreateEditLocationPanel';
 
 const queryClient = new QueryClient();
 
@@ -32,7 +34,13 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             </Route>
               <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
             </Route>
-            <Route path='locations' element={ <Locations/> }/>
+            <Route path='locations' element={ <Locations/> }>
+            <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
+              <Route index element={ <ViewLocationPanel/> }/>
+              <Route path='edit' element={ <CreateEditLocationPanel/> }/>
+            </Route>
+              <Route path='create' element={ <Panel onClose='/locations'> <CreateEditLocationPanel/> </Panel>  }/>
+            </Route>
             <Route path='drawings' element={ <Drawings/> }/>
             <Route path='export' element={ <Export/> }/>
           </Route>
