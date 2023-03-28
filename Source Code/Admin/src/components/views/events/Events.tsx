@@ -7,7 +7,7 @@ import PrimaryButton from '../../primitives/PrimaryButton';
 import { getFriendlyDate } from '../../../utils/date';
 import Table from '../../Table';
 import SearchInput from '../../primitives/SearchInput';
-import { fetchEventCount, fetchEvents } from '../../../../api/event';
+import { fetchEventCount, fetchEvents } from '../../../api/event';
 import Pagination from '../../Pagination';
 import { Link } from 'react-router-dom';
 

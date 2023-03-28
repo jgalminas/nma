@@ -1,4 +1,4 @@
-import { Count, Drawing } from '../types/admin.types';
+import { Count, Drawing } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchDrawingCount(): Promise<Count> {

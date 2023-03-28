@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchDrawingCount, fetchRecentDrawings } from '../../../../api/drawing';
-import { fetchEventCount } from '../../../../api/event';
-import { fetchLocationCount } from '../../../../api/location';
+import { fetchDrawingCount, fetchRecentDrawings } from '../../../api/drawing';
+import { fetchEventCount } from '../../../api/event';
+import { fetchLocationCount } from '../../../api/location';
 import Card from '../../Card';
 import Content from '../../Content';
 import DashboardStat from './DashboardStat';
@@ -39,8 +39,8 @@ export default function Dashboard() {
 					<DashboardStat label='Events' number={event?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkTextButton to='/admin/events'> View All </LinkTextButton>
-						<LinkPrimaryButton to='/admin/events/create'> Create Event </LinkPrimaryButton>
+						<LinkTextButton to='/events'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/events/create'> Create Event </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -48,8 +48,8 @@ export default function Dashboard() {
 					<DashboardStat label='Locations' number={location?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkTextButton to='/admin/locations'> View All </LinkTextButton>
-						<LinkPrimaryButton to='/admin/locations/create'> Add Location </LinkPrimaryButton>
+						<LinkTextButton to='/locations'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/locations/create'> Add Location </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -57,8 +57,8 @@ export default function Dashboard() {
 					<DashboardStat label='Drawings' number={drawing?.count ?? 0}/>
 					<Card.Divider/>
 					<Card.Actions>
-						<LinkTextButton to='/admin/drawings'> View All </LinkTextButton>
-						<LinkPrimaryButton to='/admin/drawings/score'> Score Drawings </LinkPrimaryButton>
+						<LinkTextButton to='/drawings'> View All </LinkTextButton>
+						<LinkPrimaryButton to='/drawings/score'> Score Drawings </LinkPrimaryButton>
 					</Card.Actions>
 				</Card>
 
@@ -89,7 +89,7 @@ export default function Dashboard() {
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data>
-											<Link className='underline' to={`/admin/events/view/${d.event.id}`}> { d.event.name } </Link>
+											<Link className='underline' to={`/events/view/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
 									</Table.Row>

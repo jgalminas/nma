@@ -1,8 +1,8 @@
 import { useNavigate, useParams } from 'react-router';
 import Panel from '../../Panel';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteEventById, fetchEventById } from '../../../../api/event';
-import { DropdownOptions, Event } from '../../../../types/admin.types';
+import { deleteEventById, fetchEventById } from '../../../api/event';
+import { DropdownOptions, Event } from '../../../admin.types';
 import Text from '../../primitives/Text';
 import Dropdown from '../../primitives/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';

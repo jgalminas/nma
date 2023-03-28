@@ -1,4 +1,4 @@
-import { Count, LocationIdName } from '../types/admin.types';
+import { Count, LocationIdName } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchLocationCount(): Promise<Count> {

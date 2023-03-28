@@ -1,4 +1,4 @@
-import { Count, CreateUpdateEvent, Event } from '../types/admin.types';
+import { Count, CreateUpdateEvent, Event } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchEventById(id: number): Promise<Event> {

@@ -1,4 +1,4 @@
-import { SelectOption } from '../../types/admin.types';
+import { SelectOption } from '../admin.types';
 
 export function validateLength(value: string | null) {
 	return value?.trim().length !== 0;
