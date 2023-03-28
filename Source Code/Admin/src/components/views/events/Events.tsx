@@ -63,7 +63,7 @@ export default function Events() {
 										<Table.Data> { getFriendlyDate(d.startTime) } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.finishTime) } </Table.Data>
 										<Table.Data>
-											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/admin/locations/view/${d.location.id}`}> { d.location.name } </Link>
+											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/locations/view/${d.location.id}`}> { d.location.name } </Link>
 										</Table.Data>
 									</Table.Row>
 								)

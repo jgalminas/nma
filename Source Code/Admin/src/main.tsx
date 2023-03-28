@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HashRouter, Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import Dashboard from './components/views/dashboard/Dashboard';
-import Drawings from './components/views/Drawings';
+import Drawings from './components/views/drawings/Drawings';
 import Events from './components/views/events/Events';
 import Export from './components/views/Export';
-import Locations from './components/views/Locations';
+import Locations from './components/views/locations/Locations';
 import App from './App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import ViewEventPanel from './components/views/events/ViewEventPanel';

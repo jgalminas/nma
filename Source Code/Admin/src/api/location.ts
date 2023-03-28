@@ -1,4 +1,4 @@
-import { Count, LocationIdName } from '../admin.types';
+import { Count, Location, LocationIdName } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchLocationCount(): Promise<Count> {
@@ -8,5 +8,10 @@ export async function fetchLocationCount(): Promise<Count> {
 
 export async function fetchLocationList(): Promise<LocationIdName[]> {
 	const res = await fetch(`${BASE_URL}/location/list`);
+	return res.json();
+}
+
+export async function fetchLocations(page: number, count?: number): Promise<Location[]> {
+	const res = await fetch(`${BASE_URL}/location?page=${page}&count=${count ?? 10}`);
 	return res.json();
 }

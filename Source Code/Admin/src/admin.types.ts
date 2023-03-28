@@ -61,3 +61,10 @@ export type LocationIdName = {
 	id: number,
 	name: string
 }
+
+export type Location = {
+	locationId: number,
+	city: string,
+	country: string,
+	locationName: string
+}
