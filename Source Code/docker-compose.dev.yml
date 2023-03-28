@@ -1,6 +1,14 @@
 ---
 version: "3.8"
 services:
+  web:
+    container_name: web_dev_c
+    build: web
+    image: web_dev_i
+    volumes:
+      - ./web/src:/web/src
+    ports:
+      - '3000:3000'
   api:
     container_name: api_dev_c
     image: api_dev_i
