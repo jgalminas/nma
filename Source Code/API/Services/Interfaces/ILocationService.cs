@@ -6,7 +6,7 @@ namespace API.Services.Interfaces
     public interface ILocationService
     {
         Task<Location> GetLocationByIdAsync(int id);
-        Task<Location[]> GetLocationsAsync();
+        Task<Location[]> GetLocationsAsync(int page, int count);
         Task<int> CreateLocationAsync(LocationDTO data);
         Task UpdateLocationAsync(int id, LocationDTO data);
         Task DeleteLocationAsync(int id);

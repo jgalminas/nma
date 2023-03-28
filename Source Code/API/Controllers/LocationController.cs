@@ -53,9 +53,9 @@ namespace API.Controllers
         /// </summary>
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "Locations", typeof(Location[]))]
-        public async Task<IActionResult> GetLocations()
+        public async Task<IActionResult> GetLocations([FromQuery] int page = 0, [FromQuery] int count = 10)
         {
-            return Ok(await _locationService.GetLocationsAsync());
+            return Ok(await _locationService.GetLocationsAsync(page, count));
         }
 
         /// <summary>

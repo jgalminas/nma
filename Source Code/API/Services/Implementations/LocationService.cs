@@ -38,9 +38,12 @@ namespace API.Services.Implementations
         /// Get all locations
         /// </summary>
         /// <returns> An array of location object </returns>
-        public async Task<Location[]> GetLocationsAsync()
+        public async Task<Location[]> GetLocationsAsync(int page, int count)
         {
-            return await _db.Locations.ToArrayAsync();
+            return await _db.Locations
+                            .Skip(page * count)
+                            .Take(count)
+                            .ToArrayAsync();
         }
 
         /// <summary>
