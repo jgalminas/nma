@@ -19,7 +19,7 @@ export default function Drawings() {
 
 	const navigate = useNavigate();
 
-	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added"];
+	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added", "Scored"];
 	
 	const { data: drawingCount } = useQuery(['drawingCount'], fetchDrawingCount);
 
@@ -63,6 +63,7 @@ export default function Drawings() {
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
+										<Table.Data> { d.isScored ? 'Yes' : 'No' } </Table.Data>
 									</Table.Row>
 								)
 							}) }

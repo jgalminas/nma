@@ -17,6 +17,7 @@ import './index.css'
 import ViewLocationPanel from './components/views/locations/ViewLocationPanel';
 import CreateEditLocationPanel from './components/views/locations/CreateEditLocationPanel';
 import { PageProvider } from './contexts/PageContext';
+import ViewDrawingPanel from './components/views/drawings/ViewDrawingPanel';
 
 const queryClient = new QueryClient();
 
@@ -47,7 +48,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
 
             <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
             <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
-              <Route index element={ <ViewEventPanel/> }/>
+              <Route index element={ <ViewDrawingPanel/> }/>
               <Route path='edit' element={ <CreateEditEventPanel/> }/>
             </Route>
               <Route path='create' element={ <Panel onClose='/drawings'> <CreateEditEventPanel/> </Panel>  }/>

@@ -36,17 +36,6 @@ export type Count = {
 	count: number
 }
 
-export type Drawing = {
-	id: number,
-	event: {
-		id: number,
-		name: string
-	},
-	createdAt: string,
-	drawersName: string,
-	drawersAge: number
-}
-
 export type DropdownOptions = {
 	name: string,
 	onClick: () => void
@@ -72,3 +61,33 @@ export interface Location extends LocationState {
 	locationId: number
 }
 
+export type TopicScore = {
+	topicScoreId: number,
+	depth: number,
+	extent: number
+}
+
+export type Score = {
+	scoreId: number,
+	breadth: number,
+	scoredBy: string,
+	scoredAt: string,
+	notes: string,
+	topicScores: TopicScore[]
+}
+
+export interface Drawing {
+	id: number,
+	event: {
+		id: number,
+		name: string
+	},
+	createdAt: string,
+	drawersName: string,
+	drawersAge: number,
+	isScored: boolean
+}
+
+export interface DrawingWithScores extends Drawing {
+	scores: Score[]
+}
