@@ -10,11 +10,12 @@ import SearchInput from '../../primitives/SearchInput';
 import { fetchEventCount, fetchEvents } from '../../../api/event';
 import Pagination from '../../Pagination';
 import { Link } from 'react-router-dom';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function Events() {
 	
 	const RECORDS_PER_PAGE = 15;
-	const [page, setPage] = useState<number>(0);
+	const { page, setPage } = usePage();
 
 	const navigate = useNavigate();
 

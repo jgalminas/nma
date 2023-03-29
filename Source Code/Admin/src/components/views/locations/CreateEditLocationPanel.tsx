@@ -10,12 +10,15 @@ import { createLocation, fetchLocationById, updateLocation } from '../../../api/
 import { validateLength } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 import { findItemInCacheArray } from '../../../utils/query';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function CreateEditLocationPanel() {
 
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { id } = useParams();	
+
+	const { page } = usePage();
 
 	// state
 	const [error, setError] = useState<boolean>(false);
@@ -106,10 +109,12 @@ export default function CreateEditLocationPanel() {
 									...prev.slice(itemIndex + 1)	
 								]
 							})
-						} else {
-							
-							// TO DO - append newly created record. (have to find out which page it should be under first) 
 
+							queryClient.invalidateQueries(['locationCount']);		
+
+						} else {							
+							queryClient.invalidateQueries(['locations', page]);
+							queryClient.invalidateQueries(['locationCount']);							
 						}
 
 						// navigate back

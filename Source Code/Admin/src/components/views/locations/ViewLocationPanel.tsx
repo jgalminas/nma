@@ -7,14 +7,15 @@ import Dropdown from '../../primitives/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
-import { findItemInCacheArray } from '../../../utils/query';
 import { deleteLocationById, fetchLocationById } from '../../../api/location';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function ViewLocationPanel() {
 
 	// navigation props/hoopks
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { page, setPage } = usePage();
 
 	// query props/hooks
 	const queryClient = useQueryClient();
@@ -48,19 +49,27 @@ export default function ViewLocationPanel() {
 			onSuccess: (res) => {
 
 				if (res.ok) {
-					// find query cache which has the item
-					const { queryKey, itemIndex } = findItemInCacheArray<Location>(queryClient, 'locations', (i: Location) => i.locationId === Number(id))
+					
+					queryClient.setQueryData<Location[]>(['locations', page], (prev) => {
 
-					// update query cache
-					if (queryKey && itemIndex) {
-						queryClient.setQueryData(queryKey, (prev: any) => {
+						if (prev) {
+							
+							const itemIndex = prev.findIndex(i => i.locationId === Number(id));						
+
+							// check for page length
+							if (prev.length === 1) {
+								setPage(page !== 0? page - 1: 0);							
+							}
 
 							return [
 								...prev.slice(0, itemIndex),
-								...prev.slice(itemIndex + 1)	
+								...prev.slice(itemIndex + 1)
 							]
-						})
-					}				
+						}
+
+					});
+
+					queryClient.invalidateQueries(['locationCount']);
 
 					// navigate back
 					navigateBack();

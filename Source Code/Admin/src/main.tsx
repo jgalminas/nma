@@ -16,6 +16,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './index.css'
 import ViewLocationPanel from './components/views/locations/ViewLocationPanel';
 import CreateEditLocationPanel from './components/views/locations/CreateEditLocationPanel';
+import { PageProvider } from './contexts/PageContext';
 
 const queryClient = new QueryClient();
 
@@ -27,14 +28,14 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path='/' element={ <App/> }>
             <Route index element={ <Navigate to="dashboard" replace /> }/>
             <Route path='dashboard' element={ <Dashboard/> }/>
-            <Route path='events' element={ <Events/> }>
+            <Route path='events' element={ <PageProvider> <Events/> </PageProvider> }>
             <Route path=':id' element={ <Panel onClose='/events'> <Outlet/> </Panel> }>
               <Route index element={ <ViewEventPanel/> }/>
               <Route path='edit' element={ <CreateEditEventPanel/> }/>
             </Route>
               <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
             </Route>
-            <Route path='locations' element={ <Locations/> }>
+            <Route path='locations' element={ <PageProvider> <Locations/> </PageProvider>  }>
             <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
               <Route index element={ <ViewLocationPanel/> }/>
               <Route path='edit' element={ <CreateEditLocationPanel/> }/>

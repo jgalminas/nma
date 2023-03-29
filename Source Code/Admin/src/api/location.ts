@@ -1,4 +1,4 @@
-import { Count, EventState, Location, LocationIdName, LocationState } from '../admin.types';
+import { Count, Location, LocationIdName, LocationState } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchLocationCount(): Promise<Count> {

@@ -14,12 +14,14 @@ import { fetchLocationList } from '../../../api/location';
 import { validateLength, validateLocation } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 import { findItemInCacheArray } from '../../../utils/query';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function CreateEditEventPanel() {
 
 	const queryClient = useQueryClient();
 	const navigate = useNavigate();
 	const { id } = useParams();	
+	const { page } = usePage();
 
 	const [error, setError] = useState<boolean>(false);
 	const { data: locationsList } = useQuery(['locationList'], fetchLocationList);
@@ -145,6 +147,12 @@ export default function CreateEditEventPanel() {
 								...prev.slice(itemIndex + 1)	
 							]
 						})
+
+						queryClient.invalidateQueries(['eventCount']);		
+
+					} else {							
+						queryClient.invalidateQueries(['events', page]);
+						queryClient.invalidateQueries(['eventCount']);							
 					}
 
 					// navigate back

@@ -10,6 +10,7 @@ import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
 import { findItemInCacheArray } from '../../../utils/query';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function ViewEventPanel() {
 
@@ -23,7 +24,8 @@ export default function ViewEventPanel() {
 	const mutation = useMutation(['deleteEvent', Number(id)], deleteEventById);
 
 	// state
-	const [popup, setPopup] = useState(false); 
+	const [popup, setPopup] = useState(false);
+	const { page, setPage } = usePage();
 	
 	// dropdown menu options 
 	const options: DropdownOptions[] = [
@@ -49,19 +51,27 @@ export default function ViewEventPanel() {
 			onSuccess: (res) => {
 
 				if (res.ok) {
-					// find query cache which has the item
-					const { queryKey, itemIndex } = findItemInCacheArray<Event>(queryClient, 'events', (i: Event) => i.eventId === Number(id))
+					
+					queryClient.setQueryData<Event[]>(['events', page], (prev) => {
 
-					// update query cache
-					if (queryKey && itemIndex) {
-						queryClient.setQueryData(queryKey, (prev: any) => {
+						if (prev) {
+							
+							const itemIndex = prev.findIndex(i => i.eventId === Number(id));						
+
+							// check for page length
+							if (prev.length === 1) {
+								setPage(page !== 0? page - 1: 0);							
+							}
 
 							return [
 								...prev.slice(0, itemIndex),
-								...prev.slice(itemIndex + 1)	
+								...prev.slice(itemIndex + 1)
 							]
-						})
-					}				
+						}
+
+					});
+
+					queryClient.invalidateQueries(['eventCount']);
 
 					// navigate back
 					navigateBack();

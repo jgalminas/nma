@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Content from '../../Content';
 import Heading from '../../primitives/Heading';
@@ -8,11 +8,13 @@ import Table from '../../Table';
 import SearchInput from '../../primitives/SearchInput';
 import Pagination from '../../Pagination';
 import { fetchLocationCount, fetchLocations } from '../../../api/location';
+import { usePage } from '../../../contexts/PageContext';
 
 export default function Locations() {
 	
 	const RECORDS_PER_PAGE = 15;
-	const [page, setPage] = useState<number>(0);
+
+	const { page, setPage } = usePage();
 
 	const navigate = useNavigate();
 
