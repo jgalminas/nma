@@ -289,7 +289,7 @@ namespace API.Services.Implementations
         /// <param name="count"></param>
         /// <param name="unscoredOnly"></param>
         /// <returns> array of drawings </returns>
-        public async Task<ICollection<DrawingDTO>> GetDrawingsAsync(int count, bool unscoredOnly)
+        public async Task<ICollection<DrawingDTO>> GetDrawingsAsync(int page, int count, bool unscoredOnly)
         {
             if (unscoredOnly)
             {
@@ -309,11 +309,15 @@ namespace API.Services.Implementations
                         DrawersName = d.DrawersName,
                         ImageUrl = $"/api/drawing/image/{d.FileId}",
                     })
+                    .Skip(page * count)
                     .Take(count)
                     .ToArrayAsync();
             } else
             {
-                return await GetDrawing().Take(count).ToArrayAsync();
+                return await GetDrawing()
+                    .Skip(page * count)
+                    .Take(count)
+                    .ToArrayAsync();
             }
 
         }

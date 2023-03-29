@@ -191,12 +191,12 @@ namespace API.Controllers
 
         [HttpGet]
         [Route("/Api/Drawings")]
-        public async Task<IActionResult> GetDrawings([FromQuery] int count = 10, [FromQuery] bool unscoredOnly = true)
+        public async Task<IActionResult> GetDrawings([FromQuery] int page = 0, [FromQuery] int count = 10, [FromQuery] bool unscoredOnly = true)
         {
             try
             {
                 return Ok(
-                    await _drawingService.GetDrawingsAsync(count, unscoredOnly)
+                    await _drawingService.GetDrawingsAsync(page, count, unscoredOnly)
                     );
 
             }
