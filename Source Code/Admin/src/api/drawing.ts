@@ -32,3 +32,8 @@ export async function deleteDrawingById(id: number): Promise<Response> {
 
 	return res;
 }
+
+export async function fetchImage(imageUrl: string): Promise<Blob> {
+	const res = await fetch(BASE_URL + imageUrl);	
+	return res.blob();
+}

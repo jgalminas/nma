@@ -32,7 +32,7 @@ namespace API.Services.Implementations
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
                 isScored = d.Scores.Count != 0,
-                ImageUrl = $"/api/drawing/image/{d.FileId}"
+                ImageUrl = $"/drawing/image/{d.FileId}"
             });
         }
         private IQueryable<DrawingDTO> GetDrawingWithScores()
@@ -49,7 +49,7 @@ namespace API.Services.Implementations
                 CreatedAt = d.CreatedAt,
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
-                ImageUrl = $"/api/drawing/image/{d.FileId}",
+                ImageUrl = $"/drawing/image/{d.FileId}",
                 isScored = d.Scores.Count != 0,
 
                 // map score data

@@ -10,17 +10,19 @@ import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
 import { usePage } from '../../../contexts/PageContext';
-import { fetchDrawingByIdWithScores } from '../../../api/drawing';
+import { fetchDrawingByIdWithScores, fetchImage } from '../../../api/drawing';
+import Image from '../../Image';
 
 export default function ViewDrawingPanel() {
 
 	// navigation props/hoopks
 	const { id } = useParams();
-	const navigate = useNavigate();
+	const navigate = useNavigate();	
 
 	// query props/hooks
 	const queryClient = useQueryClient();
 	const { data: drawing } = useQuery(['drawing', Number(id)], () => fetchDrawingByIdWithScores(Number(id), true));
+	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
 	const mutation = useMutation(['deleteDrawing', Number(id)], deleteEventById);
 
 	// state
@@ -94,6 +96,8 @@ export default function ViewDrawingPanel() {
 			</Panel.Header>
 
 			<div className='flex flex-col gap-5'>
+
+				<Image isLoading={isImageLoading} url={image} alt='Drawing'/>
 				<Text label="ID"> { drawing?.id ?? '-' } </Text>
 				<Text label="Drawer's Name"> { drawing?.drawersName ?? '-' } </Text>
 				<Text label="Drawer's Age"> { drawing?.drawersAge ?? '-' } </Text>

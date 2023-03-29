@@ -85,7 +85,8 @@ export interface Drawing {
 	createdAt: string,
 	drawersName: string,
 	drawersAge: number,
-	isScored: boolean
+	isScored: boolean,
+	imageUrl: string
 }
 
 export interface DrawingWithScores extends Drawing {
