@@ -67,6 +67,8 @@ export default function ViewLocationPanel() {
 							]
 						}
 
+						return [];
+
 					});
 
 					queryClient.invalidateQueries(['locationCount']);

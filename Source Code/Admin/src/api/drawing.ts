@@ -6,7 +6,7 @@ export async function fetchDrawingCount(): Promise<Count> {
 	return res.json();
 }
 
-export async function fetchRecentDrawings(count: number): Promise<Drawing[]> {
-	const res = await fetch(`${BASE_URL}/drawings?unscoredOnly=True&count=${count}`);
+export async function fetchDrawings(page: number, count: number, unscoredOnly: boolean): Promise<Drawing[]> {
+	const res = await fetch(`${BASE_URL}/drawings?unscoredOnly=${unscoredOnly}&count=${count}&page=${page}`);
 	return res.json();
 }

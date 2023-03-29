@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchDrawingCount, fetchRecentDrawings } from '../../../api/drawing';
+import { fetchDrawingCount, fetchDrawings } from '../../../api/drawing';
 import { fetchEventCount } from '../../../api/event';
 import { fetchLocationCount } from '../../../api/location';
 import Card from '../../Card';
@@ -24,7 +24,7 @@ export default function Dashboard() {
 	const { data: event } = useQuery(['eventCount'], fetchEventCount);
 	const { data: location } = useQuery(['locationCount'], fetchLocationCount);
 	const { data: drawing } = useQuery(['drawingCount'], fetchDrawingCount);
-	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchRecentDrawings(NUM_OF_DRAWINGS));
+	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchDrawings(0, NUM_OF_DRAWINGS, true));
 
 	const viewDrawing = (id: number) => navigate(`/drawings/${id}/view`);
 

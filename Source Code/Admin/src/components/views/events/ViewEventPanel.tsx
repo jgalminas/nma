@@ -9,7 +9,6 @@ import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
-import { findItemInCacheArray } from '../../../utils/query';
 import { usePage } from '../../../contexts/PageContext';
 
 export default function ViewEventPanel() {
@@ -68,6 +67,8 @@ export default function ViewEventPanel() {
 								...prev.slice(itemIndex + 1)
 							]
 						}
+
+						return [];
 
 					});
 

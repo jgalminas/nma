@@ -28,21 +28,31 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
           <Route path='/' element={ <App/> }>
             <Route index element={ <Navigate to="dashboard" replace /> }/>
             <Route path='dashboard' element={ <Dashboard/> }/>
+
             <Route path='events' element={ <PageProvider> <Events/> </PageProvider> }>
-            <Route path=':id' element={ <Panel onClose='/events'> <Outlet/> </Panel> }>
+              <Route path=':id' element={ <Panel onClose='/events'> <Outlet/> </Panel> }>
+                <Route index element={ <ViewEventPanel/> }/>
+                <Route path='edit' element={ <CreateEditEventPanel/> }/>
+              </Route>
+              <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
+            </Route>
+
+            <Route path='locations' element={ <PageProvider> <Locations/> </PageProvider>  }>
+              <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
+                <Route index element={ <ViewLocationPanel/> }/>
+                <Route path='edit' element={ <CreateEditLocationPanel/> }/>
+              </Route>
+              <Route path='create' element={ <Panel onClose='/locations'> <CreateEditLocationPanel/> </Panel>  }/>
+            </Route>
+
+            <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
+            <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
               <Route index element={ <ViewEventPanel/> }/>
               <Route path='edit' element={ <CreateEditEventPanel/> }/>
             </Route>
-              <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
+              <Route path='create' element={ <Panel onClose='/drawings'> <CreateEditEventPanel/> </Panel>  }/>
             </Route>
-            <Route path='locations' element={ <PageProvider> <Locations/> </PageProvider>  }>
-            <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
-              <Route index element={ <ViewLocationPanel/> }/>
-              <Route path='edit' element={ <CreateEditLocationPanel/> }/>
-            </Route>
-              <Route path='create' element={ <Panel onClose='/locations'> <CreateEditLocationPanel/> </Panel>  }/>
-            </Route>
-            <Route path='drawings' element={ <Drawings/> }/>
+
             <Route path='export' element={ <Export/> }/>
           </Route>
         </Routes>

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Content from '../../Content';
 import Heading from '../../primitives/Heading';
