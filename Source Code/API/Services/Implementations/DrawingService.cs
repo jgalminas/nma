@@ -31,6 +31,7 @@ namespace API.Services.Implementations
                 CreatedAt = d.CreatedAt,
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
+                isScored = d.Scores.Count != 0,
                 ImageUrl = $"/api/drawing/image/{d.FileId}"
             });
         }
@@ -49,6 +50,7 @@ namespace API.Services.Implementations
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
                 ImageUrl = $"/api/drawing/image/{d.FileId}",
+                isScored = d.Scores.Count != 0,
 
                 // map score data
                 Scores = d.Scores.Select(s => new ScoreDTO()
@@ -164,7 +166,7 @@ namespace API.Services.Implementations
         {
             DrawingDTO drawing;
 
-            if (withScores)
+            if (!withScores)
             {
                 drawing = await GetDrawing().FirstOrDefaultAsync(d => d.Id == id);
             } else
