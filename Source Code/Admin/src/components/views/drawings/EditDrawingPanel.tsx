@@ -8,7 +8,7 @@ import TextButton from '../../primitives/TextButton';
 import Select from '../../primitives/Select';
 import { fetchEventList } from '../../../api/event';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { validateLength, validateSelectNotEmpty } from '../../../utils/validation';
+import { validateAge, validateLength, validateSelectNotEmpty } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 import { usePage } from '../../../contexts/PageContext';
 import { fetchDrawingById, updateDrawing } from '../../../api/drawing';
@@ -34,7 +34,7 @@ export default function EditDrawingPanel() {
 	// validation
 	const { name, age, event } = useValidation({
 		"name": { message: 'Name cannot be empty', isValid: true, validator: validateLength },
-		"age": { message: 'Age cannot be empty', isValid: true, validator: validateLength },
+		"age": { message: 'Age must be between 0 and 120', isValid: true, validator: validateAge },
 		"event": { message: 'Event cannot be empty', isValid: true, validator: validateSelectNotEmpty },
 	});	
 
@@ -72,8 +72,9 @@ export default function EditDrawingPanel() {
 	const navigateBack = () => navigate(-1);
 
 	// update state
-	const setAge = (number: string) => {
-		setDrawing({ ...drawing, drawersAge: Number(number) });
+	const setAge = (value: string) => {
+		age.validate(value);
+		setDrawing({ ...drawing, drawersAge: Number(value) });
 	};
 
 	const setEvent = (selected: SelectOption) => {
@@ -92,8 +93,9 @@ export default function EditDrawingPanel() {
 		setError(false);		
 
 		if (name.validate(drawing.drawersName)
-			&& event.validate(drawing.event)) {
-			
+			&& age.validate(drawing.drawersAge)
+			&& event.validate(drawing.event)) {			
+
 			mutation.reset();
 
 			// send network request
@@ -127,7 +129,12 @@ export default function EditDrawingPanel() {
 
 			<div className='flex flex-col gap-5'>
 				<TextInput value={drawing.drawersName} label="Drawer's Name" onChange={setName} validation={name.validation}/>
-				<TextInput value={drawing.drawersAge.toString()} label="Drawer's Age" onChange={setAge} validation={age.validation}/>
+				<TextInput value={drawing.drawersAge === 0 ? '': drawing.drawersAge.toString()}
+				label="Drawer's Age"
+				onChange={setAge}
+				validation={age.validation}
+				type='number'
+				max={3}/>
 				<Select value={drawing.event} options={events} label='Event' onChange={setEvent} validation={event.validation}/>
 			</div>
 			

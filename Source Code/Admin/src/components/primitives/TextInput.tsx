@@ -6,14 +6,25 @@ export interface TextInputProps {
 	onChange: (v: string) => void,
 	label?: string,
 	value?: string,
-	validation?: Validation
+	validation?: Validation,
+	type?: "number" | "text",
+	max?: number
 }
 
-export default function TextInput({ validation, label, name, value, onChange }: TextInputProps) {
+export default function TextInput({ validation, label, name, value, onChange, type = "text", max }: TextInputProps) {
 	
 	const inputId = name ?? useId();
 
-	const onInputChange = (e: ChangeEvent<HTMLInputElement>) => onChange(e.target.value);	
+	const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		if (type === "number") {
+			if (/^[0-9]*$/.test(e.target.value)) {
+				onChange(e.target.value);
+			}	
+		} else {
+			onChange(e.target.value);
+		}
+
+	};	
 
 	return (
 		<div className='flex flex-col'>
@@ -29,6 +40,7 @@ export default function TextInput({ validation, label, name, value, onChange }: 
 				${validation?.isValid ? 'border-gray-100 focus:border-blue-400 ring-blue-300': 'border-red-500 focus:border-red-500 ring-red-300'}`}
 			name={name}
 			type='text'
+			maxLength={max}
 			value={value}
 			onChange={onInputChange}/>
 
