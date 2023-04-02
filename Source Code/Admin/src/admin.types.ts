@@ -63,6 +63,7 @@ export interface Location extends LocationState {
 
 export type TopicScore = {
 	topicScoreId: number,
+	topicName: string,
 	depth: number,
 	extent: number
 }

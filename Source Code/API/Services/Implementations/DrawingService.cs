@@ -65,6 +65,7 @@ namespace API.Services.Implementations
                     TopicScores = s.TopicScores.Select(ts => new TopicScoreDTO()
                     {
                         TopicScoreId = ts.TopicScoreId,
+                        TopicName = ts.Topic.TopicName,
                         Depth = ts.Depth,
                         Extent = ts.Extent
                     }).ToArray()

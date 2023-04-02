@@ -5,13 +5,16 @@ import { deleteEventById } from '../../../api/event';
 import { Drawing, DropdownOptions } from '../../../admin.types';
 import Text from '../../primitives/Text';
 import Dropdown from '../../primitives/Dropdown';
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, ChevronDownIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
 import { usePage } from '../../../contexts/PageContext';
 import { fetchDrawingByIdWithScores, fetchImage } from '../../../api/drawing';
 import Image from '../../Image';
+import Table from '../../Table';
+import { Tab } from '@headlessui/react';
+import { Label } from '@headlessui/react/dist/components/label/label';
 
 export default function ViewDrawingPanel() {
 
@@ -102,6 +105,55 @@ export default function ViewDrawingPanel() {
 				<Text label="Drawer's Name"> { drawing?.drawersName ?? '-' } </Text>
 				<Text label="Drawer's Age"> { drawing?.drawersAge ?? '-' } </Text>
 				<Text label="Date Added"> { drawing && getFriendlyDate(drawing?.createdAt)  } </Text>
+				<Text label="Event"> { drawing?.event.name ?? '-' } </Text>
+				<Text label="Scored"> { (drawing?.isScored) ? 'Yes' : 'No' } </Text>
+				
+
+				{/* {
+					drawing?.scores.map((score) => {
+						return (
+							<div>
+								
+								<div className='bg-gray-100 rounded py-2 px-3 flex justify-between items-center'>
+									<Text label='Breadth'> { score.breadth } </Text>
+									<Text label='Scored At'> { getFriendlyDate(score.scoredAt) } </Text>
+									<Text label='By'> { score.scoredBy } </Text>
+									<ChevronDownIcon className='w-5 h-5'/>
+								</div>
+
+								<div>
+									<Table>
+										<Table.Head>
+											<Table.Row>
+												<Table.Heading/>
+												<Table.Heading> Depth </Table.Heading>
+												<Table.Heading> Extent </Table.Heading>
+											</Table.Row>
+										</Table.Head>
+										<Table.Body>
+											{ score.topicScores.map((ts) => {
+												return (
+													<Table.Row>
+														<Table.Heading> { ts.topicName } </Table.Heading>
+														<Table.Data> { ts.depth } </Table.Data>
+														<Table.Data> { ts.extent } </Table.Data>
+													</Table.Row>
+												)
+											}) }
+
+										</Table.Body>
+									</Table>
+								</div>
+
+							</div>
+						)
+					})
+				} */}
+
+
+
+
+
 			</div>
 		</Fragment>
 	)

@@ -1,4 +1,4 @@
-import { MouseEvent, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export interface TableProps {
 	children: ReactNode
@@ -29,7 +29,7 @@ export function Head({ children }: HeadProps) {
 
 // HTML <th/> component
 export interface HeadingProps {
-	children: ReactNode
+	children?: ReactNode
 }
 
 export function Heading({ children }: HeadingProps) {
