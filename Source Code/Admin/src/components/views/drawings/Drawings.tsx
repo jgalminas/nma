@@ -10,6 +10,7 @@ import { usePage } from '../../../contexts/PageContext';
 import { fetchDrawingCount, fetchDrawings } from '../../../api/drawing';
 import { getFriendlyDate } from '../../../utils/date';
 import PrimaryButton from '../../primitives/PrimaryButton';
+import PrimaryButtonSmall from '../../primitives/PrimaryButtonSmall';
 
 export default function Drawings() {
 	
@@ -27,7 +28,7 @@ export default function Drawings() {
 		keepPreviousData: true
 	});	
 
-	const viewDrawing = (id: number) => navigate(`${id}`);
+	const viewDrawing = (id: number) => navigate(id.toString());
 
 	return (
 		<Content>
@@ -63,7 +64,17 @@ export default function Drawings() {
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
-										<Table.Data> { d.isScored ? 'Yes' : 'No' } </Table.Data>
+										<Table.Data>
+											{ !d.isScored ?
+												<div className='flex justify-end'>
+													No
+													<div className='ml-auto'>
+														<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
+													</div>
+												</div>
+												: 'Yes'
+											}
+										</Table.Data>
 									</Table.Row>
 								)
 							}) }
