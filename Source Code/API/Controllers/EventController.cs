@@ -139,5 +139,19 @@ namespace API.Controllers
                 return StatusCode(500, new GenericResponse() { Message = e.Message });
             }
         }
+
+        [HttpGet]
+        [Route("List")]
+        public async Task<IActionResult> GetEventListAsync()
+        {
+            try
+            {
+                return Ok(await _eventService.GetEventListAsync());
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
     }
 }

@@ -11,5 +11,7 @@ namespace API.Services.Interfaces
         Task UpdateEventAsync(int id, EventUpdateDTO data);
         Task DeleteEventAsync(int id);
         Task<int> GetEventCountAsync();
+        Task<IdNameDTO[]> GetEventListAsync();
+
     }
 }

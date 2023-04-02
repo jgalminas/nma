@@ -140,9 +140,9 @@ namespace API.Services.Implementations
             }
         }
 
-        public Task<LocationIdNameDTO[]> GetLocationListAsync()
+        public Task<IdNameDTO[]> GetLocationListAsync()
         {
-            return _db.Locations.Select(l => new LocationIdNameDTO()
+            return _db.Locations.Select(l => new IdNameDTO()
             {
                 Id = l.LocationId,
                 Name = l.LocationName

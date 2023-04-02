@@ -29,7 +29,7 @@ namespace API.Services.Implementations
                 Notes = e.Notes,
                 StartTime = e.StartTime,
                 FinishTime = e.FinishTime,
-                Location = new LocationIdNameDTO()
+                Location = new IdNameDTO()
                 {
                     Id = e.Location.LocationId,
                     Name = e.Location.LocationName
@@ -170,6 +170,19 @@ namespace API.Services.Implementations
         public async Task<int> GetEventCountAsync()
         {
             return await _db.Events.CountAsync();
+        }
+
+        /// <summary>
+        /// Gets a list of all events
+        /// </summary>
+        /// <returns> a list containing id and name of each event </returns>
+        public Task<IdNameDTO[]> GetEventListAsync()
+        {
+            return _db.Events.Select(l => new IdNameDTO()
+            {
+                Id = l.EventId,
+                Name = l.EventName
+            }).ToArrayAsync();
         }
     }
 }
