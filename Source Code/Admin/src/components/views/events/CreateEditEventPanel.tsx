@@ -11,7 +11,7 @@ import Select from '../../primitives/Select';
 import { createEvent, fetchEventById, updateEvent } from '../../../api/event';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchLocationList } from '../../../api/location';
-import { validateLength, validateLocation } from '../../../utils/validation';
+import { validateLength, validateSelectNotEmpty } from '../../../utils/validation';
 import { useValidation } from '../../../hooks/validation';
 import { findItemInCacheArray } from '../../../utils/query';
 import { usePage } from '../../../contexts/PageContext';
@@ -25,7 +25,7 @@ export default function CreateEditEventPanel() {
 
 	const [error, setError] = useState<boolean>(false);
 	const { data: locationsList } = useQuery(['locationList'], fetchLocationList);
-	const [locations, setLoations] = useState<SelectOption[]>([]);
+	const [locations, setLocations] = useState<SelectOption[]>([]);
 	const [event, setEvent] = useState<EventState>({
 		location: { id: -1, value: 'Select location' },
 		eventName: '',
@@ -43,7 +43,7 @@ export default function CreateEditEventPanel() {
 		"name": { message: 'Name cannot be empty', isValid: true, validator: validateLength },
 		"startTime": { message: 'Start date/time must be selected', isValid: true, validator: validateLength },
 		"finishTime": { message: 'Finish date/time must be selected', isValid: true, validator: validateLength },
-		"location": { message: 'Location cannot be empty', isValid: true, validator: validateLocation },
+		"location": { message: 'Location cannot be empty', isValid: true, validator: validateSelectNotEmpty },
 	});	
 
 	// fetch event data when editing
@@ -75,7 +75,7 @@ export default function CreateEditEventPanel() {
 			}
 		}) ?? [];
 		
-		setLoations(options);
+		setLocations(options);
 
 	}, [locationsList])
 
@@ -116,7 +116,7 @@ export default function CreateEditEventPanel() {
 			
 			mutation.reset();
 
-			// sent network request
+			// send network request
 			mutation.mutate({
 				locationId: event.location.id,
 				eventName: event.eventName,
@@ -152,7 +152,6 @@ export default function CreateEditEventPanel() {
 
 					} else {							
 						queryClient.invalidateQueries(['events', page]);
-						queryClient.invalidateQueries(['eventCount']);							
 					}
 
 					// navigate back

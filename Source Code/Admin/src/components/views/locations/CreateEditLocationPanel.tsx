@@ -86,7 +86,7 @@ export default function CreateEditLocationPanel() {
 			
 			mutation.reset();
 
-			// sent network request
+			// send network request
 			mutation.mutate(location,
 				{
 					onSuccess: () => {

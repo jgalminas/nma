@@ -4,6 +4,6 @@ export function validateLength(value: string | null) {
 	return value?.trim().length !== 0;
 }
 
-export function validateLocation(option: SelectOption) {
+export function validateSelectNotEmpty(option: SelectOption) {
 	return option.id != -1;
 }

@@ -1,4 +1,4 @@
-import { Count, Drawing, DrawingWithScores } from '../admin.types';
+import { Count, Drawing, DrawingWithScores, EditDrawing } from '../admin.types';
 import { BASE_URL } from './api.config';
 
 export async function fetchDrawingById(id: number): Promise<Drawing> {
@@ -36,4 +36,18 @@ export async function deleteDrawingById(id: number): Promise<Response> {
 export async function fetchImage(imageUrl: string): Promise<Blob> {
 	const res = await fetch(BASE_URL + imageUrl);	
 	return res.blob();
+}
+
+export async function updateDrawing(id: number, drawing: EditDrawing): Promise<Response> {
+
+	const res = fetch(`${BASE_URL}/drawing/${id}`, {
+		method: 'PATCH',
+		mode: 'cors',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(drawing)
+	});
+
+	return res;
 }

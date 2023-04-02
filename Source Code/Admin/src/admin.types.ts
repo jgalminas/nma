@@ -46,7 +46,7 @@ export type SelectOption = {
 	value: string
 }
 
-export type LocationIdName = {
+export type IdName = {
 	id: number,
 	name: string
 }
@@ -92,4 +92,16 @@ export interface Drawing {
 
 export interface DrawingWithScores extends Drawing {
 	scores: Score[]
+}
+
+export type EditDrawingState = {
+	event: SelectOption,
+	drawersName: string,
+	drawersAge: number
+}
+
+export type EditDrawing = {
+	eventId: number,
+	drawersName: string,
+	drawersAge: number
 }

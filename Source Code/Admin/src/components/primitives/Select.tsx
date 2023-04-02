@@ -36,7 +36,7 @@ export default function Select({ label, value, onChange, options, validation }: 
 				leave="transition ease-in duration-100"
 				leaveFrom="opacity-100"
 				leaveTo="opacity-0">
-					<Listbox.Options className="absolute mt-1 max-h-60 overflow-auto border border-1 border-gray-200 rounded bg-white w-fit min-w-[10rem]">
+					<Listbox.Options className="absolute mt-1 max-h-60 overflow-y-auto overflow-x-hidden border border-1 border-gray-200 rounded bg-white w-fit min-w-[10rem]">
 					{ options.map((opt, key) => (
 						<Listbox.Option key={key}
 						className={({ active }) => `relative text-left cursor-default select-none py-1.5 px-3 text-gray-600 ${active && 'bg-gray-50'}`}
