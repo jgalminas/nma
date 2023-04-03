@@ -11,6 +11,7 @@ import { fetchDrawingCount, fetchDrawings } from '../../../api/drawing';
 import { getFriendlyDate } from '../../../utils/date';
 import PrimaryButton from '../../primitives/PrimaryButton';
 import PrimaryButtonSmall from '../../primitives/PrimaryButtonSmall';
+import { Link } from 'react-router-dom';
 
 export default function Drawings() {
 	
@@ -20,7 +21,7 @@ export default function Drawings() {
 
 	const navigate = useNavigate();
 
-	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added", "Scored"];
+	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added", "Event", "Scored"];
 	
 	const { data: drawingCount } = useQuery(['drawingCount'], fetchDrawingCount);
 
@@ -57,13 +58,16 @@ export default function Drawings() {
 					<Table.Body>
 						{ Array.isArray(drawings) &&  drawings?.map((d, key) => {
 								return (
-									<Table.Row className='hover:bg-gray-100 cursor-pointer'
+									<Table.Row className='hover:bg-gray-50 cursor-pointer'
 									key={key}
 									onClick={() => d.id && viewDrawing(d.id)}>
 										<Table.Data> { d.id } </Table.Data>
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
+										<Table.Data>
+											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/events/${d.event.id}`}> { d.event.name } </Link>
+										</Table.Data>
 										<Table.Data>
 											{ !d.isScored ?
 												<div className='flex justify-end'>

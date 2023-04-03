@@ -56,7 +56,7 @@ export default function Events() {
 					<Table.Body>
 						{ Array.isArray(events) &&  events?.map((d, key) => {
 								return (
-									<Table.Row className='hover:bg-gray-100 cursor-pointer'
+									<Table.Row className='hover:bg-gray-50 cursor-pointer'
 									key={key}
 									onClick={() => d.eventId && viewEvent(d.eventId)}>
 										<Table.Data> { d.eventId } </Table.Data>
@@ -64,7 +64,7 @@ export default function Events() {
 										<Table.Data> { getFriendlyDate(d.startTime) } </Table.Data>
 										<Table.Data> { getFriendlyDate(d.finishTime) } </Table.Data>
 										<Table.Data>
-											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/locations/view/${d.location.id}`}> { d.location.name } </Link>
+											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/locations/${d.location.id}`}> { d.location.name } </Link>
 										</Table.Data>
 									</Table.Row>
 								)

@@ -26,7 +26,7 @@ export default function Dashboard() {
 	const { data: drawing } = useQuery(['drawingCount'], fetchDrawingCount);
 	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchDrawings(0, NUM_OF_DRAWINGS, true));
 
-	const viewDrawing = (id: number) => navigate(`/drawings/${id}/view`);
+	const viewDrawing = (id: number) => navigate(`/drawings/${id}`);
 
 	return (
 		<Content>
@@ -83,13 +83,13 @@ export default function Dashboard() {
 						{ drawings?.map((d) => {
 								return (
 									<Table.Row
-										className='hover:bg-gray-100 cursor-pointer'
+										className='hover:bg-gray-50 cursor-pointer'
 										key={d.id}
 										onClick={() => d.id && viewDrawing(d.id)}>
 										<Table.Data> { d.drawersName } </Table.Data>
 										<Table.Data> { d.drawersAge } </Table.Data>
 										<Table.Data>
-											<Link className='underline' to={`/events/view/${d.event.id}`}> { d.event.name } </Link>
+											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/events/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
 										<Table.Data> { getFriendlyDate(d.createdAt) } </Table.Data>
 									</Table.Row>

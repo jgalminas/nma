@@ -55,7 +55,7 @@ export default function Locations() {
 					<Table.Body>
 						{ Array.isArray(locations) &&  locations?.map((d, key) => {
 								return (
-									<Table.Row className='hover:bg-gray-100 cursor-pointer'
+									<Table.Row className='hover:bg-gray-50 cursor-pointer'
 									key={key}
 									onClick={() => d.locationId && viewLocation(d.locationId)}>
 										<Table.Data> { d.locationName } </Table.Data>
