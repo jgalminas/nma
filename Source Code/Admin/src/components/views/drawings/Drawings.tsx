@@ -21,7 +21,7 @@ export default function Drawings() {
 
 	const navigate = useNavigate();
 
-	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added", "Event", "Scored"];
+	const columns: ReactNode[] = ["ID", "Drawer's Name", "Drawer's Age", "Date Added", "Event", "Scored", ""];
 	
 	const { data: drawingCount } = useQuery(['drawingCount'], fetchDrawingCount);
 
@@ -68,16 +68,11 @@ export default function Drawings() {
 										<Table.Data>
 											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/events/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
+										<Table.Data> { d.isScored ? 'Yes' : 'No' } </Table.Data>
 										<Table.Data>
-											{ !d.isScored ?
-												<div className='flex justify-end'>
-													No
-													<div className='ml-auto pl-2'>
-														<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
-													</div>
-												</div>
-												: 'Yes'
-											}
+											<div className='flex justify-end'>
+												<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
+											</div>
 										</Table.Data>
 									</Table.Row>
 								)
