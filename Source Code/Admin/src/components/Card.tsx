@@ -3,13 +3,13 @@ import { ReactNode } from 'react';
 export interface CardProps {
 	children: ReactNode,
 	className?: string,
-	appendClassName?: boolean // option to append or override the className
+	overrideClass?: boolean // option to append or override the className
 }
 
-export default function Card({ children, className, appendClassName = true }: CardProps) {
+export default function Card({ children, className, overrideClass: overrideClass = false }: CardProps) {
 
 	const defaultClass = 'border border-gray-200 p-5 bg-white rounded-md w-fit h-fit';
-	const cardClass = appendClassName ? `${className} ${defaultClass}` : className;
+	const cardClass = !overrideClass ? `${className} ${defaultClass}` : className;
 
 	return (
 		<div className={cardClass}>

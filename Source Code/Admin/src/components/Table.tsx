@@ -1,13 +1,19 @@
 import { ReactNode } from 'react';
 
 export interface TableProps {
-	children: ReactNode
+	children: ReactNode,
+	className?: string,
+	overrideClass?: boolean
 }
 
 // HTML <table/> component
-export default function Table({ children }: TableProps) {
+export default function Table({ children, className, overrideClass = false }: TableProps) {
+
+	const defaultClass = 'w-full text-gray-600 divide-y divide-gray-200 outline outline-1 outline-gray-200 rounded-md';
+	const tableClass = !overrideClass ? `${className} ${defaultClass}` : className;
+
 	return (
-		<table className='w-full text-gray-600 divide-y divide-gray-200 outline outline-1 outline-gray-200 rounded-md'>
+		<table className={tableClass}>
 			{ children }
 		</table>
 	)
@@ -16,12 +22,18 @@ export default function Table({ children }: TableProps) {
 
 // HTML <thead/> component
 export interface HeadProps {
-	children: ReactNode
+	children: ReactNode,
+	className?: string,
+	overrideClass?: boolean
 }
 
-export function Head({ children }: HeadProps) {
+export function Head({ children, className, overrideClass }: HeadProps) {
+
+	const defaultClass = 'bg-gray-50';
+	const headClass = !overrideClass ? `${className} ${defaultClass}` : className;
+
 	return (
-		<thead className='bg-gray-50'>
+		<thead className={headClass}>
 			{ children }
 		</thead>
 	)

@@ -5,16 +5,16 @@ import { deleteEventById } from '../../../api/event';
 import { Drawing, DropdownOptions } from '../../../admin.types';
 import Text from '../../primitives/Text';
 import Dropdown from '../../primitives/Dropdown';
-import { ArrowDownIcon, ChevronDownIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
 import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../DeletePopup';
 import { usePage } from '../../../contexts/PageContext';
 import { fetchDrawingByIdWithScores, fetchImage } from '../../../api/drawing';
 import Image from '../../Image';
-import Table from '../../Table';
-import { Tab } from '@headlessui/react';
-import { Label } from '@headlessui/react/dist/components/label/label';
+import { Disclosure } from '@headlessui/react';
+import PrimaryButtonSmall from '../../primitives/PrimaryButtonSmall';
+import ScoreTable from './ScoreTable';
 
 export default function ViewDrawingPanel() {
 
@@ -95,6 +95,12 @@ export default function ViewDrawingPanel() {
 			{ popup && <DeletePopup onClose={cancelDelete} onConfirm={confirmDelete} isError={mutation.data?.status === 500} isLoading={mutation.isLoading}/> }
 
 			<Panel.Header title='Drawing Details'>
+				{ !drawing?.isScored &&
+					<PrimaryButtonSmall
+					onClick={() => navigate(`/drawings/score/${drawing?.id}`)}>
+					Score
+					</PrimaryButtonSmall>
+				}
 				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
 			</Panel.Header>
 
@@ -108,51 +114,39 @@ export default function ViewDrawingPanel() {
 				<Text label="Event"> { drawing?.event.name ?? '-' } </Text>
 				<Text label="Scored"> { (drawing?.isScored) ? 'Yes' : 'No' } </Text>
 				
+				{ drawing?.isScored &&
+					<Fragment>
+						<h2 className='text-lg font-medium text-gray-700'> Scores </h2>
+						<hr/>
+					</Fragment>
+				}
 
-				{/* {
-					drawing?.scores.map((score) => {
-						return (
-							<div>
-								
-								<div className='bg-gray-100 rounded py-2 px-3 flex justify-between items-center'>
-									<Text label='Breadth'> { score.breadth } </Text>
-									<Text label='Scored At'> { getFriendlyDate(score.scoredAt) } </Text>
-									<Text label='By'> { score.scoredBy } </Text>
-									<ChevronDownIcon className='w-5 h-5'/>
-								</div>
-
-								<div>
-									<Table>
-										<Table.Head>
-											<Table.Row>
-												<Table.Heading/>
-												<Table.Heading> Depth </Table.Heading>
-												<Table.Heading> Extent </Table.Heading>
-											</Table.Row>
-										</Table.Head>
-										<Table.Body>
-											{ score.topicScores.map((ts) => {
-												return (
-													<Table.Row>
-														<Table.Heading> { ts.topicName } </Table.Heading>
-														<Table.Data> { ts.depth } </Table.Data>
-														<Table.Data> { ts.extent } </Table.Data>
-													</Table.Row>
-												)
-											}) }
-
-										</Table.Body>
-									</Table>
-								</div>
-
-							</div>
-						)
-					})
-				} */}
-
-
-
-
+				{ drawing?.scores.map((score, key) => {
+					return (
+						<div className='flex flex-col gap-2' key={key}>
+							<Disclosure>
+								{({ open }) => (
+									<Fragment>
+										<Disclosure.Button className="flex w-full justify-between items-center px-4 py-2 text-left font-medium text-gray-600
+										hover:bg-gray-50 hover:rounded">
+											<Text label='Breadth'> { score.breadth } </Text>
+											<Text label='Scored At'> { getFriendlyDate(score.scoredAt) } </Text>
+											<Text label='By'> { score.scoredBy } </Text>
+											<ChevronDownIcon
+											className={`${
+												open ? 'rotate-180 transform' : ''
+											} h-4 w-4 text-gray-500`}
+											/>
+										</Disclosure.Button>
+										<Disclosure.Panel className="text-sm">
+											<ScoreTable score={score}/>
+										</Disclosure.Panel>
+									</Fragment>
+								)}
+							</Disclosure>
+						</div>
+					)	
+				}) }
 
 			</div>
 		</Fragment>

@@ -28,7 +28,7 @@ export default function Panel({ children, onClose }: PanelProps) {
 
 	return (
 		isDOMLoaded ? createPortal(
-			<div ref={ref} className='p-5 w-[25rem] xl:w-[28rem] h-[calc(100vh-3.75rem)] border-l border-gray-200 bg-white absolute top-[3.75rem] right-0 flex flex-col overflow-x-auto'>
+			<div ref={ref} className='p-5 min-w-[30rem] max-w-[30rem] xl:w-[28rem] h-[calc(100vh-3.75rem)] border-l border-gray-200 bg-white absolute top-[3.75rem] right-0 flex flex-col overflow-x-auto'>
 
 				{ children }
 				
@@ -47,7 +47,7 @@ interface HeaderProps {
 function Header({ children, title }: HeaderProps) {
 	return (
 		<Fragment>
-			<div className='flex items-center'>
+			<div className='flex items-center gap-2'>
 				<h2 className='text-xl font-medium text-gray-700 mr-auto'> { title } </h2>
 				{ children }
 			</div>

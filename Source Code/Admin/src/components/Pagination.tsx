@@ -14,8 +14,15 @@ export default function Pagination({ current, setPage, count, size = 10 }: Pagin
 	let currentPage = current + 1;
 	const range = usePagination(currentPage, count, size);
 
-	const next = () => currentPage < range[range.length - 1] && setPage(current + 1);
-	const previous = () => currentPage > range[0] && setPage(current - 1);
+	const next = () => {
+		const pageRange = range[range.length -1];
+		typeof pageRange === 'number' && currentPage < pageRange && setPage(current + 1)
+	};
+
+	const previous = () => {
+		const pageRange = range[0]
+		typeof pageRange === 'number' && currentPage > pageRange && setPage(current - 1)
+	};
 
 	return (
 		<div className='flex justify-center gap-8 items-center py-3'>

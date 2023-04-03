@@ -68,7 +68,7 @@ export default function Drawings() {
 											{ !d.isScored ?
 												<div className='flex justify-end'>
 													No
-													<div className='ml-auto'>
+													<div className='ml-auto pl-2'>
 														<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
 													</div>
 												</div>
