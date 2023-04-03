@@ -2,9 +2,12 @@
 {
     public class EventDTO
     {
-
-        public int? Id { get; set; }
-        public string Name { get; set; }
+        public int EventId { get; set; }
+        public IdNameDTO Location { get; set; }
+        public string? EventName { get; set; }
+        public string? Notes { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? FinishTime { get; set; }
 
     }
 }

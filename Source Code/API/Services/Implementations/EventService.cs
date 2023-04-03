@@ -17,14 +17,35 @@ namespace API.Services.Implementations
         }
 
         /// <summary>
+        /// Query which maps event entity to event dto
+        /// </summary>
+        /// <returns></returns>
+        private IQueryable<EventDTO> SelectEvent()
+        {
+            return _db.Events.Select(e => new EventDTO()
+            {
+                EventId = e.EventId,
+                EventName = e.EventName,
+                Notes = e.Notes,
+                StartTime = e.StartTime,
+                FinishTime = e.FinishTime,
+                Location = new IdNameDTO()
+                {
+                    Id = e.Location.LocationId,
+                    Name = e.Location.LocationName
+                }
+            });
+        }
+
+        /// <summary>
         /// Get event by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns> An event object </returns>
         /// <exception cref="NotFound"></exception>
-        public async Task<Event> GetEventByIdAsync(int id)
+        public async Task<EventDTO> GetEventByIdAsync(int id)
         {
-            if (await _db.Events.FindAsync(id) is Event ev)
+            if (await SelectEvent().Where(e => e.EventId == id).FirstOrDefaultAsync() is EventDTO ev)
             {
                 return ev;
             }
@@ -38,9 +59,12 @@ namespace API.Services.Implementations
         /// Get all events
         /// </summary>
         /// <returns> An array of event object </returns>
-        public async Task<Event[]> GetEventsAsync()
+        public async Task<EventDTO[]> GetEventsAsync(int page, int count)
         {
-            return await _db.Events.ToArrayAsync();
+            return await SelectEvent()
+                .Skip(page * count)
+                .Take(count)
+                .ToArrayAsync();
         }
 
         /// <summary>
@@ -146,6 +170,19 @@ namespace API.Services.Implementations
         public async Task<int> GetEventCountAsync()
         {
             return await _db.Events.CountAsync();
+        }
+
+        /// <summary>
+        /// Gets a list of all events
+        /// </summary>
+        /// <returns> a list containing id and name of each event </returns>
+        public Task<IdNameDTO[]> GetEventListAsync()
+        {
+            return _db.Events.Select(l => new IdNameDTO()
+            {
+                Id = l.EventId,
+                Name = l.EventName
+            }).ToArrayAsync();
         }
     }
 }

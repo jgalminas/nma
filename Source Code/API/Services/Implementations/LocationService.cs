@@ -38,9 +38,12 @@ namespace API.Services.Implementations
         /// Get all locations
         /// </summary>
         /// <returns> An array of location object </returns>
-        public async Task<Location[]> GetLocationsAsync()
+        public async Task<Location[]> GetLocationsAsync(int page, int count)
         {
-            return await _db.Locations.ToArrayAsync();
+            return await _db.Locations
+                            .Skip(page * count)
+                            .Take(count)
+                            .ToArrayAsync();
         }
 
         /// <summary>
@@ -135,6 +138,15 @@ namespace API.Services.Implementations
             {
                 throw new NotFound($"Location with id {id} doesn't exist");
             }
+        }
+
+        public Task<IdNameDTO[]> GetLocationListAsync()
+        {
+            return _db.Locations.Select(l => new IdNameDTO()
+            {
+                Id = l.LocationId,
+                Name = l.LocationName
+            }).ToArrayAsync();
         }
     }
 }
