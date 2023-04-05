@@ -1,19 +1,19 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteEventById } from '../../../api/event';
-import { Drawing, DropdownOptions } from '../../../admin.types';
-import Text from '../../primitives/Text';
-import Dropdown from '../../primitives/Dropdown';
+import { deleteEventById } from '../events/event.api';
+import { Drawing, DropdownOptions } from '../../admin.types';
+import Text from '../../components/Text';
+import Dropdown from '../../components/Dropdown';
 import { ChevronDownIcon, EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { getFriendlyDate } from '../../../utils/date';
+import { getFriendlyDate } from '../../utils/date';
 import { Fragment, useState } from 'react';
-import DeletePopup from '../../DeletePopup';
-import { usePage } from '../../../contexts/PageContext';
-import { fetchDrawingByIdWithScores, fetchImage } from '../../../api/drawing';
-import Image from '../../Image';
+import DeletePopup from '../../components/DeletePopup';
+import { usePage } from '../../contexts/PageContext';
+import { fetchDrawingByIdWithScores, fetchImage } from './drawing.api';
+import Image from '../../components/Image';
 import { Disclosure } from '@headlessui/react';
-import PrimaryButtonSmall from '../../primitives/PrimaryButtonSmall';
+import PrimaryButtonSmall from '../../components/PrimaryButtonSmall';
 import ScoreTable from './ScoreTable';
 
 export default function ViewDrawingPanel() {

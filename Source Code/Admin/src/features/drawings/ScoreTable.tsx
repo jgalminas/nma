@@ -1,5 +1,5 @@
-import { Score } from '../../../admin.types';
-import Table from '../../Table';
+import { Score } from '../../admin.types';
+import Table from '../../components/Table';
 
 export interface ScoreTableProps {
 	score: Score

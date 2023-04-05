@@ -1,6 +1,6 @@
 import { Menu, Transition } from '@headlessui/react';
 import { Fragment, ReactNode } from 'react';
-import { DropdownOptions } from '../../admin.types';
+import { DropdownOptions } from '../admin.types';
 
 export interface DropdownProps {
 	button: ReactNode

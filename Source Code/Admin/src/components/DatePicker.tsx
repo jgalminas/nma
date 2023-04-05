@@ -1,5 +1,5 @@
 import { useId } from 'react';
-import { Validation } from '../../hooks/validation';
+import { Validation } from '../hooks/validation';
 
 export interface DatePickerProps {
 	label?: string

@@ -1,5 +1,5 @@
 import { ChangeEvent, useId } from 'react';
-import { Validation } from '../../hooks/validation';
+import { Validation } from '../hooks/validation';
 
 export interface TextInputProps {
 	name?: string,

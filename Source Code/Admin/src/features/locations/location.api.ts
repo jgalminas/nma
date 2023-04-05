@@ -1,5 +1,5 @@
-import { Count, Location, IdName, LocationState } from '../admin.types';
-import { BASE_URL } from './api.config';
+import { Count, Location, IdName, LocationState } from '../../admin.types';
+import { BASE_URL } from '../../config/api.config';
 
 export async function fetchLocationCount(): Promise<Count> {
 	const res = await fetch(`${BASE_URL}/location/count`);

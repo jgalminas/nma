@@ -1,34 +1,35 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { DropdownOptions, Location } from '../../../admin.types';
-import Text from '../../primitives/Text';
-import Dropdown from '../../primitives/Dropdown';
+import { deleteEventById, fetchEventById } from './event.api';
+import { DropdownOptions, Event } from '../../admin.types';
+import Text from '../../components/Text';
+import Dropdown from '../../components/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
+import { getFriendlyDate } from '../../utils/date';
 import { Fragment, useState } from 'react';
-import DeletePopup from '../../DeletePopup';
-import { deleteLocationById, fetchLocationById } from '../../../api/location';
-import { usePage } from '../../../contexts/PageContext';
+import DeletePopup from '../../components/DeletePopup';
+import { usePage } from '../../contexts/PageContext';
 
-export default function ViewLocationPanel() {
+export default function ViewEventPanel() {
 
 	// navigation props/hoopks
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const { page, setPage } = usePage();
 
 	// query props/hooks
 	const queryClient = useQueryClient();
-	const { data: location } = useQuery(['location', Number(id)], () => fetchLocationById(Number(id)));
-	const mutation = useMutation(['deleteLocation', Number(id)], deleteLocationById);
+	const { data: event } = useQuery(['event', Number(id)], () => fetchEventById(Number(id)));
+	const mutation = useMutation(['deleteEvent', Number(id)], deleteEventById);
 
 	// state
-	const [popup, setPopup] = useState(false); 
+	const [popup, setPopup] = useState(false);
+	const { page, setPage } = usePage();
 	
 	// dropdown menu options 
 	const options: DropdownOptions[] = [
 		{ name: 'Edit', onClick: () => navigateToEdit() },
-		{ name: 'Delete', onClick: () => deleteLocation() }
+		{ name: 'Delete', onClick: () => deleteEvent() }
 	];
 
 	// navigation functions
@@ -36,7 +37,7 @@ export default function ViewLocationPanel() {
 	const navigateBack = () => navigate(-1);
 
 	// delete functions
-	const deleteLocation = () => { 
+	const deleteEvent = () => { 
 		setPopup(true);
 		mutation.reset();
 	}
@@ -50,11 +51,11 @@ export default function ViewLocationPanel() {
 
 				if (res.ok) {
 					
-					queryClient.setQueryData<Location[]>(['locations', page], (prev) => {
+					queryClient.setQueryData<Event[]>(['events', page], (prev) => {
 
 						if (prev) {
 							
-							const itemIndex = prev.findIndex(i => i.locationId === Number(id));						
+							const itemIndex = prev.findIndex(i => i.eventId === Number(id));						
 
 							// check for page length
 							if (prev.length === 1) {
@@ -71,7 +72,7 @@ export default function ViewLocationPanel() {
 
 					});
 
-					queryClient.invalidateQueries(['locationCount']);
+					queryClient.invalidateQueries(['eventCount']);
 
 					// navigate back
 					navigateBack();
@@ -87,17 +88,17 @@ export default function ViewLocationPanel() {
 
 			{ popup && <DeletePopup onClose={cancelDelete} onConfirm={confirmDelete} isError={mutation.data?.status === 500} isLoading={mutation.isLoading}/> }
 
-			<Panel.Header title='Location Details'>
+			<Panel.Header title='Event Details'>
 				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
 			</Panel.Header>
 
 			<div className='flex flex-col gap-5'>
-				<Text label='ID'> { location?.locationId ?? '-' } </Text>
-				<Text label='Name'> { location?.locationName ?? '-' } </Text>
-				<Text label='Name'> { location?.city ?? '-' } </Text>
-				<Text label='Name'> { location?.country ?? '-' } </Text>
+				<Text label='ID'> { event?.eventId ?? '-' } </Text>
+				<Text label='Name'> { event?.eventName ?? '-' } </Text>
+				<Text label='Start Time'> { event && getFriendlyDate(event?.startTime)  } </Text>
+				<Text label='Finish Time'> { event && getFriendlyDate(event?.finishTime)  } </Text>
+				<Text label='Notes'> { event?.notes ?? '-' } </Text>
 			</div>
-
 		</Fragment>
 	)
 }

@@ -1,17 +1,17 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { Fragment, useEffect, useState } from 'react';
-import { EditDrawing, EditDrawingState, SelectOption } from '../../../admin.types';
-import TextInput from '../../primitives/TextInput';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import TextButton from '../../primitives/TextButton';
-import Select from '../../primitives/Select';
-import { fetchEventList } from '../../../api/event';
+import { EditDrawing, EditDrawingState, SelectOption } from '../../admin.types';
+import TextInput from '../../components/TextInput';
+import PrimaryButton from '../../components/PrimaryButton';
+import TextButton from '../../components/TextButton';
+import Select from '../../components/Select';
+import { fetchEventList } from '../events/event.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { validateAge, validateLength, validateSelectNotEmpty } from '../../../utils/validation';
-import { useValidation } from '../../../hooks/validation';
-import { usePage } from '../../../contexts/PageContext';
-import { fetchDrawingById, updateDrawing } from '../../../api/drawing';
+import { validateAge, validateLength, validateSelectNotEmpty } from '../../utils/validation';
+import { useValidation } from '../../hooks/validation';
+import { usePage } from '../../contexts/PageContext';
+import { fetchDrawingById, updateDrawing } from './drawing.api';
 
 export default function EditDrawingPanel() {
 

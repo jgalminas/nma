@@ -1,17 +1,17 @@
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { fetchDrawingCount, fetchDrawings } from '../../../api/drawing';
-import { fetchEventCount } from '../../../api/event';
-import { fetchLocationCount } from '../../../api/location';
-import Card from '../../Card';
-import Content from '../../Content';
+import { fetchDrawingCount, fetchDrawings } from '../drawings/drawing.api';
+import { fetchEventCount } from '../events/event.api';
+import { fetchLocationCount } from '../locations/location.api';
+import Card from '../../components/Card';
+import Content from '../../components/Content';
 import DashboardStat from './DashboardStat';
-import Heading from '../../primitives/Heading';
-import LinkTextButton from '../../primitives/LinkTextButton';
-import { getFriendlyDate } from '../../../utils/date';
-import Table from '../../Table';
-import LinkPrimaryButton from '../../primitives/LinkPrimaryButton';
+import Heading from '../../components/Heading';
+import LinkTextButton from '../../components/LinkTextButton';
+import { getFriendlyDate } from '../../utils/date';
+import Table from '../../components/Table';
+import LinkPrimaryButton from '../../components/LinkPrimaryButton';
 
 export default function Dashboard() {
 	

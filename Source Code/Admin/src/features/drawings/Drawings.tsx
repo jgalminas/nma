@@ -1,16 +1,16 @@
 import { Outlet, useNavigate } from 'react-router';
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Content from '../../Content';
-import Heading from '../../primitives/Heading';
-import Table from '../../Table';
-import SearchInput from '../../primitives/SearchInput';
-import Pagination from '../../Pagination';
-import { usePage } from '../../../contexts/PageContext';
-import { fetchDrawingCount, fetchDrawings } from '../../../api/drawing';
-import { getFriendlyDate } from '../../../utils/date';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import PrimaryButtonSmall from '../../primitives/PrimaryButtonSmall';
+import Content from '../../components/Content';
+import Heading from '../../components/Heading';
+import Table from '../../components/Table';
+import SearchInput from '../../components/SearchInput';
+import Pagination from '../../components/Pagination';
+import { usePage } from '../../contexts/PageContext';
+import { fetchDrawingCount, fetchDrawings } from './drawing.api';
+import { getFriendlyDate } from '../../utils/date';
+import PrimaryButton from '../../components/PrimaryButton';
+import PrimaryButtonSmall from '../../components/PrimaryButtonSmall';
 import { Link } from 'react-router-dom';
 
 export default function Drawings() {
@@ -69,13 +69,12 @@ export default function Drawings() {
 											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/events/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
 										<Table.Data> { d.isScored ? 'Yes' : 'No' } </Table.Data>
-										{ !d.isScored &&
-											<Table.Data>
+										<Table.Data>
+											{ !d.isScored &&
 												<div className='flex justify-end'>
 													<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
-												</div>
-											</Table.Data>
-										}
+												</div> }
+										</Table.Data>
 									</Table.Row>
 								)
 							}) }

@@ -1,35 +1,34 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { deleteEventById, fetchEventById } from '../../../api/event';
-import { DropdownOptions, Event } from '../../../admin.types';
-import Text from '../../primitives/Text';
-import Dropdown from '../../primitives/Dropdown';
+import { DropdownOptions, Location } from '../../admin.types';
+import Text from '../../components/Text';
+import Dropdown from '../../components/Dropdown';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import { getFriendlyDate } from '../../../utils/date';
 import { Fragment, useState } from 'react';
-import DeletePopup from '../../DeletePopup';
-import { usePage } from '../../../contexts/PageContext';
+import DeletePopup from '../../components/DeletePopup';
+import { deleteLocationById, fetchLocationById } from './location.api';
+import { usePage } from '../../contexts/PageContext';
 
-export default function ViewEventPanel() {
+export default function ViewLocationPanel() {
 
 	// navigation props/hoopks
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { page, setPage } = usePage();
 
 	// query props/hooks
 	const queryClient = useQueryClient();
-	const { data: event } = useQuery(['event', Number(id)], () => fetchEventById(Number(id)));
-	const mutation = useMutation(['deleteEvent', Number(id)], deleteEventById);
+	const { data: location } = useQuery(['location', Number(id)], () => fetchLocationById(Number(id)));
+	const mutation = useMutation(['deleteLocation', Number(id)], deleteLocationById);
 
 	// state
-	const [popup, setPopup] = useState(false);
-	const { page, setPage } = usePage();
+	const [popup, setPopup] = useState(false); 
 	
 	// dropdown menu options 
 	const options: DropdownOptions[] = [
 		{ name: 'Edit', onClick: () => navigateToEdit() },
-		{ name: 'Delete', onClick: () => deleteEvent() }
+		{ name: 'Delete', onClick: () => deleteLocation() }
 	];
 
 	// navigation functions
@@ -37,7 +36,7 @@ export default function ViewEventPanel() {
 	const navigateBack = () => navigate(-1);
 
 	// delete functions
-	const deleteEvent = () => { 
+	const deleteLocation = () => { 
 		setPopup(true);
 		mutation.reset();
 	}
@@ -51,11 +50,11 @@ export default function ViewEventPanel() {
 
 				if (res.ok) {
 					
-					queryClient.setQueryData<Event[]>(['events', page], (prev) => {
+					queryClient.setQueryData<Location[]>(['locations', page], (prev) => {
 
 						if (prev) {
 							
-							const itemIndex = prev.findIndex(i => i.eventId === Number(id));						
+							const itemIndex = prev.findIndex(i => i.locationId === Number(id));						
 
 							// check for page length
 							if (prev.length === 1) {
@@ -72,7 +71,7 @@ export default function ViewEventPanel() {
 
 					});
 
-					queryClient.invalidateQueries(['eventCount']);
+					queryClient.invalidateQueries(['locationCount']);
 
 					// navigate back
 					navigateBack();
@@ -88,17 +87,17 @@ export default function ViewEventPanel() {
 
 			{ popup && <DeletePopup onClose={cancelDelete} onConfirm={confirmDelete} isError={mutation.data?.status === 500} isLoading={mutation.isLoading}/> }
 
-			<Panel.Header title='Event Details'>
+			<Panel.Header title='Location Details'>
 				<Dropdown button={<EllipsisVerticalIcon className='w-6 h-6 text-gray-500'/>} options={options}/>
 			</Panel.Header>
 
 			<div className='flex flex-col gap-5'>
-				<Text label='ID'> { event?.eventId ?? '-' } </Text>
-				<Text label='Name'> { event?.eventName ?? '-' } </Text>
-				<Text label='Start Time'> { event && getFriendlyDate(event?.startTime)  } </Text>
-				<Text label='Finish Time'> { event && getFriendlyDate(event?.finishTime)  } </Text>
-				<Text label='Notes'> { event?.notes ?? '-' } </Text>
+				<Text label='ID'> { location?.locationId ?? '-' } </Text>
+				<Text label='Name'> { location?.locationName ?? '-' } </Text>
+				<Text label='Name'> { location?.city ?? '-' } </Text>
+				<Text label='Name'> { location?.country ?? '-' } </Text>
 			</div>
+
 		</Fragment>
 	)
 }

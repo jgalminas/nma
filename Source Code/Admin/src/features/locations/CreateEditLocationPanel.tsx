@@ -1,16 +1,16 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { Fragment, useEffect, useState } from 'react';
-import { Location, LocationState } from '../../../admin.types';
-import TextInput from '../../primitives/TextInput';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import TextButton from '../../primitives/TextButton';
+import { Location, LocationState } from '../../admin.types';
+import TextInput from '../../components/TextInput';
+import PrimaryButton from '../../components/PrimaryButton';
+import TextButton from '../../components/TextButton';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createLocation, fetchLocationById, updateLocation } from '../../../api/location';
-import { validateLength } from '../../../utils/validation';
-import { useValidation } from '../../../hooks/validation';
-import { findItemInCacheArray } from '../../../utils/query';
-import { usePage } from '../../../contexts/PageContext';
+import { createLocation, fetchLocationById, updateLocation } from './location.api';
+import { validateLength } from '../../utils/validation';
+import { useValidation } from '../../hooks/validation';
+import { findItemInCacheArray } from '../../utils/query';
+import { usePage } from '../../contexts/PageContext';
 
 export default function CreateEditLocationPanel() {
 

@@ -1,16 +1,16 @@
 import { Outlet, useNavigate } from 'react-router';
 import { ReactNode, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Content from '../../Content';
-import Heading from '../../primitives/Heading';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import { getFriendlyDate } from '../../../utils/date';
-import Table from '../../Table';
-import SearchInput from '../../primitives/SearchInput';
-import { fetchEventCount, fetchEvents } from '../../../api/event';
-import Pagination from '../../Pagination';
+import Content from '../../components/Content';
+import Heading from '../../components/Heading';
+import PrimaryButton from '../../components/PrimaryButton';
+import { getFriendlyDate } from '../../utils/date';
+import Table from '../../components/Table';
+import SearchInput from '../../components/SearchInput';
+import { fetchEventCount, fetchEvents } from './event.api';
+import Pagination from '../../components/Pagination';
 import { Link } from 'react-router-dom';
-import { usePage } from '../../../contexts/PageContext';
+import { usePage } from '../../contexts/PageContext';
 
 export default function Events() {
 	

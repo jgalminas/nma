@@ -1,8 +1,8 @@
 import { Listbox, Transition } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import { Fragment, useId } from 'react';
-import { SelectOption } from '../../admin.types';
-import { Validation } from '../../hooks/validation';
+import { SelectOption } from '../admin.types';
+import { Validation } from '../hooks/validation';
 
 export interface SelectProps {
 	options: SelectOption[],

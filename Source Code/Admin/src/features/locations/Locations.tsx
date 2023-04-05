@@ -1,14 +1,14 @@
 import { Outlet, useNavigate } from 'react-router';
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import Content from '../../Content';
-import Heading from '../../primitives/Heading';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import Table from '../../Table';
-import SearchInput from '../../primitives/SearchInput';
-import Pagination from '../../Pagination';
-import { fetchLocationCount, fetchLocations } from '../../../api/location';
-import { usePage } from '../../../contexts/PageContext';
+import Content from '../../components/Content';
+import Heading from '../../components/Heading';
+import PrimaryButton from '../../components/PrimaryButton';
+import Table from '../../components/Table';
+import SearchInput from '../../components/SearchInput';
+import Pagination from '../../components/Pagination';
+import { fetchLocationCount, fetchLocations } from './location.api';
+import { usePage } from '../../contexts/PageContext';
 
 export default function Locations() {
 	

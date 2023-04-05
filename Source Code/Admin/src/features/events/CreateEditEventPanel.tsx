@@ -1,20 +1,20 @@
 import { useNavigate, useParams } from 'react-router';
-import Panel from '../../Panel';
+import Panel from '../../components/Panel';
 import { Fragment, useEffect, useState } from 'react';
-import { CreateUpdateEvent, Event, EventState, SelectOption } from '../../../admin.types';
-import TextInput from '../../primitives/TextInput';
-import DatePicker from '../../primitives/DatePicker';
-import TextAreaInput from '../../primitives/TextAreaInput';
-import PrimaryButton from '../../primitives/PrimaryButton';
-import TextButton from '../../primitives/TextButton';
-import Select from '../../primitives/Select';
-import { createEvent, fetchEventById, updateEvent } from '../../../api/event';
+import { CreateUpdateEvent, Event, EventState, SelectOption } from '../../admin.types';
+import TextInput from '../../components/TextInput';
+import DatePicker from '../../components/DatePicker';
+import TextAreaInput from '../../components/TextAreaInput';
+import PrimaryButton from '../../components/PrimaryButton';
+import TextButton from '../../components/TextButton';
+import Select from '../../components/Select';
+import { createEvent, fetchEventById, updateEvent } from './event.api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchLocationList } from '../../../api/location';
-import { validateLength, validateSelectNotEmpty } from '../../../utils/validation';
-import { useValidation } from '../../../hooks/validation';
-import { findItemInCacheArray } from '../../../utils/query';
-import { usePage } from '../../../contexts/PageContext';
+import { fetchLocationList } from '../locations/location.api';
+import { validateLength, validateSelectNotEmpty } from '../../utils/validation';
+import { useValidation } from '../../hooks/validation';
+import { findItemInCacheArray } from '../../utils/query';
+import { usePage } from '../../contexts/PageContext';
 
 export default function CreateEditEventPanel() {
 
