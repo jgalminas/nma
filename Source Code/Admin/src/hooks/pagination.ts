@@ -1,6 +1,13 @@
 import { useMemo } from 'react';
 import { range } from '../utils/number';
 
+/**
+ * Computes the number of pages based on page size and number of records.
+ * @param current 
+ * @param count 
+ * @param size 
+ * @returns array containing page numbers and '...' inbetween large ranges
+ */
 export default function usePagination(current: number, count: number, size: number) {
 
 	const pageRange = useMemo(() => {
