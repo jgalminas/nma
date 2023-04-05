@@ -134,7 +134,8 @@ namespace API.Controllers
                 var count = await _eventService.GetEventCountAsync();
                 return Ok(new CountDTO() { Count = count });
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 return StatusCode(500, new GenericResponse() { Message = e.Message });
             }

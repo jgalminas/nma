@@ -170,7 +170,8 @@ namespace API.Services.Implementations
             if (!withScores)
             {
                 drawing = await GetDrawing().FirstOrDefaultAsync(d => d.Id == id);
-            } else
+            }
+            else
             {
                 drawing = await GetDrawingWithScores().FirstOrDefaultAsync(d => d.Id == id);
             }
@@ -315,7 +316,8 @@ namespace API.Services.Implementations
                     .Skip(page * count)
                     .Take(count)
                     .ToArrayAsync();
-            } else
+            }
+            else
             {
                 return await GetDrawing()
                     .Skip(page * count)
