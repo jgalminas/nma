@@ -29,7 +29,7 @@ export default function ScoreSelector({ scores, dispatch, section, setSection, o
 	const onUpdateNotes = (value: string) => dispatch({ type: ScoreStateActionType.UPDATE_NOTES, value: value });
 
 	return (
-		<div className='w-80 h-full overflow-y-auto pl-5 flex flex-col'>
+		<div className='min-w-[20rem] h-full overflow-y-auto p-7 flex flex-col'>
 
 			<H2Heading>
 				{ isOnBreadth ? 'Breadth Score': `${selectedTopics[section].topic.name} Score` }

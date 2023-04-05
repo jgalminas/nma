@@ -99,9 +99,9 @@ export default function Scoring() {
 
 			<PageHeading> Scoring </PageHeading>
 
-			<div className='mt-7 bg-white flex-grow rounded-md border-gray-200 border flex p-5'>
+			<div className='xl:flex mt-7 bg-white flex-grow rounded-md border-gray-200 border'>
 				
-				<div className='flex-grow pr-5'>
+				<div className='flex-grow px-7 pt-7 xl:p-7'>
 
 				<H2Heading> Drawing </H2Heading>
 				<h3 className='text-lg text-gray-600 mb-5'> { id } </h3>
@@ -109,9 +109,11 @@ export default function Scoring() {
 				<Image isLoading={isImageLoading} url={image}/>
 				</div>
 
-				<div className='h-full border-l border-gray-200'/>
+				<div className='xl:h-[90%] xl:border-l border-gray-200 self-center'/>
 
-				<ScoreSelector {...scoreSelectorProps}/>
+				<div>
+					<ScoreSelector {...scoreSelectorProps}/>
+				</div>
 
 			</div>
 
