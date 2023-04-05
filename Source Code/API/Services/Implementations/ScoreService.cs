@@ -39,7 +39,6 @@ namespace API.Services.Implementations
         /// </summary>
         /// <param name="page"></param>
         /// <param name="count"></param>
-        /// <returns> An event id </returns>
         public async Task<Score[]> GetScoresAsync(int page, int count)
         {
             return await _db.Scores

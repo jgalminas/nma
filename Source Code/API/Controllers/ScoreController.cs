@@ -84,7 +84,7 @@ namespace API.Controllers
         [Route("{id:int}")]
         [SwaggerResponse(StatusCodes.Status200OK)]
         [SwaggerResponse(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> UpdateScore(int id, [FromBody] ScoreDTO data)
+        public async Task<IActionResult> UpdateScore(int id, [FromBody] ScoreNewDTO data)
         {
             try
             {
