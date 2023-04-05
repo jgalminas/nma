@@ -74,7 +74,9 @@ export default function Events() {
 							
 			</div>
 			
-			<Pagination current={page} count={eventCount?.count ?? 0} size={RECORDS_PER_PAGE} setPage={setPage}/>
+			<div className='mt-auto'>
+				<Pagination current={page} count={eventCount?.count ?? 0} size={RECORDS_PER_PAGE} setPage={setPage}/>
+			</div>
 
 			<Outlet/>
 		</Content>

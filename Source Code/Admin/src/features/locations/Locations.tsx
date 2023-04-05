@@ -69,7 +69,9 @@ export default function Locations() {
 							
 			</div>
 			
-			<Pagination current={page} count={locationCount?.count ?? 0} size={RECORDS_PER_PAGE} setPage={setPage}/>
+			<div className='mt-auto'>
+				<Pagination current={page} count={locationCount?.count ?? 0} size={RECORDS_PER_PAGE} setPage={setPage}/>
+			</div>
 
 			<Outlet/>
 		</Content>
