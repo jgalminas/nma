@@ -1,4 +1,4 @@
-# Web Drawing & Admin Portal
+# Web Drawing
 
 This part of the project contains code related to the web drawing application.
 
@@ -12,7 +12,7 @@ The project uses [Vite](https://vitejs.dev/) for its development tooling.
 
 ### Production Build
 
-When the project is ready to be hosted, it can be build using the following command.
+When the project is ready to be hosted, it can be built using the following command.
 
 ```
 npm run build
@@ -31,6 +31,6 @@ npm run preview
 When developing use the following command to host a static server and take advantage of Hot Module Reloading for quick feedback.
 
 ```
-npm run dev
+npm run start
 ```
 
