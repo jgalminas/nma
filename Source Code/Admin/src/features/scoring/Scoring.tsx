@@ -6,7 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchDrawingById, fetchImage } from '../../api/sharedDrawing.api';
 import H2Heading from '../../components/H2Heading';
 import { useReducer, useState } from 'react';
-import ScoreSelector from './ScoreSelector';
+import ScorePanel from './ScorePanel';
 
 export interface TopicState {
 	checked: boolean,
@@ -112,7 +112,7 @@ export default function Scoring() {
 				<div className='xl:h-[90%] xl:border-l border-gray-200 self-center'/>
 
 				<div>
-					<ScoreSelector {...scoreSelectorProps}/>
+					<ScorePanel {...scoreSelectorProps}/>
 				</div>
 
 			</div>
