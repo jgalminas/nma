@@ -69,11 +69,13 @@ export default function Drawings() {
 											<Link onClick={(e) => e.stopPropagation()} className='underline' to={`/events/${d.event.id}`}> { d.event.name } </Link>
 										</Table.Data>
 										<Table.Data> { d.isScored ? 'Yes' : 'No' } </Table.Data>
-										<Table.Data>
-											<div className='flex justify-end'>
-												<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
-											</div>
-										</Table.Data>
+										{ !d.isScored &&
+											<Table.Data>
+												<div className='flex justify-end'>
+													<PrimaryButtonSmall onClick={() => navigate(`score/${d.id}`)}> Score </PrimaryButtonSmall>
+												</div>
+											</Table.Data>
+										}
 									</Table.Row>
 								)
 							}) }
