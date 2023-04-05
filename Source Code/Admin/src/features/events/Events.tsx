@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from 'react-router';
 import { ReactNode, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Content from '../../components/Content';
-import Heading from '../../components/Heading';
+import PageHeading from '../../components/PageHeading';
 import PrimaryButton from '../../components/PrimaryButton';
 import { getFriendlyDate } from '../../utils/date';
 import Table from '../../components/Table';
@@ -32,7 +32,7 @@ export default function Events() {
 	return (
 		<Content>
 
-			<Heading> Events </Heading>
+			<PageHeading> Events </PageHeading>
 
 			<div className='flex w-full gap-4 mt-7 flex-wrap justify-end'>
 				<SearchInput onChange={() => console.log(1)}/>

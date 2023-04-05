@@ -6,7 +6,7 @@ export interface ContentProps {
 
 export default function Content({ children }: ContentProps) {
 	return (
-		<div className='max-w-[120rem] w-full h-full'>
+		<div className='max-w-[120rem] w-full h-full flex flex-col'>
 			{ children }
 		</div>
 	)

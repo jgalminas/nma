@@ -10,11 +10,12 @@ import { getFriendlyDate } from '../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../components/DeletePopup';
 import { usePage } from '../../contexts/PageContext';
-import { fetchDrawingByIdWithScores, fetchImage } from './drawing.api';
+import { fetchDrawingByIdWithScores } from './drawing.api';
 import Image from '../../components/Image';
 import { Disclosure } from '@headlessui/react';
 import PrimaryButtonSmall from '../../components/PrimaryButtonSmall';
 import ScoreTable from './ScoreTable';
+import { fetchImage } from '../../api/sharedDrawing.api';
 
 export default function ViewDrawingPanel() {
 

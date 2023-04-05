@@ -1,10 +1,5 @@
 import { Count, Drawing, DrawingWithScores, EditDrawing } from '../../admin.types';
-import { BASE_URL } from '../../config/api.config';
-
-export async function fetchDrawingById(id: number): Promise<Drawing> {
-	const res = await fetch(`${BASE_URL}/drawing/${id}`);
-	return res.json();
-}
+import { BASE_URL } from '../../api/api.config';
 
 export async function fetchDrawingByIdWithScores(id: number, withScores: boolean): Promise<DrawingWithScores> {
 	const res = await fetch(`${BASE_URL}/drawing/${id}?withScores=${withScores}`);
@@ -31,11 +26,6 @@ export async function deleteDrawingById(id: number): Promise<Response> {
 	});
 
 	return res;
-}
-
-export async function fetchImage(imageUrl: string): Promise<Blob> {
-	const res = await fetch(BASE_URL + imageUrl);	
-	return res.blob();
 }
 
 export async function updateDrawing(id: number, drawing: EditDrawing): Promise<Response> {

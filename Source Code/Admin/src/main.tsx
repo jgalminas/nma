@@ -19,6 +19,7 @@ import CreateEditLocationPanel from './features/locations/CreateEditLocationPane
 import { PageProvider } from './contexts/PageContext';
 import ViewDrawingPanel from './features/drawings/ViewDrawingPanel';
 import EditDrawingPanel from './features/drawings/EditDrawingPanel';
+import Scoring from './features/scoring/Scoring';
 
 const queryClient = new QueryClient();
 
@@ -48,10 +49,15 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
             </Route>
 
             <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
-            <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
-              <Route index element={ <ViewDrawingPanel/> }/>
-              <Route path='edit' element={ <EditDrawingPanel/> }/>
+              <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
+                <Route index element={ <ViewDrawingPanel/> }/>
+                <Route path='edit' element={ <EditDrawingPanel/> }/>
+              </Route>
             </Route>
+
+            <Route path='drawings/score'>
+              <Route index element={ <Scoring/> }/>
+              <Route path=':id' element={ <Scoring/> }/>
             </Route>
 
             <Route path='export' element={ <Export/> }/>

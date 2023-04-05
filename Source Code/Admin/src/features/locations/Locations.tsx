@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from 'react-router';
 import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Content from '../../components/Content';
-import Heading from '../../components/Heading';
+import PageHeading from '../../components/PageHeading';
 import PrimaryButton from '../../components/PrimaryButton';
 import Table from '../../components/Table';
 import SearchInput from '../../components/SearchInput';
@@ -31,7 +31,7 @@ export default function Locations() {
 	return (
 		<Content>
 
-			<Heading> Locations </Heading>
+			<PageHeading> Locations </PageHeading>
 
 			<div className='flex w-full gap-4 mt-7 flex-wrap justify-end'>
 				<SearchInput onChange={() => console.log(1)}/>

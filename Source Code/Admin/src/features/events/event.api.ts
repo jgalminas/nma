@@ -1,5 +1,5 @@
 import { Count, CreateUpdateEvent, Event, IdName } from '../../admin.types';
-import { BASE_URL } from '../../config/api.config';
+import { BASE_URL } from '../../api/api.config';
 
 export async function fetchEventById(id: number): Promise<Event> {
 	const res = await fetch(`${BASE_URL}/event/${id}`);

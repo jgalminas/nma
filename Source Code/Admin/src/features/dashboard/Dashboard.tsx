@@ -7,7 +7,7 @@ import { fetchLocationCount } from '../locations/location.api';
 import Card from '../../components/Card';
 import Content from '../../components/Content';
 import DashboardStat from './DashboardStat';
-import Heading from '../../components/Heading';
+import PageHeading from '../../components/PageHeading';
 import LinkTextButton from '../../components/LinkTextButton';
 import { getFriendlyDate } from '../../utils/date';
 import Table from '../../components/Table';
@@ -31,7 +31,7 @@ export default function Dashboard() {
 	return (
 		<Content>
 
-			<Heading> Dashboard </Heading>
+			<PageHeading> Dashboard </PageHeading>
 			
 			<div className='flex w-full gap-7 mt-7 flex-wrap'>
 

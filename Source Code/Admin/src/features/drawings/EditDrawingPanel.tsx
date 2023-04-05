@@ -11,7 +11,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { validateAge, validateLength, validateSelectNotEmpty } from '../../utils/validation';
 import { useValidation } from '../../hooks/validation';
 import { usePage } from '../../contexts/PageContext';
-import { fetchDrawingById, updateDrawing } from './drawing.api';
+import { updateDrawing } from './drawing.api';
+import { fetchDrawingById } from '../../api/sharedDrawing.api';
 
 export default function EditDrawingPanel() {
 
