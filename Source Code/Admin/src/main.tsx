@@ -21,6 +21,7 @@ import ViewDrawingPanel from './features/drawings/ViewDrawingPanel';
 import EditDrawingPanel from './features/drawings/EditDrawingPanel';
 import Scoring from './features/scoring/Scoring';
 import './index.css'
+import CreateEditUser from './features/user/CreateEditUser';
 
 const queryClient = new QueryClient();
 
@@ -57,22 +58,21 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               </Route>
               </Route>
 
+              <Route path='drawings/score'>
+                <Route index element={  <Scoring/> }/>
+                <Route path=':id' element={ <Scoring/> }/>
+              </Route>
+
               <Route path='export' element={ <Export/> }/>
             </Route>
 
-            <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
-              <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
-                <Route index element={ <ViewDrawingPanel/> }/>
-                <Route path='edit' element={ <EditDrawingPanel/> }/>
+            <Route path='users' element={ <UnauthedOnlyRoute> <UserSelect/> </UnauthedOnlyRoute> }>
+              <Route path='create' element={ <CreateEditUser/> } />
+              <Route path='edit'>
+                <Route index element={ <CreateEditUser/> }/>
+                <Route path=':id' element={ <CreateEditUser/> }/>
               </Route>
             </Route>
-
-            <Route path='drawings/score'>
-              <Route index element={ <Scoring/> }/>
-              <Route path=':id' element={ <Scoring/> }/>
-            </Route>
-
-            <Route path='login' element={ <UnauthedOnlyRoute> <UserSelect/>  </UnauthedOnlyRoute> }/>
 
           </Routes>
         </HashRouter>

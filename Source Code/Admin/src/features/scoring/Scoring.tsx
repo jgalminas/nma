@@ -9,6 +9,7 @@ import { useReducer, useState } from 'react';
 import ScorePanel from './ScorePanel';
 import { CreateScore } from '../../admin.types';
 import { createScore, fetchTopics } from './scoring.api';
+import { useUser } from '../../contexts/UserContext';
 
 export interface TopicState {
 	checked: boolean,
@@ -102,6 +103,7 @@ const reducer = (state: ScoreState, action: ScoreStateAction) => {
 
 export default function Scoring() {
 
+	const { user } = useUser(); 
 	const [section, setSection] = useState<number>(-1);
 	const navigate = useNavigate();
 
@@ -142,7 +144,7 @@ export default function Scoring() {
 	const onSubmit = () => {
 
 		mutation.mutate({
-			scorerId: 1,
+			scorerId: user?.id ?? -1,
 			drawingId: Number(id),
 			notes: scores.notes,
 			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))

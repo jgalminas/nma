@@ -50,7 +50,7 @@ export function AuthRoute({ children }: AuthRouteProps) {
 
     const { user } = useUser();
 
-    return user ? <Fragment> { children } </Fragment> : <Navigate to="/login"/>
+    return user ? <Fragment> { children } </Fragment> : <Navigate to="/users"/>
 }
 
 export function UnauthedOnlyRoute({ children }: AuthRouteProps) {
