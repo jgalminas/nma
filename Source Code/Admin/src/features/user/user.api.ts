@@ -36,7 +36,7 @@ export async function updateScorer(id: number, scorer: CreateEditScorer): Promis
 		body: JSON.stringify(scorer)
 	});
 
-	return res.json();
+	return res;
 }
 
 export async function deleteScorerById(id: number): Promise<Response> {

@@ -1,9 +1,9 @@
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline';
-import TextButton from '../../components/TextButton';
 import { useUser } from '../../contexts/UserContext';
 import { useNavigate } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { fetchScorers } from './user.api';
+import PrimaryButton from '../../components/PrimaryButton';
 
 export default function UserSelect() {
 
@@ -16,11 +16,17 @@ export default function UserSelect() {
 	});
 
 	return (
-		<div className='text-center flex flex-col pt-6 pb-3 bg-white rounded-md border border-gray-200 w-96 h-96'>
-			<h1 className='text-gray-700 text-lg font-medium'> Select User </h1> 
+		<div className='flex flex-col bg-white rounded-md border border-gray-200 w-96 h-96'>
+
+			<div className='p-6 flex justify-end items-center'>
+				<h1 className='text-gray-700 text-lg font-medium'> Select User </h1>
+				<div className='ml-auto'>
+					<PrimaryButton onClick={() => navigate('/users/create')}> Add User </PrimaryButton>
+				</div>
+			</div>
 
 			{ (users && users.length > 0) ?
-				<div className='mt-6 flex flex-col overflow-x-auto border-t border-b py-2 border-gray-100'>
+				<div className='flex flex-col overflow-x-auto border-t border-b py-2 border-gray-100'>
 					{ users.map((u, key) => {
 						return (
 							<div key={key} className='py-2.5 px-4 text-gray-600 hover:bg-gray-50 rounded flex justify-center relative cursor-pointer'
@@ -37,9 +43,6 @@ export default function UserSelect() {
 				: <p className='mt-5 text-gray-500'> No users found. </p>
 			} 
 
-			<div className='pt-3 justify-end px-3 mt-auto'>
-				<TextButton onClick={() => navigate('/users/create')}> Add User </TextButton>
-			</div>
 		</div>
 	)
 }

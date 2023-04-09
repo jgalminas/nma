@@ -91,9 +91,9 @@ export default function CreateEditUser() {
 				isLoading={deleteMutation.isLoading}/>
 			}
 
-			<h1 className='text-center text-gray-700 text-lg font-medium'> { id ? 'Edit User' : 'Add User' } </h1> 
+			<h1 className='text-gray-700 text-lg font-medium'> { id ? 'Edit User' : 'Add User' } </h1> 
 			
-			<div className='mt-6 pt-4 flex flex-col border-t border-gray-100'>
+			<div className='mt-6 px-4 flex flex-col border-t border-gray-100'>
 				{ id && <h2 className='text-gray-600 text-base font-medium mb-3'> Change Username </h2> }
 				<TextInput value={username} label='Username' onChange={onUsernameChange} validation={validation.validation}/>
 				
