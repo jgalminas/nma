@@ -1,4 +1,5 @@
-import { createContext, ReactNode, useContext, useState } from 'react';
+import { createContext, Fragment, ReactNode, useContext, useState } from 'react';
+import { Navigate } from 'react-router';
 
 export type User = {
 	id: number,
@@ -38,4 +39,23 @@ export function UserProvider({ children }: UserProviderProps) {
 			{ children }
 		</UserContext.Provider>
 	)
+}
+
+
+export interface AuthRouteProps {
+	children: ReactNode
+}
+
+export function AuthRoute({ children }: AuthRouteProps) {
+
+    const { user } = useUser();
+
+    return user ? <Fragment> { children } </Fragment> : <Navigate to="/login"/>
+}
+
+export function UnauthedOnlyRoute({ children }: AuthRouteProps) {
+
+    const { user } = useUser();
+
+    return !user ? <Fragment> { children } </Fragment> : <Navigate to="/"/>
 }

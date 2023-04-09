@@ -19,45 +19,52 @@ import CreateEditLocationPanel from './components/views/locations/CreateEditLoca
 import { PageProvider } from './contexts/PageContext';
 import ViewDrawingPanel from './components/views/drawings/ViewDrawingPanel';
 import EditDrawingPanel from './components/views/drawings/EditDrawingPanel';
+import { AuthRoute, UnauthedOnlyRoute, UserProvider } from './contexts/UserContext';
+import UserSelect from './components/views/user/UserSelect';
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      <HashRouter>
-        <Routes>
-          <Route path='/' element={ <App/> }>
-            <Route index element={ <Navigate to="dashboard" replace /> }/>
-            <Route path='dashboard' element={ <Dashboard/> }/>
+      <UserProvider>
+        <HashRouter>
+          <Routes>
+            <Route path='/' element={ <AuthRoute> <App/> </AuthRoute> }>
+              <Route index element={  <Navigate to="dashboard" replace />  }/>
+              <Route path='dashboard' element={ <Dashboard/> }/>
 
-            <Route path='events' element={ <PageProvider> <Events/> </PageProvider> }>
-              <Route path=':id' element={ <Panel onClose='/events'> <Outlet/> </Panel> }>
-                <Route index element={ <ViewEventPanel/> }/>
-                <Route path='edit' element={ <CreateEditEventPanel/> }/>
+              <Route path='events' element={ <PageProvider> <Events/> </PageProvider> }>
+                <Route path=':id' element={ <Panel onClose='/events'> <Outlet/> </Panel> }>
+                  <Route index element={ <ViewEventPanel/> }/>
+                  <Route path='edit' element={ <CreateEditEventPanel/> }/>
+                </Route>
+                <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
               </Route>
-              <Route path='create' element={ <Panel onClose='/events'> <CreateEditEventPanel/> </Panel>  }/>
-            </Route>
 
-            <Route path='locations' element={ <PageProvider> <Locations/> </PageProvider>  }>
-              <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
-                <Route index element={ <ViewLocationPanel/> }/>
-                <Route path='edit' element={ <CreateEditLocationPanel/> }/>
+              <Route path='locations' element={ <PageProvider> <Locations/> </PageProvider>  }>
+                <Route path=':id' element={ <Panel onClose='/locations'> <Outlet/> </Panel> }>
+                  <Route index element={ <ViewLocationPanel/> }/>
+                  <Route path='edit' element={ <CreateEditLocationPanel/> }/>
+                </Route>
+                <Route path='create' element={ <Panel onClose='/locations'> <CreateEditLocationPanel/> </Panel>  }/>
               </Route>
-              <Route path='create' element={ <Panel onClose='/locations'> <CreateEditLocationPanel/> </Panel>  }/>
+
+              <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
+              <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
+                <Route index element={ <ViewDrawingPanel/> }/>
+                <Route path='edit' element={ <EditDrawingPanel/> }/>
+              </Route>
+              </Route>
+
+              <Route path='export' element={ <Export/> }/>
             </Route>
 
-            <Route path='drawings' element={ <PageProvider> <Drawings/> </PageProvider> }>
-            <Route path=':id' element={ <Panel onClose='/drawings'> <Outlet/> </Panel> }>
-              <Route index element={ <ViewDrawingPanel/> }/>
-              <Route path='edit' element={ <EditDrawingPanel/> }/>
-            </Route>
-            </Route>
+            <Route path='login' element={ <UnauthedOnlyRoute> <UserSelect/>  </UnauthedOnlyRoute> }/>
 
-            <Route path='export' element={ <Export/> }/>
-          </Route>
-        </Routes>
-      </HashRouter>
+          </Routes>
+        </HashRouter>
+      </UserProvider>
       <ReactQueryDevtools initialIsOpen={false}/>
     </QueryClientProvider>
   </React.StrictMode>
