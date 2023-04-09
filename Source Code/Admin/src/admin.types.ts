@@ -123,3 +123,12 @@ export type EditDrawing = {
 	drawersName: string,
 	drawersAge: number
 }
+
+export type Scorer = {
+	scorerId: number,
+	username: string
+}
+
+export type CreateEditScorer = {
+	username: string
+}

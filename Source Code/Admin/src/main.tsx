@@ -16,12 +16,13 @@ import ViewLocationPanel from './features/locations/ViewLocationPanel';
 import CreateEditLocationPanel from './features/locations/CreateEditLocationPanel';
 import { PageProvider } from './contexts/PageContext';
 import { AuthRoute, UnauthedOnlyRoute, UserProvider } from './contexts/UserContext';
-import UserSelect from './features/user/UserSelect';
 import ViewDrawingPanel from './features/drawings/ViewDrawingPanel';
 import EditDrawingPanel from './features/drawings/EditDrawingPanel';
 import Scoring from './features/scoring/Scoring';
 import './index.css'
 import CreateEditUser from './features/user/CreateEditUser';
+import Users from './features/user/Users';
+import UserSelect from './features/user/UserSelect';
 
 const queryClient = new QueryClient();
 
@@ -66,7 +67,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
               <Route path='export' element={ <Export/> }/>
             </Route>
 
-            <Route path='users' element={ <UnauthedOnlyRoute> <UserSelect/> </UnauthedOnlyRoute> }>
+            <Route path='users' element={ <UnauthedOnlyRoute> <Users/> </UnauthedOnlyRoute> }>
+              <Route index element={  <Navigate to="select" replace />  }/>
+              <Route path='select' element={ <UserSelect/> } />
               <Route path='create' element={ <CreateEditUser/> } />
               <Route path='edit'>
                 <Route index element={ <CreateEditUser/> }/>
