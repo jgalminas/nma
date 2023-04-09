@@ -1,12 +1,14 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import Content from '../../components/Content';
 import PageHeading from '../../components/PageHeading';
 import Image from '../../components/Image';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchDrawingById, fetchImage } from '../../api/sharedDrawing.api';
 import H2Heading from '../../components/H2Heading';
 import { useReducer, useState } from 'react';
 import ScorePanel from './ScorePanel';
+import { CreateScore } from '../../admin.types';
+import { createScore, fetchTopics } from './scoring.api';
 
 export interface TopicState {
 	checked: boolean,
@@ -31,13 +33,16 @@ export const ScoreStateActionType = {
 	UPDATE_DEPTH: 'UPDATE_DEPTH',
 	UPDATE_EXTENT: 'UPDATE_EXTENT',
 	UPDATE_DEPTH_NOTES: 'UPDATE_DEPTH_NOTES',
-	UPDATE_EXTENT_NOTES: 'UPDATE_EXTENT_NOTES'
+	UPDATE_EXTENT_NOTES: 'UPDATE_EXTENT_NOTES',
+	SET_TOPICS: 'SET_TOPICS'
 } as const
 
 export type ScoreStateAction = 
 	  { type: "CHECK", index: number }
 	| { type: "UPDATE_NOTES", value: string }
 	| { type: "UPDATE_EXTENT" | "UPDATE_DEPTH", topicId: number, value: number }
+	| { type: "UPDATE_EXTENT_NOTES" | "UPDATE_DEPTH_NOTES", topicId: number, value: string }
+	| { type: "SET_TOPICS", topics: TopicState[] }
 
 const reducer = (state: ScoreState, action: ScoreStateAction) => {
 	switch (action.type) {
@@ -58,9 +63,9 @@ const reducer = (state: ScoreState, action: ScoreStateAction) => {
 		case ScoreStateActionType.UPDATE_EXTENT: 
 		case ScoreStateActionType.UPDATE_DEPTH:
 
-			const score = action.type === ScoreStateActionType.UPDATE_EXTENT ? 'extent' : 'depth';	
-			const topic = state.topics.find(t => t.topic.id === action.topicId);
-			const topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
+			var score = action.type === ScoreStateActionType.UPDATE_EXTENT ? 'extent' : 'depth';	
+			var topic = state.topics.find(t => t.topic.id === action.topicId);
+			var topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
 
 			return {
 				...state,
@@ -70,6 +75,26 @@ const reducer = (state: ScoreState, action: ScoreStateAction) => {
 					...state.topics.slice(topicIndex + 1, state.topics.length)
 				]
 			}
+		case ScoreStateActionType.UPDATE_EXTENT_NOTES: 
+		case ScoreStateActionType.UPDATE_DEPTH_NOTES:
+
+			var scoreNotes = action.type === ScoreStateActionType.UPDATE_EXTENT_NOTES ? 'extentNotes' : 'depthNotes';	
+			var topic = state.topics.find(t => t.topic.id === action.topicId);
+			var topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
+
+			return {
+				...state,
+				topics: [
+					...state.topics.slice(0, topicIndex),
+					{ ...state.topics[topicIndex], [scoreNotes]: action.value },
+					...state.topics.slice(topicIndex + 1, state.topics.length)
+				]
+			}
+		case ScoreStateActionType.SET_TOPICS:
+			return {
+				...state,
+				topics: action.topics
+			}
 		default:
 			return state;
 	}
@@ -78,6 +103,7 @@ const reducer = (state: ScoreState, action: ScoreStateAction) => {
 export default function Scoring() {
 
 	const [section, setSection] = useState<number>(-1);
+	const navigate = useNavigate();
 
 	const [scores, dispatch] = useReducer(reducer, {
 		notes: '',
@@ -94,10 +120,35 @@ export default function Scoring() {
 
 	const { id } = useParams();
 	const { data: drawing } = useQuery(['drawing', Number(id)], () => fetchDrawingById(Number(id)));
-	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });	
+	useQuery(['topics'], () => fetchTopics(0, 20), {
+		onSuccess: (topics) => {
+			dispatch({
+				type: ScoreStateActionType.SET_TOPICS,
+				topics: topics.map((t) => ({
+					checked: false,
+					topic: { id: t.topicId, name: t.topicName },
+					extent: 0,
+					depth: 0,
+					extentNotes: '',
+					depthNotes: ''
+				}))
+			});
+		}
+	});
+
+	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
+	const mutation = useMutation((score: CreateScore) => createScore(score));
 
 	const onSubmit = () => {
-		console.log(1);
+
+		mutation.mutate({
+			scorerId: 1,
+			drawingId: Number(id),
+			notes: scores.notes,
+			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
+		});
+
+		navigate('/drawings');
 	}
 
 	const scoreSelectorProps = {
@@ -108,14 +159,12 @@ export default function Scoring() {
 		onSubmit
 	}
 
-	console.table(scores.topics);
-
 	return (
 		<Content>
 
 			<PageHeading> Scoring </PageHeading>
 
-			<div className='xl:flex mt-7 bg-white flex-grow rounded-md border-gray-200 border'>
+			<div className='xl:flex mt-7 bg-white flex-grow rounded-md border-gray-200 border overflow-x-auto'>
 				
 				<div className='flex-grow px-7 pt-7 xl:p-7'>
 

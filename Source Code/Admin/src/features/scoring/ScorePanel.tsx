@@ -30,6 +30,7 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 	const onCheck = (index: number) => dispatch({ type: ScoreStateActionType.CHECK, index });
 	const onUpdateNotes = (value: string) => dispatch({ type: ScoreStateActionType.UPDATE_NOTES, value });
 	const onScoreChange = (topicId: number, value: number, type: "UPDATE_EXTENT" | "UPDATE_DEPTH") => dispatch({ type, topicId, value });
+	const onUpdateScoreNotes = (topicId: number, value: string, type: "UPDATE_EXTENT_NOTES" | "UPDATE_DEPTH_NOTES") => dispatch({ type, topicId, value });
 
 	return (
 		<div className='min-w-[20rem] xl:w-80 h-full overflow-y-auto p-7 flex flex-col'>
@@ -52,10 +53,12 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 						<TextAreaInput label='Notes' rows={4} value={scores.notes} onChange={onUpdateNotes}/>
 					</div>
 				</Fragment>
-				: <Fragment>
+				: <div className='flex flex-col gap-5 mt-5'>
 					<ScoreSelector label='Depth' value={selectedTopics[section].depth} onChange={(value) => onScoreChange(currentTopicId, value, "UPDATE_DEPTH")}/>
+					<TextAreaInput label='Depth Notes' rows={4} value={selectedTopics[section].depthNotes} onChange={(value) => onUpdateScoreNotes(currentTopicId, value, "UPDATE_DEPTH_NOTES")}/>
 					<ScoreSelector label='Extent' value={selectedTopics[section].extent} withInput onChange={(value) => onScoreChange(currentTopicId, value, "UPDATE_EXTENT")}/>
-				</Fragment>
+					<TextAreaInput label='Extent Notes' rows={4} value={selectedTopics[section].extentNotes} onChange={(value) => onUpdateScoreNotes(currentTopicId, value, "UPDATE_EXTENT_NOTES")}/>
+				</div>
 			}
 
 			<div className='flex mt-auto justify-end gap-3'>

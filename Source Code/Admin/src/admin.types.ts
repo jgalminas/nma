@@ -68,6 +68,11 @@ export type TopicScore = {
 	extent: number
 }
 
+export type Topic = {
+	topicId: number,
+    topicName: string,
+}
+
 export type Score = {
 	scoreId: number,
 	breadth: number,
@@ -75,6 +80,19 @@ export type Score = {
 	scoredAt: string,
 	notes: string,
 	topicScores: TopicScore[]
+}
+
+export type CreateTopicScore = {
+	topicId: number,
+	depth: number,
+	extent: number
+}
+
+export type CreateScore = {
+	drawingId: number,
+	scorerId: number,
+	notes: string,
+	topicScores: CreateTopicScore[]
 }
 
 export interface Drawing {
