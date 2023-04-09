@@ -81,7 +81,7 @@ export default function CreateEditUser() {
 	}
 
 	return (
-		<div className='flex flex-col p-6 bg-white rounded-md border border-gray-200 w-96 h-96'>
+		<div className='flex flex-col p-6 bg-white rounded-md border border-gray-200 w-96 h-96 shadow-xl'>
 
 			{ popup &&
 				<DeletePopup
@@ -93,9 +93,11 @@ export default function CreateEditUser() {
 
 			<h1 className='text-gray-700 text-lg font-medium'> { id ? 'Edit User' : 'Add User' } </h1> 
 			
-			<div className='mt-6 px-4 flex flex-col border-t border-gray-100'>
-				{ id && <h2 className='text-gray-600 text-base font-medium mb-3'> Change Username </h2> }
-				<TextInput value={username} label='Username' onChange={onUsernameChange} validation={validation.validation}/>
+			<div className='mt-6 flex flex-col border-t border-gray-100'>
+				<div className='mt-3'>
+					{ id && <h2 className='text-gray-600 text-base font-medium mb-3'> Change Username </h2> }
+					<TextInput value={username} label='Username' onChange={onUsernameChange} validation={validation.validation}/>
+				</div>
 				
 				{ id &&
 					<Fragment>

@@ -16,7 +16,7 @@ export default function UserSelect() {
 	});
 
 	return (
-		<div className='flex flex-col bg-white rounded-md border border-gray-200 w-96 h-96'>
+		<div className='flex flex-col bg-white rounded-md border border-gray-200 w-96 h-96 shadow-xl'>
 
 			<div className='p-6 flex justify-end items-center'>
 				<h1 className='text-gray-700 text-lg font-medium'> Select User </h1>
@@ -24,6 +24,8 @@ export default function UserSelect() {
 					<PrimaryButton onClick={() => navigate('/users/create')}> Add User </PrimaryButton>
 				</div>
 			</div>
+
+			<p className='text-gray-500 px-6 pb-3'> Please select a user to continue. </p>
 
 			{ (users && users.length > 0) ?
 				<div className='flex flex-col overflow-x-auto border-t border-b py-2 border-gray-100'>
