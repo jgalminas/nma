@@ -16,7 +16,7 @@ import ViewLocationPanel from './features/locations/ViewLocationPanel';
 import CreateEditLocationPanel from './features/locations/CreateEditLocationPanel';
 import { PageProvider } from './contexts/PageContext';
 import { AuthRoute, UnauthedOnlyRoute, UserProvider } from './contexts/UserContext';
-import UserSelect from './components/views/user/UserSelect';
+import UserSelect from './features/user/UserSelect';
 import ViewDrawingPanel from './features/drawings/ViewDrawingPanel';
 import EditDrawingPanel from './features/drawings/EditDrawingPanel';
 import Scoring from './features/scoring/Scoring';
