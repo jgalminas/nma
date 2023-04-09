@@ -54,6 +54,7 @@ builder.Services.AddScoped<IDrawingService, DrawingService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<ITopicService, TopicService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
