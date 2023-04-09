@@ -37,6 +37,7 @@ export const ScoreStateActionType = {
 export type ScoreStateAction = 
 	  { type: "CHECK", index: number }
 	| { type: "UPDATE_NOTES", value: string }
+	| { type: "UPDATE_EXTENT" | "UPDATE_DEPTH", topicId: number, value: number }
 
 const reducer = (state: ScoreState, action: ScoreStateAction) => {
 	switch (action.type) {
@@ -53,6 +54,21 @@ const reducer = (state: ScoreState, action: ScoreStateAction) => {
 			return {
 				...state,
 				notes: action.value
+			}
+		case ScoreStateActionType.UPDATE_EXTENT: 
+		case ScoreStateActionType.UPDATE_DEPTH:
+
+			const score = action.type === ScoreStateActionType.UPDATE_EXTENT ? 'extent' : 'depth';	
+			const topic = state.topics.find(t => t.topic.id === action.topicId);
+			const topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
+
+			return {
+				...state,
+				topics: [
+					...state.topics.slice(0, topicIndex),
+					{ ...state.topics[topicIndex], [score]: action.value },
+					...state.topics.slice(topicIndex + 1, state.topics.length)
+				]
 			}
 		default:
 			return state;
@@ -92,7 +108,7 @@ export default function Scoring() {
 		onSubmit
 	}
 
-	console.table(scores);
+	console.table(scores.topics);
 
 	return (
 		<Content>

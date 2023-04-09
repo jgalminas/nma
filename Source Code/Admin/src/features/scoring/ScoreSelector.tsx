@@ -30,7 +30,7 @@ export default function ScoreSelector({ label, value, withInput, onChange }: Sco
 				}) }
 
 				{ withInput &&
-					<input type='number' className='focus:outline-none focus:border-blue-400
+					<input value={(value && value !== 0) ? value : ''} type='number' className='focus:outline-none focus:border-blue-400
 					focus:ring-2 ring-opacity-40 border border-gray-200 rounded-md bg-gray-100 px-2 text-gray-700 w-14'
 					onChange={(e) => onChange(e.target.valueAsNumber)}/>
 				}
