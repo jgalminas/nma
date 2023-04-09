@@ -23,7 +23,7 @@ export interface UserProviderProps {
 	children?: ReactNode
 }
 
-export function PageProvider({ children }: UserProviderProps) {
+export function UserProvider({ children }: UserProviderProps) {
 
 	const [user, setUser] = useState<User | null>(null);
 
