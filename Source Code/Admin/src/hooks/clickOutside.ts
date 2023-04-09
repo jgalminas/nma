@@ -1,9 +1,11 @@
 import { RefObject, useEffect } from "react";
 
-// Click outside hook that works with a toggle button.
-// Takes three params, a node ref for the click element, a ref for the menu node
-// and the callback function.
-// If not toggle is not being used pass null to the clickNodeRef.
+/**
+ * A hook that executes a callback function when a mouse click occurs outside of the target element.
+ * @param nodeRef React Ref of a node which is the target element.
+ * @param callback The function that is to be executed upon clicking outside.
+ * @param clickNodeRef React Ref of an element which contains the target and shouldn't fire the click outside function
+ */
 export default function useClickOutside<T extends HTMLElement>(nodeRef: RefObject<T>, callback: () => void, clickNodeRef?: RefObject<T>) {
 
     useEffect(() => {
@@ -29,7 +31,12 @@ export default function useClickOutside<T extends HTMLElement>(nodeRef: RefObjec
 }
 
 
-// recursively check if a given attribute is attached to DOM nodes
+/**
+ * recursively check if a given attribute is attached to DOM nodes
+ * @param target 
+ * @param attribute 
+ * @returns true or false
+ */
 function hasDataAttribute(target: HTMLElement, attribute: string): boolean {
     if (!target || target === document.documentElement) {
       return false;
