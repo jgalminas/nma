@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router';
 import PrimaryButton from '../../components/PrimaryButton';
 import TextButton from '../../components/TextButton';
 import TextInput from '../../components/TextInput';
-import { useEffect, useState } from 'react';
+import { Fragment, useEffect, useState } from 'react';
 import { useValidation } from '../../hooks/validation';
 import { validateLength } from '../../utils/validation';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -94,13 +94,18 @@ export default function CreateEditUser() {
 			<h1 className='text-center text-gray-700 text-lg font-medium'> { id ? 'Edit User' : 'Add User' } </h1> 
 			
 			<div className='mt-6 pt-4 flex flex-col border-t border-gray-100'>
-				<h2 className='text-gray-600 text-base font-medium mb-3'> Change Username </h2>
+				{ id && <h2 className='text-gray-600 text-base font-medium mb-3'> Change Username </h2> }
 				<TextInput value={username} label='Username' onChange={onUsernameChange} validation={validation.validation}/>
 				
-				<h2 className='text-gray-600 text-base font-medium mt-5 mb-3'> Delete User </h2>
-				<div>
-					<DangerButton onClick={deleteUser}> Delete </DangerButton>
-				</div>
+				{ id &&
+					<Fragment>
+						<h2 className='text-gray-600 text-base font-medium mt-5 mb-3'> Delete User </h2>
+						<div>
+							<DangerButton onClick={deleteUser}> Delete </DangerButton>
+						</div>
+					</Fragment>
+				}
+
 			</div>
 
 			<div className='mt-auto'>
