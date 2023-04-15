@@ -42,7 +42,7 @@ export default function UserSelect() {
 						)
 					}) }
 				</div>
-				: <p className='mt-5 text-gray-500'> No users found. </p>
+				: <p className='text-center mt-14 text-gray-500'> No users found. </p>
 			} 
 
 		</div>
