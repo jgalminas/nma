@@ -18,7 +18,7 @@ namespace API.Models.Entities
         public Guid? FileName { get; set; }
         public string? FileExt { get; set; }
         public string? DrawersName { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         public virtual Event? Event { get; set; }
         public virtual ICollection<Score> Scores { get; set; }

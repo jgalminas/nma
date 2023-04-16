@@ -14,7 +14,7 @@ namespace API.Models.Entities
         public string? Country { get; set; }
         public string? City { get; set; }
         public string? LocationName { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         public virtual ICollection<Event> Events { get; set; }
     }
