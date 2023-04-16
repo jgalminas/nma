@@ -3,7 +3,7 @@ version: "3.8"
 services:
   web:
     container_name: web_c
-    build: web
+    build: Web Drawing
     image: web_i
     volumes:
       - ./web/src:/web/src
