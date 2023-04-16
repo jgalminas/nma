@@ -10,6 +10,7 @@ import ScorePanel from './ScorePanel';
 import { CreateScore } from '../../admin.types';
 import { createScore, fetchTopics } from './scoring.api';
 import { useUser } from '../../contexts/UserContext';
+import { fetchFirstUnscoredDrawing } from '../../api/sharedDrawing.api';
 
 export interface TopicState {
 	checked: boolean,
@@ -122,7 +123,10 @@ export default function Scoring() {
 	});
 
 	const { id } = useParams();
-	const { data: drawing } = useQuery(['drawing', Number(id)], () => fetchDrawingById(Number(id)));
+	const { data: drawing } = useQuery({
+		queryKey: id != undefined ? ['drawing', Number(id)] : ['randomDrawing'],
+		queryFn: id != undefined ? () => fetchDrawingById(Number(id)) : fetchFirstUnscoredDrawing
+	});
 	useQuery(['topics'], () => fetchTopics(0, 20), {
 		onSuccess: (topics) => {
 			dispatch({
@@ -139,14 +143,14 @@ export default function Scoring() {
 		}
 	});
 
-	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
+	const { data: image, isLoading: isImageLoading } = useQuery(['image', drawing?.id], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
 	const mutation = useMutation((score: CreateScore) => createScore(score));
 
 	const onSubmit = () => {
 
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
-			drawingId: Number(id),
+			drawingId: drawing?.id ?? -1,
 			notes: scores.notes,
 			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
 		}, {

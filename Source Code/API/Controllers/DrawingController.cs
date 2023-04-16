@@ -206,5 +206,22 @@ namespace API.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("First-Unscored")]
+        public async Task<IActionResult> GetFirstUnscoredDrawing()
+        {
+            try
+            {
+                return Ok(
+                    await _drawingService.GetFirstUnscoredDrawing()
+                    );
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
+
     }
 }

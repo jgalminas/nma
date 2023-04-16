@@ -299,7 +299,7 @@ namespace API.Services.Implementations
                         CreatedAt = d.CreatedAt,
                         DrawersAge = d.DrawersAge,
                         DrawersName = d.DrawersName,
-                        ImageUrl = $"/api/drawing/image/{d.FileId}",
+                        ImageUrl = $"/drawing/image/{d.FileId}",
                     })
                     .Skip(page * count)
                     .Take(count)
@@ -330,5 +330,27 @@ namespace API.Services.Implementations
             }
 
         }
+
+        public async Task<DrawingDTO> GetFirstUnscoredDrawing()
+        {
+            return await _db.Drawings
+                    .Where(d => d.IsDeleted == false)
+                    .Where(d => !d.Scores.Any(s => s.IsDeleted == false))
+                    .Select(d => new DrawingDTO()
+                    {
+                        // map drawing data
+                        Id = d.DrawingId,
+                        Event = new EventIdNameDTO()
+                        {
+                            Id = d.EventId,
+                            Name = d.Event.EventName ?? string.Empty,
+                        },
+                        CreatedAt = d.CreatedAt,
+                        DrawersAge = d.DrawersAge,
+                        DrawersName = d.DrawersName,
+                        ImageUrl = $"/drawing/image/{d.FileId}",
+                    }).FirstAsync();
+        }
+
     }
 }

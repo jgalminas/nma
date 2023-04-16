@@ -38,7 +38,7 @@ export default function Drawings() {
 
 			<div className='flex w-full gap-4 mt-7 flex-wrap justify-end'>
 				<SearchInput onChange={() => console.log(1)}/>
-				<PrimaryButton onClick={() => console.log(1)}> Score Drawings </PrimaryButton>
+				<PrimaryButton onClick={() => navigate('score')}> Score Drawings </PrimaryButton>
 			</div>
 
 			<div className='mt-5'>
