@@ -92,7 +92,7 @@ namespace API.Controllers
         {
             try
             {
-                DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
+                DrawingStreamDTO drawing = await _drawingService.GetFileById(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
             catch (NotFound e)
