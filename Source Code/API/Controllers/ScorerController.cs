@@ -22,9 +22,9 @@ namespace API.Controllers
 
         [HttpGet]
         [SwaggerResponse(StatusCodes.Status200OK, "Scorers", typeof(Scorer[]))]
-        public IActionResult GetScorers()
+        public async Task<IActionResult> GetScorers()
         {
-            return Ok(_scorerService.GetScorers());
+            return Ok(await _scorerService.GetScorersAsync());
         }
 
         [HttpGet]
@@ -69,6 +69,24 @@ namespace API.Controllers
             try
             {
                 return Ok(await _scorerService.CreateScorerAsync(scorer.Username));
+            }
+            catch (NotFound e)
+            {
+                return NotFound(new GenericResponse() { Message = e.Message });
+            }
+        }
+
+        [HttpDelete]
+        [Route("{id}")]
+        [SwaggerResponse(StatusCodes.Status200OK)]
+        [SwaggerResponse(StatusCodes.Status404NotFound)]
+        [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteScorer([FromRoute] int id)
+        {
+            try
+            {
+                await _scorerService.DeleteScorerByIdAsync(id);
+                return Ok();
             }
             catch (NotFound e)
             {

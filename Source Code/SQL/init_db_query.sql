@@ -11,7 +11,8 @@ IF DB_ID(@dbname) IS NULL
         LocationId INT PRIMARY KEY IDENTITY(1,1),
         Country VARCHAR(63),
         City VARCHAR(63),
-        LocationName VARCHAR(127)
+        LocationName VARCHAR(127),
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE Event (
@@ -20,7 +21,8 @@ IF DB_ID(@dbname) IS NULL
         EventName NVARCHAR(95),
         Notes NVARCHAR(1023),
         StartTime DATETIME,
-        FinishTime DATETIME
+        FinishTime DATETIME,
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE Drawing (
@@ -31,12 +33,14 @@ IF DB_ID(@dbname) IS NULL
         FileId VARCHAR(99),
         FileName UNIQUEIDENTIFIER,
         FileExt VARCHAR(4),
-        DrawersName NVARCHAR(49)
+        DrawersName NVARCHAR(49),
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE Scorer (
         ScorerId INT PRIMARY KEY IDENTITY(1,1),
-        Username VARCHAR(63)
+        Username VARCHAR(63),
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE Score (
@@ -44,12 +48,14 @@ IF DB_ID(@dbname) IS NULL
         DrawingId INT FOREIGN KEY REFERENCES Drawing(DrawingId),
         ScorerId INT FOREIGN KEY REFERENCES Scorer(ScorerId),
         ScoredAt DATETIME DEFAULT GETDATE(),
-        Notes NVARCHAR(255)
+        Notes NVARCHAR(255),
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE Topic (
         TopicId INT PRIMARY KEY IDENTITY(1,1),
-        TopicName NVARCHAR(63)
+        TopicName NVARCHAR(63),
+        isDeleted BIT DEFAULT 0
     )
 
     CREATE TABLE TopicScores (
@@ -57,7 +63,8 @@ IF DB_ID(@dbname) IS NULL
         ScoreId INT FOREIGN KEY REFERENCES Score(ScoreId),
         TopicId INT FOREIGN KEY REFERENCES Topic(TopicId),
         Depth INT,
-        Extent INT
+        Extent INT,
+        isDeleted BIT DEFAULT 0
     )
 
     GO

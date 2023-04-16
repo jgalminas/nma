@@ -10,3 +10,8 @@ export async function fetchImage(imageUrl: string): Promise<Blob> {
 	const res = await fetch(BASE_URL + imageUrl);	
 	return res.blob();
 }
+
+export async function fetchFirstUnscoredDrawing(): Promise<Drawing> {
+	const res = await fetch(`${BASE_URL}/drawing/first-unscored`);	
+	return res.json();
+}

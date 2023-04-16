@@ -24,7 +24,7 @@ export default function Dashboard() {
 	const { data: event } = useQuery(['eventCount'], fetchEventCount);
 	const { data: location } = useQuery(['locationCount'], fetchLocationCount);
 	const { data: drawing } = useQuery(['drawingCount'], fetchDrawingCount);
-	const { data: drawings } = useQuery(['recentDrawings', NUM_OF_DRAWINGS], () => fetchDrawings(0, NUM_OF_DRAWINGS, true));
+	const { data: drawings } = useQuery(['recentDrawings'], () => fetchDrawings(0, NUM_OF_DRAWINGS, true));
 
 	const viewDrawing = (id: number) => navigate(`/drawings/${id}`);
 

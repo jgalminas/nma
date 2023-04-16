@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router';
 import Content from '../../components/Content';
 import PageHeading from '../../components/PageHeading';
 import Image from '../../components/Image';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDrawingById, fetchImage } from '../../api/sharedDrawing.api';
 import H2Heading from '../../components/H2Heading';
 import { useReducer, useState } from 'react';
@@ -10,6 +10,7 @@ import ScorePanel from './ScorePanel';
 import { CreateScore } from '../../admin.types';
 import { createScore, fetchTopics } from './scoring.api';
 import { useUser } from '../../contexts/UserContext';
+import { fetchFirstUnscoredDrawing } from '../../api/sharedDrawing.api';
 
 export interface TopicState {
 	checked: boolean,
@@ -106,6 +107,7 @@ export default function Scoring() {
 	const { user } = useUser(); 
 	const [section, setSection] = useState<number>(-1);
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const [scores, dispatch] = useReducer(reducer, {
 		notes: '',
@@ -121,7 +123,10 @@ export default function Scoring() {
 	});
 
 	const { id } = useParams();
-	const { data: drawing } = useQuery(['drawing', Number(id)], () => fetchDrawingById(Number(id)));
+	const { data: drawing } = useQuery({
+		queryKey: id != undefined ? ['drawing', Number(id)] : ['randomDrawing'],
+		queryFn: id != undefined ? () => fetchDrawingById(Number(id)) : fetchFirstUnscoredDrawing
+	});
 	useQuery(['topics'], () => fetchTopics(0, 20), {
 		onSuccess: (topics) => {
 			dispatch({
@@ -138,19 +143,23 @@ export default function Scoring() {
 		}
 	});
 
-	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
+	const { data: image, isLoading: isImageLoading } = useQuery(['image', drawing?.id], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
 	const mutation = useMutation((score: CreateScore) => createScore(score));
 
 	const onSubmit = () => {
 
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
-			drawingId: Number(id),
+			drawingId: drawing?.id ?? -1,
 			notes: scores.notes,
 			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
-		});
+		}, {
+			onSuccess: () => {
+				queryClient.invalidateQueries(["drawings", 0]);
+				navigate('/drawings');
+			}
+		});	
 
-		navigate('/drawings');
 	}
 
 	const scoreSelectorProps = {

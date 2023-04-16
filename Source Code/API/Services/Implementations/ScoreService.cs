@@ -42,6 +42,7 @@ namespace API.Services.Implementations
         public async Task<Score[]> GetScoresAsync(int page, int count)
         {
             return await _db.Scores
+                            .Where(s => s.IsDeleted == false)
                             .Skip(page * count)
                             .Take(count)
                             .ToArrayAsync();
@@ -49,7 +50,7 @@ namespace API.Services.Implementations
 
         public async Task<int> GetScoreCountAsync()
         {
-            return await _db.Scores.CountAsync();
+            return await _db.Scores.Where(s => s.IsDeleted == false).CountAsync();
         }
 
         /// <summary>
@@ -61,46 +62,52 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task<int> CreateScoreAsync(ScoreNewDTO data)
         {
+
+            if (await _db.Drawings.FindAsync(data.DrawingId) == null)
+            {
+                throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
+            }
+
+            if (await _db.Scorers.FindAsync(data.ScorerId) == null)
+            {
+                throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
+            }
+
+            var score = new Score()
+            {
+                ScoreId = data.ScoreId,
+                DrawingId = data.DrawingId,
+                ScorerId = data.ScorerId,
+                ScoredAt = data.ScoredAt,
+                Notes = data.Notes,
+                TopicScores = new List<TopicScore>()
+            };
+
+            foreach (TopicScoreNewDTO ts in data.TopicScores)
+            {
+                if (await _db.Topics.FindAsync(ts.TopicId) == null)
+                {
+                    throw new NotFound($"Topic with id {ts.TopicId} doesn't exist");
+                }
+
+                score.TopicScores.Add(new TopicScore()
+                {
+                    TopicScoreId = ts.TopicScoreId,
+                    ScoreId = data.ScoreId,
+                    TopicId = ts.TopicId,
+                    Depth = ts.Depth,
+                    Extent = ts.Extent
+                });
+
+            }
+
             try
             {
-                foreach (TopicScoreNewDTO ts in data.TopicScores)
-                {
-                    if (_db.Topics.Find(ts.TopicId) == null)
-                    {
-                        throw new NotFound($"Topic with id {ts.TopicId} doesn't exist");
-                    }
 
-                    await _db.TopicScores.AddAsync(new TopicScore() {
-                        TopicScoreId = ts.TopicScoreId,
-                        ScoreId = data.ScoreId,
-                        TopicId = ts.TopicId,
-                        Depth = ts.Depth,
-                        Extent = ts.Extent,
-                    });
-                }
-
-                if (_db.Drawings.Find(data.DrawingId) == null)
-                {
-                    throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
-                }
-
-                if (_db.Scorers.Find(data.ScorerId) == null)
-                {
-                    throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
-                }
-
-                var sc = new Score() {
-                    ScoreId = data.ScoreId,
-                    DrawingId = data.DrawingId,
-                    ScorerId = data.ScorerId,
-                    ScoredAt = data.ScoredAt,
-                    Notes = data.Notes,
-                };
-
-                await _db.Scores.AddAsync(sc);
+                await _db.Scores.AddAsync(score);
                 await _db.SaveChangesAsync();
 
-                return sc.ScoreId;
+                return score.ScoreId;
             }
             catch (DbUpdateException)
             {
@@ -159,16 +166,15 @@ namespace API.Services.Implementations
         /// <param name="id"></param>
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
-        public async Task DeleteScoreAsync(int id)
+        public async Task DeleteScoreAsync(int id) 
         {
             if (await _db.Scores.FindAsync(id) is Score sc)
             {
+
+                sc.IsDeleted = true;
+
                 try {
-                    foreach (TopicScore ts in sc.TopicScores)
-                    {
-                        _db.TopicScores.Remove(ts);
-                    }
-                    _db.Scores.Remove(sc);
+                    await _db.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
                 {
@@ -177,7 +183,7 @@ namespace API.Services.Implementations
             }
             else
             {
-                throw new NotFound($"Location with id {id} doesn't exist");
+                throw new NotFound($"Score with id {id} doesn't exist");
             }
         }
     }
