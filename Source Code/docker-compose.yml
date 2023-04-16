@@ -2,24 +2,24 @@
 version: "3.8"
 services:
   web:
-    container_name: web_dev_c
+    container_name: web_c
     build: web
-    image: web_dev_i
+    image: web_i
     volumes:
       - ./web/src:/web/src
     ports:
       - '3000:3000'
   api:
-    container_name: api_dev_c
-    image: api_dev_i
+    container_name: api_c
+    image: api_i
     build: api
     ports:
       - 5000:80
     depends_on:
       - sql_db
   sql_db:
-    container_name: sql_dev_c
-    image: sql_dev_i
+    container_name: sql_c
+    image: sql_i
     build: sql
     ports:
       - 1433:1433
