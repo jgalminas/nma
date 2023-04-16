@@ -61,46 +61,61 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task<int> CreateScoreAsync(ScoreNewDTO data)
         {
+
+            if (await _db.Drawings.FindAsync(data.DrawingId) == null)
+            {
+                throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
+            }
+
+            if (await _db.Scorers.FindAsync(data.ScorerId) == null)
+            {
+                throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
+            }
+
+            var score = new Score()
+            {
+                ScoreId = data.ScoreId,
+                DrawingId = data.DrawingId,
+                ScorerId = data.ScorerId,
+                ScoredAt = data.ScoredAt,
+                Notes = data.Notes,
+                TopicScores = new List<TopicScore>()
+            };
+
+            foreach (TopicScoreNewDTO ts in data.TopicScores)
+            {
+                if (await _db.Topics.FindAsync(ts.TopicId) == null)
+                {
+                    throw new NotFound($"Topic with id {ts.TopicId} doesn't exist");
+                }
+
+                score.TopicScores.Add(new TopicScore()
+                {
+                    TopicScoreId = ts.TopicScoreId,
+                    ScoreId = data.ScoreId,
+                    TopicId = ts.TopicId,
+                    Depth = ts.Depth,
+                    Extent = ts.Extent
+                });
+
+                /*                await _db.TopicScores.AddAsync(new TopicScore()
+                                {
+                                    TopicScoreId = ts.TopicScoreId,
+                                    ScoreId = data.ScoreId,
+                                    TopicId = ts.TopicId,
+                                    Depth = ts.Depth,
+                                    Extent = ts.Extent,
+                                });*/
+            }
+
+
             try
             {
-                foreach (TopicScoreNewDTO ts in data.TopicScores)
-                {
-                    if (_db.Topics.Find(ts.TopicId) == null)
-                    {
-                        throw new NotFound($"Topic with id {ts.TopicId} doesn't exist");
-                    }
 
-                    await _db.TopicScores.AddAsync(new TopicScore() {
-                        TopicScoreId = ts.TopicScoreId,
-                        ScoreId = data.ScoreId,
-                        TopicId = ts.TopicId,
-                        Depth = ts.Depth,
-                        Extent = ts.Extent,
-                    });
-                }
-
-                if (_db.Drawings.Find(data.DrawingId) == null)
-                {
-                    throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
-                }
-
-                if (_db.Scorers.Find(data.ScorerId) == null)
-                {
-                    throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
-                }
-
-                var sc = new Score() {
-                    ScoreId = data.ScoreId,
-                    DrawingId = data.DrawingId,
-                    ScorerId = data.ScorerId,
-                    ScoredAt = data.ScoredAt,
-                    Notes = data.Notes,
-                };
-
-                await _db.Scores.AddAsync(sc);
+                await _db.Scores.AddAsync(score);
                 await _db.SaveChangesAsync();
 
-                return sc.ScoreId;
+                return score.ScoreId;
             }
             catch (DbUpdateException)
             {

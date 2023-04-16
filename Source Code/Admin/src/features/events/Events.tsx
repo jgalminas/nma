@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import Content from '../../components/Content';
 import PageHeading from '../../components/PageHeading';
