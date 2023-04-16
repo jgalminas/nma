@@ -44,7 +44,7 @@ namespace API.Services.Implementations
             if (await _db.Scorers.FindAsync(id) is Scorer scorer)
             {
 
-                _db.Scorers.Remove(scorer);
+                scorer.IsDeleted = true;
 
                 try
                 {
@@ -73,9 +73,9 @@ namespace API.Services.Implementations
             }
         }
 
-        public Scorer[] GetScorers()
+        public async Task<Scorer[]> GetScorersAsync()
         {
-            return _db.Scorers.ToArray();
+            return await _db.Scorers.Where(s => s.IsDeleted == false).ToArrayAsync();
         }
 
         public async Task UpdateScorerAsync(int id, string username)

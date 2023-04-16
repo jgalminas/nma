@@ -12,7 +12,7 @@ namespace API.Models.Entities
 
         public int ScorerId { get; set; }
         public string? Username { get; set; }
-        public bool? IsDeleted { get; set; }
+        public bool? IsDeleted { get; set; } = false;
 
         public virtual ICollection<Score> Scores { get; set; }
     }

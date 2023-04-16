@@ -28,7 +28,7 @@ export default function UserSelect() {
 			<p className='text-gray-500 px-6 pb-3'> Please select a user to continue. </p>
 
 			{ (users && users.length > 0) ?
-				<div className='flex flex-col overflow-x-auto border-t border-b py-2 border-gray-100'>
+				<div className='flex flex-col overflow-x-auto border-t py-2 border-gray-100'>
 					{ users.map((u, key) => {
 						return (
 							<div key={key} className='py-2.5 px-4 text-gray-600 hover:bg-gray-50 rounded flex justify-center relative cursor-pointer'
