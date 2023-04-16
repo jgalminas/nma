@@ -18,17 +18,13 @@ export default function UserSelect() {
 	return (
 		<div className='flex flex-col bg-white rounded-md border border-gray-200 w-96 h-96 shadow-xl'>
 
-			<div className='p-6 flex justify-end items-center'>
+			<div className='p-6 flex flex-col border-b'>
 				<h1 className='text-gray-700 text-lg font-medium'> Select User </h1>
-				<div className='ml-auto'>
-					<PrimaryButton onClick={() => navigate('/users/create')}> Add User </PrimaryButton>
-				</div>
+				<p className='text-gray-600'> Please select a user to continue. </p>
 			</div>
 
-			<p className='text-gray-500 px-6 pb-3'> Please select a user to continue. </p>
-
 			{ (users && users.length > 0) ?
-				<div className='flex flex-col overflow-x-auto border-t py-2 border-gray-100'>
+				<div className='flex flex-col overflow-x-auto py-2 border-gray-100'>
 					{ users.map((u, key) => {
 						return (
 							<div key={key} className='py-2.5 px-4 text-gray-600 hover:bg-gray-50 rounded flex justify-center relative cursor-pointer'
@@ -42,8 +38,14 @@ export default function UserSelect() {
 						)
 					}) }
 				</div>
-				: <p className='text-center mt-14 text-gray-500'> No users found. </p>
+				: <div className='flex justify-center items-center flex-grow'>
+					<p className='text-center text-gray-500'> No users found. <br/> Add one to continue. </p>
+				</div>
 			} 
+
+			<div className='mt-auto flex justify-end p-6 border-t'>
+				<PrimaryButton onClick={() => navigate('/users/create')}> Add User </PrimaryButton>
+			</div>
 
 		</div>
 	)
