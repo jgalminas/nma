@@ -42,6 +42,7 @@ namespace API.Services.Implementations
         public async Task<Score[]> GetScoresAsync(int page, int count)
         {
             return await _db.Scores
+                            .Where(s => s.IsDeleted == false)
                             .Skip(page * count)
                             .Take(count)
                             .ToArrayAsync();
@@ -49,7 +50,7 @@ namespace API.Services.Implementations
 
         public async Task<int> GetScoreCountAsync()
         {
-            return await _db.Scores.CountAsync();
+            return await _db.Scores.Where(s => s.IsDeleted == false).CountAsync();
         }
 
         /// <summary>
@@ -98,16 +99,7 @@ namespace API.Services.Implementations
                     Extent = ts.Extent
                 });
 
-                /*                await _db.TopicScores.AddAsync(new TopicScore()
-                                {
-                                    TopicScoreId = ts.TopicScoreId,
-                                    ScoreId = data.ScoreId,
-                                    TopicId = ts.TopicId,
-                                    Depth = ts.Depth,
-                                    Extent = ts.Extent,
-                                });*/
             }
-
 
             try
             {
@@ -174,16 +166,15 @@ namespace API.Services.Implementations
         /// <param name="id"></param>
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
-        public async Task DeleteScoreAsync(int id)
+        public async Task DeleteScoreAsync(int id) 
         {
             if (await _db.Scores.FindAsync(id) is Score sc)
             {
+
+                sc.IsDeleted = true;
+
                 try {
-                    foreach (TopicScore ts in sc.TopicScores)
-                    {
-                        _db.TopicScores.Remove(ts);
-                    }
-                    _db.Scores.Remove(sc);
+                    await _db.SaveChangesAsync();
                 }
                 catch (DbUpdateException)
                 {
@@ -192,7 +183,7 @@ namespace API.Services.Implementations
             }
             else
             {
-                throw new NotFound($"Location with id {id} doesn't exist");
+                throw new NotFound($"Score with id {id} doesn't exist");
             }
         }
     }

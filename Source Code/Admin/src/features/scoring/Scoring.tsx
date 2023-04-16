@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router';
 import Content from '../../components/Content';
 import PageHeading from '../../components/PageHeading';
 import Image from '../../components/Image';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDrawingById, fetchImage } from '../../api/sharedDrawing.api';
 import H2Heading from '../../components/H2Heading';
 import { useReducer, useState } from 'react';
@@ -106,6 +106,7 @@ export default function Scoring() {
 	const { user } = useUser(); 
 	const [section, setSection] = useState<number>(-1);
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	const [scores, dispatch] = useReducer(reducer, {
 		notes: '',
@@ -148,9 +149,13 @@ export default function Scoring() {
 			drawingId: Number(id),
 			notes: scores.notes,
 			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
-		});
+		}, {
+			onSuccess: () => {
+				queryClient.invalidateQueries(["drawings", 0]);
+				navigate('/drawings');
+			}
+		});	
 
-		navigate('/drawings');
 	}
 
 	const scoreSelectorProps = {

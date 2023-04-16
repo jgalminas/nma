@@ -31,7 +31,7 @@ namespace API.Services.Implementations
                 CreatedAt = d.CreatedAt,
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
-                isScored = d.Scores.Count != 0,
+                isScored = d.Scores.Where(s => s.IsDeleted == false).Count() != 0,
                 ImageUrl = $"/drawing/image/{d.FileId}"
             });
         }
@@ -50,10 +50,10 @@ namespace API.Services.Implementations
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
                 ImageUrl = $"/drawing/image/{d.FileId}",
-                isScored = d.Scores.Count != 0,
+                isScored = d.Scores.Where(s => s.IsDeleted == false).Count() != 0,
 
                 // map score data
-                Scores = d.Scores.Select(s => new ScoreDTO()
+                Scores = d.Scores.Where(s => s.IsDeleted == false).Select(s => new ScoreDTO()
                 {
                     ScoreId = s.ScoreId,
                     Breadth = s.TopicScores.Count(),
@@ -286,7 +286,7 @@ namespace API.Services.Implementations
             {
                 return await _db.Drawings
                     .Where(d => d.IsDeleted == false)
-                    .Where(d => !d.Scores.Any())
+                    .Where(d => !d.Scores.Any(s => s.IsDeleted == false))
                     .Select(d => new DrawingDTO()
                     {
                         // map drawing data
@@ -321,7 +321,7 @@ namespace API.Services.Implementations
                         CreatedAt = d.CreatedAt,
                         DrawersAge = d.DrawersAge,
                         DrawersName = d.DrawersName,
-                        isScored = d.Scores.Count != 0,
+                        isScored = d.Scores.Where(d => d.IsDeleted == false).Count() != 0,
                         ImageUrl = $"/drawing/image/{d.FileId}"
                     })
                     .Skip(page * count)
