@@ -74,7 +74,9 @@ export default function ViewEventPanel() {
 
 					queryClient.invalidateQueries(['eventCount']);
 
-					// navigate back
+
+					// navigate back & close popup
+					setPopup(false);
 					navigateBack();
 				}
 

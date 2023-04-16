@@ -61,7 +61,20 @@ namespace API.Services.Implementations
         /// <returns> An array of event object </returns>
         public async Task<EventDTO[]> GetEventsAsync(int page, int count)
         {
-            return await SelectEvent()
+            return await _db.Events.Where(e => e.IsDeleted == false)
+                .Select(e => new EventDTO()
+                {
+                    EventId = e.EventId,
+                    EventName = e.EventName,
+                    Notes = e.Notes,
+                    StartTime = e.StartTime,
+                    FinishTime = e.FinishTime,
+                    Location = new IdNameDTO()
+                    {
+                        Id = e.Location.LocationId,
+                        Name = e.Location.LocationName
+                    }
+                })
                 .Skip(page * count)
                 .Take(count)
                 .ToArrayAsync();
@@ -147,7 +160,9 @@ namespace API.Services.Implementations
         {
             if (await _db.Events.FindAsync(id) is Event ev)
             {
-                _db.Events.Remove(ev);
+
+                ev.IsDeleted = true;
+
                 try
                 {
                     await _db.SaveChangesAsync();
@@ -169,7 +184,7 @@ namespace API.Services.Implementations
         /// <returns> number of events </returns>
         public async Task<int> GetEventCountAsync()
         {
-            return await _db.Events.CountAsync();
+            return await _db.Events.Where(e => e.IsDeleted == false).CountAsync();
         }
 
         /// <summary>
@@ -178,7 +193,7 @@ namespace API.Services.Implementations
         /// <returns> a list containing id and name of each event </returns>
         public Task<IdNameDTO[]> GetEventListAsync()
         {
-            return _db.Events.Select(l => new IdNameDTO()
+            return _db.Events.Where(e => e.IsDeleted == false).Select(l => new IdNameDTO()
             {
                 Id = l.EventId,
                 Name = l.EventName
