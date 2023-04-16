@@ -12,6 +12,7 @@ namespace API.Models.Entities
 
         public int TopicId { get; set; }
         public string? TopicName { get; set; }
+        public bool? IsDeleted { get; set; }
 
         public virtual ICollection<TopicScore> TopicScores { get; set; }
     }
