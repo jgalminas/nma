@@ -75,11 +75,12 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseMiddleware<APIKeyMiddleware>();
 
 app.UseCors(AllowAny);
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<APIKeyMiddleware>();
 
 app.UseAuthorization();
 
