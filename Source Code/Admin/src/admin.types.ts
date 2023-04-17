@@ -78,7 +78,6 @@ export type Score = {
 	breadth: number,
 	scoredBy: string,
 	scoredAt: string,
-	notes: string,
 	topicScores: TopicScore[]
 }
 
@@ -91,7 +90,6 @@ export type CreateTopicScore = {
 export type CreateScore = {
 	drawingId: number,
 	scorerId: number,
-	notes: string,
 	topicScores: CreateTopicScore[]
 }
 

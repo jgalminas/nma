@@ -48,7 +48,6 @@ IF DB_ID(@dbname) IS NULL
         DrawingId INT FOREIGN KEY REFERENCES Drawing(DrawingId),
         ScorerId INT FOREIGN KEY REFERENCES Scorer(ScorerId),
         ScoredAt DATETIME DEFAULT GETDATE(),
-        Notes NVARCHAR(255),
         isDeleted BIT DEFAULT 0
     )
 
@@ -64,6 +63,8 @@ IF DB_ID(@dbname) IS NULL
         TopicId INT FOREIGN KEY REFERENCES Topic(TopicId),
         Depth INT,
         Extent INT,
+        DepthNotes NVARCHAR(255),
+        ExtentNotes NVARCHAR(255),
         isDeleted BIT DEFAULT 0
     )
 

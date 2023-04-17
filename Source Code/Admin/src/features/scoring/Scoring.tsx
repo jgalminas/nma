@@ -151,7 +151,6 @@ export default function Scoring() {
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
 			drawingId: drawing?.id ?? -1,
-			notes: scores.notes,
 			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
 		}, {
 			onSuccess: () => {
