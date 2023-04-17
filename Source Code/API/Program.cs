@@ -1,5 +1,6 @@
 using System.Reflection;
 using API.Contexts;
+using API.Middlewares;
 using API.Services.Implementations;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
@@ -63,6 +64,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     string? xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    // add authentication params
+    options.OperationFilter<AuthenticationFilter>();
 });
 builder.Services.AddMemoryCache();
 
@@ -70,6 +74,8 @@ var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseMiddleware<APIKeyMiddleware>();
 
 app.UseCors(AllowAny);
 
