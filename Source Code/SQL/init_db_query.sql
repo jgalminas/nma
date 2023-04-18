@@ -12,7 +12,7 @@ IF DB_ID(@dbname) IS NULL
         Country VARCHAR(63),
         City VARCHAR(63),
         LocationName VARCHAR(127),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE Event (
@@ -22,7 +22,7 @@ IF DB_ID(@dbname) IS NULL
         Notes NVARCHAR(1023),
         StartTime DATETIME,
         FinishTime DATETIME,
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE Drawing (
@@ -34,13 +34,13 @@ IF DB_ID(@dbname) IS NULL
         FileName UNIQUEIDENTIFIER,
         FileExt VARCHAR(4),
         DrawersName NVARCHAR(49),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE Scorer (
         ScorerId INT PRIMARY KEY IDENTITY(1,1),
         Username VARCHAR(63),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE Score (
@@ -48,13 +48,13 @@ IF DB_ID(@dbname) IS NULL
         DrawingId INT FOREIGN KEY REFERENCES Drawing(DrawingId),
         ScorerId INT FOREIGN KEY REFERENCES Scorer(ScorerId),
         ScoredAt DATETIME DEFAULT GETDATE(),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE Topic (
         TopicId INT PRIMARY KEY IDENTITY(1,1),
         TopicName NVARCHAR(63),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     CREATE TABLE TopicScores (
@@ -65,7 +65,7 @@ IF DB_ID(@dbname) IS NULL
         Extent INT,
         DepthNotes NVARCHAR(255),
         ExtentNotes NVARCHAR(255),
-        isDeleted BIT DEFAULT 0
+        isDeleted BIT DEFAULT 0 NOT NULL
     )
 
     GO

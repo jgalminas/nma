@@ -41,7 +41,7 @@ namespace API.Services.Implementations
         public async Task<Location[]> GetLocationsAsync(int page, int count)
         {
             return await _db.Locations
-                            .Where(l => l.IsDeleted == false)
+                            .Where(l => !l.IsDeleted)
                             .Skip(page * count)
                             .Take(count)
                             .ToArrayAsync();
@@ -53,7 +53,7 @@ namespace API.Services.Implementations
         /// <returns> numer of locations </returns>
         public async Task<int> GetLocationCountAsync()
         {
-            return await _db.Locations.Where(l => l.IsDeleted == false).CountAsync();
+            return await _db.Locations.Where(l => !l.IsDeleted).CountAsync();
         }
 
         /// <summary>
@@ -145,7 +145,7 @@ namespace API.Services.Implementations
         public Task<IdNameDTO[]> GetLocationListAsync()
         {
             return _db.Locations
-                .Where(l => l.IsDeleted == false)
+                .Where(l => !l.IsDeleted)
                 .Select(l => new IdNameDTO()
                 {
                     Id = l.LocationId,

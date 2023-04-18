@@ -14,8 +14,7 @@ namespace API.Models.Entities
         public int? DrawingId { get; set; }
         public int? ScorerId { get; set; }
         public DateTime? ScoredAt { get; set; }
-        public string? Notes { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         public virtual Drawing? Drawing { get; set; }
         public virtual Scorer? Scorer { get; set; }

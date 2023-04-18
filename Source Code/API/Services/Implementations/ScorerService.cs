@@ -75,7 +75,7 @@ namespace API.Services.Implementations
 
         public async Task<Scorer[]> GetScorersAsync()
         {
-            return await _db.Scorers.Where(s => s.IsDeleted == false).ToArrayAsync();
+            return await _db.Scorers.Where(s => !s.IsDeleted).ToArrayAsync();
         }
 
         public async Task UpdateScorerAsync(int id, string username)

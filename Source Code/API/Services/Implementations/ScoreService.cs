@@ -42,7 +42,7 @@ namespace API.Services.Implementations
         public async Task<Score[]> GetScoresAsync(int page, int count)
         {
             return await _db.Scores
-                            .Where(s => s.IsDeleted == false)
+                            .Where(s => !s.IsDeleted)
                             .Skip(page * count)
                             .Take(count)
                             .ToArrayAsync();
@@ -50,7 +50,7 @@ namespace API.Services.Implementations
 
         public async Task<int> GetScoreCountAsync()
         {
-            return await _db.Scores.Where(s => s.IsDeleted == false).CountAsync();
+            return await _db.Scores.Where(s => !s.IsDeleted).CountAsync();
         }
 
         /// <summary>
@@ -79,7 +79,6 @@ namespace API.Services.Implementations
                 DrawingId = data.DrawingId,
                 ScorerId = data.ScorerId,
                 ScoredAt = data.ScoredAt,
-                Notes = data.Notes,
                 TopicScores = new List<TopicScore>()
             };
 
@@ -96,7 +95,9 @@ namespace API.Services.Implementations
                     ScoreId = data.ScoreId,
                     TopicId = ts.TopicId,
                     Depth = ts.Depth,
-                    Extent = ts.Extent
+                    Extent = ts.Extent,
+                    DepthNotes = ts.DepthNotes,
+                    ExtentNotes = ts.ExtentNotes
                 });
 
             }
@@ -133,6 +134,8 @@ namespace API.Services.Implementations
                         ts.TopicId = ts_data.TopicId;
                         ts.Depth = ts_data.Depth;
                         ts.Extent = ts_data.Extent;
+                        ts.ExtentNotes = ts_data.ExtentNotes;
+                        ts.DepthNotes = ts_data.DepthNotes;
                     }
                     else
                     {
@@ -143,7 +146,6 @@ namespace API.Services.Implementations
                 sc.DrawingId = data.DrawingId;
                 sc.ScorerId = data.ScorerId;
                 sc.ScoredAt = data.ScoredAt;
-                sc.Notes = data.Notes;
 
                 try
                 {

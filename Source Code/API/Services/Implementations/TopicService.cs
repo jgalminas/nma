@@ -24,6 +24,7 @@ namespace API.Services.Implementations
         public async Task<Topic[]> GetTopicsAsync(int page, int count)
         {
             return await _db.Topics
+                            .Where(t => !t.IsDeleted)
                             .Skip(page * count)
                             .Take(count)
                             .ToArrayAsync();

@@ -45,9 +45,7 @@ namespace API.Contexts
                     .HasMaxLength(99)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.HasOne(d => d.Event)
                     .WithMany(p => p.Drawings)
@@ -63,9 +61,7 @@ namespace API.Contexts
 
                 entity.Property(e => e.FinishTime).HasColumnType("datetime");
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.Notes).HasMaxLength(1023);
 
@@ -89,9 +85,7 @@ namespace API.Contexts
                     .HasMaxLength(63)
                     .IsUnicode(false);
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.LocationName)
                     .HasMaxLength(127)
@@ -102,11 +96,7 @@ namespace API.Contexts
             {
                 entity.ToTable("Score");
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.Notes).HasMaxLength(255);
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.ScoredAt)
                     .HasColumnType("datetime")
@@ -127,9 +117,7 @@ namespace API.Contexts
             {
                 entity.ToTable("Scorer");
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.Username)
                     .HasMaxLength(63)
@@ -140,18 +128,18 @@ namespace API.Contexts
             {
                 entity.ToTable("Topic");
 
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.Property(e => e.TopicName).HasMaxLength(63);
             });
 
             modelBuilder.Entity<TopicScore>(entity =>
             {
-                entity.Property(e => e.IsDeleted)
-                    .HasColumnName("isDeleted")
-                    .HasDefaultValueSql("((0))");
+                entity.Property(e => e.DepthNotes).HasMaxLength(255);
+
+                entity.Property(e => e.ExtentNotes).HasMaxLength(255);
+
+                entity.Property(e => e.IsDeleted).HasColumnName("isDeleted");
 
                 entity.HasOne(d => d.Score)
                     .WithMany(p => p.TopicScores)

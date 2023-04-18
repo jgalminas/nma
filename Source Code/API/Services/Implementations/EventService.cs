@@ -61,7 +61,7 @@ namespace API.Services.Implementations
         /// <returns> An array of event object </returns>
         public async Task<EventDTO[]> GetEventsAsync(int page, int count)
         {
-            return await _db.Events.Where(e => e.IsDeleted == false)
+            return await _db.Events.Where(e => !e.IsDeleted)
                 .Select(e => new EventDTO()
                 {
                     EventId = e.EventId,
@@ -184,7 +184,7 @@ namespace API.Services.Implementations
         /// <returns> number of events </returns>
         public async Task<int> GetEventCountAsync()
         {
-            return await _db.Events.Where(e => e.IsDeleted == false).CountAsync();
+            return await _db.Events.Where(e => !e.IsDeleted).CountAsync();
         }
 
         /// <summary>
@@ -193,7 +193,7 @@ namespace API.Services.Implementations
         /// <returns> a list containing id and name of each event </returns>
         public Task<IdNameDTO[]> GetEventListAsync()
         {
-            return _db.Events.Where(e => e.IsDeleted == false).Select(l => new IdNameDTO()
+            return _db.Events.Where(e => !e.IsDeleted).Select(l => new IdNameDTO()
             {
                 Id = l.EventId,
                 Name = l.EventName

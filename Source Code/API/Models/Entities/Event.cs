@@ -16,7 +16,7 @@ namespace API.Models.Entities
         public string? Notes { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? FinishTime { get; set; }
-        public bool? IsDeleted { get; set; } = false;
+        public bool IsDeleted { get; set; }
 
         public virtual Location? Location { get; set; }
         public virtual ICollection<Drawing> Drawings { get; set; }
