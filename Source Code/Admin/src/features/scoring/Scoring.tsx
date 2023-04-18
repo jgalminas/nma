@@ -111,15 +111,7 @@ export default function Scoring() {
 
 	const [scores, dispatch] = useReducer(reducer, {
 		notes: '',
-		topics: [
-			{ checked: false, topic: { id: 1, name: 'Marine Fauna' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 2, name: 'Marine Flora' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 3, name: 'Plymouth Landmarks' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 4, name: 'Physical Features' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 5, name: 'Marine Threats' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 6, name: 'Marine Industry/Careers' }, extent: 0, depth: 0, extentNotes: '', depthNotes: '' },
-			{ checked: false, topic: { id: 7, name: 'Recreational Activities' }, extent: 0, depth: 0, extentNotes: '', depthNotes: ''}
-		]
+		topics: []
 	});
 
 	const { id } = useParams();
@@ -127,6 +119,7 @@ export default function Scoring() {
 		queryKey: id != undefined ? ['drawing', Number(id)] : ['randomDrawing'],
 		queryFn: id != undefined ? () => fetchDrawingById(Number(id)) : fetchFirstUnscoredDrawing
 	});
+	
 	useQuery(['topics'], () => fetchTopics(0, 20), {
 		onSuccess: (topics) => {
 			dispatch({
@@ -140,10 +133,19 @@ export default function Scoring() {
 					depthNotes: ''
 				}))
 			});
-		}
+		},
+		refetchInterval: false,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false
 	});
 
-	const { data: image, isLoading: isImageLoading } = useQuery(['image', drawing?.id], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
+	const { data: image, isLoading: isImageLoading } = useQuery(['image', drawing?.id], () => fetchImage(drawing?.imageUrl ?? ''), {
+		enabled: !!drawing,
+		refetchInterval: false,
+		refetchOnReconnect: false,
+		refetchOnWindowFocus: false
+	});
+	
 	const mutation = useMutation((score: CreateScore) => createScore(score));
 
 	const onSubmit = () => {
@@ -151,7 +153,7 @@ export default function Scoring() {
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
 			drawingId: drawing?.id ?? -1,
-			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth }))
+			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth, depthNotes: t.depthNotes, extentNotes: t.extentNotes }))
 		}, {
 			onSuccess: () => {
 				queryClient.invalidateQueries(["drawings", 0]);
@@ -186,9 +188,8 @@ export default function Scoring() {
 
 				<div className='xl:h-[90%] xl:border-l border-gray-200 self-center'/>
 
-				<div>
-					<ScorePanel {...scoreSelectorProps}/>
-				</div>
+				<ScorePanel {...scoreSelectorProps}/>
+
 
 			</div>
 

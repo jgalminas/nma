@@ -84,7 +84,9 @@ export type Score = {
 export type CreateTopicScore = {
 	topicId: number,
 	depth: number,
-	extent: number
+	extent: number,
+	depthNotes: string,
+	extentNotes: string
 }
 
 export type CreateScore = {
