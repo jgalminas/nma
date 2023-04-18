@@ -153,7 +153,14 @@ export default function Scoring() {
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
 			drawingId: drawing?.id ?? -1,
-			topicScores: scores.topics.map((t) => ({ topicId: t.topic.id, extent: t.extent, depth: t.depth, depthNotes: t.depthNotes, extentNotes: t.extentNotes }))
+			topicScores: scores.topics.filter((t) => t.checked).map(t => {
+				return {
+					topicId:t.topic.id,
+					extent: t.extent,
+					depth: t.depth,
+					depthNotes: t.depthNotes,
+					extentNotes: t.extentNotes }
+			})
 		}, {
 			onSuccess: () => {
 				queryClient.invalidateQueries(["drawings", 0]);

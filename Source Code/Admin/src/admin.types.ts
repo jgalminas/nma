@@ -66,6 +66,8 @@ export type TopicScore = {
 	topicName: string,
 	depth: number,
 	extent: number
+	depthNotes: string,
+	extentNotes: string
 }
 
 export type Topic = {
