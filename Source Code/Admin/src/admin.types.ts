@@ -66,6 +66,13 @@ export type TopicScore = {
 	topicName: string,
 	depth: number,
 	extent: number
+	depthNotes: string,
+	extentNotes: string
+}
+
+export type Topic = {
+	topicId: number,
+    topicName: string,
 }
 
 export type Score = {
@@ -73,8 +80,21 @@ export type Score = {
 	breadth: number,
 	scoredBy: string,
 	scoredAt: string,
-	notes: string,
 	topicScores: TopicScore[]
+}
+
+export type CreateTopicScore = {
+	topicId: number,
+	depth: number,
+	extent: number,
+	depthNotes: string,
+	extentNotes: string
+}
+
+export type CreateScore = {
+	drawingId: number,
+	scorerId: number,
+	topicScores: CreateTopicScore[]
 }
 
 export interface Drawing {
@@ -104,4 +124,13 @@ export type EditDrawing = {
 	eventId: number,
 	drawersName: string,
 	drawersAge: number
+}
+
+export type Scorer = {
+	scorerId: number,
+	username: string
+}
+
+export type CreateEditScorer = {
+	username: string
 }

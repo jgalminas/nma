@@ -1,8 +1,8 @@
 import { TrashIcon } from '@heroicons/react/24/outline';
-import Spinner from './icons/Spinner';
+import Spinner from './Spinner';
 import Popup from './Popup';
-import DangerButton from './primitives/DangerButton';
-import TextButton from './primitives/TextButton';
+import DangerButton from './DangerButton';
+import TextButton from './TextButton';
 
 export interface DeletePopupProps {
 	onClose?: () => void,

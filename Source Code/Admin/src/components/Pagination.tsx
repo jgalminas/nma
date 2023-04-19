@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import usePagination from '../hooks/pagination';
-import TextButton from './primitives/TextButton';
+import TextButton from './TextButton';
 
 export interface PaginationProps {
 	current: number,

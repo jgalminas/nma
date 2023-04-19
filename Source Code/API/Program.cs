@@ -1,5 +1,6 @@
 using System.Reflection;
 using API.Contexts;
+using API.Middlewares;
 using API.Services.Implementations;
 using API.Services.Interfaces;
 using Bytewizer.Backblaze.Client;
@@ -52,7 +53,10 @@ builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IDrawingService, DrawingService>();
 builder.Services.AddScoped<IEventService, EventService>();
+builder.Services.AddScoped<IScoreService, ScoreService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
+builder.Services.AddScoped<ITopicService, TopicService>();
+builder.Services.AddScoped<IScorerService, ScorerService>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -60,6 +64,9 @@ builder.Services.AddSwaggerGen(options =>
 {
     string? xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+
+    // add authentication params
+    options.OperationFilter<AuthenticationFilter>();
 });
 builder.Services.AddMemoryCache();
 
@@ -68,9 +75,12 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+
 app.UseCors(AllowAny);
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<APIKeyMiddleware>();
 
 app.UseAuthorization();
 
