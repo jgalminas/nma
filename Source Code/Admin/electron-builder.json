@@ -1,5 +1,5 @@
 {
-  "appId": "ma.admin",
+  "appId": "MA Admin Portal",
   "asar": true,
   "directories": {
     "output": "release/${version}"
@@ -9,7 +9,7 @@
     "dist"
   ],
   "mac": {
-    "artifactName": "${productName}_${version}.${ext}",
+    "artifactName": "$MA Admin Portal_${version}.${ext}",
     "target": [
       "dmg",
       "zip"
@@ -24,12 +24,12 @@
         ]
       }
     ],
-    "artifactName": "${productName}_${version}.${ext}"
+    "artifactName": "$MA Admin Portal_${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
-    "perMachine": false,
+    "perMachine": true,
     "allowToChangeInstallationDirectory": true,
-    "deleteAppDataOnUninstall": false
+    "deleteAppDataOnUninstall": true
   }
 }

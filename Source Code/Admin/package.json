@@ -1,7 +1,7 @@
 {
-  "name": "ma_web",
+  "name": "ma_admin_portal",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "dist-electron/main.js",
   "scripts": {
     "start": "vite",
