@@ -1,5 +1,7 @@
 {
   "name": "ma_admin_portal",
+  "description": "Drawing data management application for National Marine Aquarium",
+  "author": "Team M",
   "private": true,
   "version": "1.0.0",
   "main": "dist-electron/main.js",

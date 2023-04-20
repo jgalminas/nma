@@ -1,15 +1,17 @@
 {
-  "appId": "MA Admin Portal",
+  "appId": "ma.admin",
   "asar": true,
+  "productName": "MA Admin Portal",
   "directories": {
-    "output": "release/${version}"
+    "output": "release/${version}",
+    "buildResources": "dist"
   },
   "files": [
     "dist-electron",
     "dist"
   ],
   "mac": {
-    "artifactName": "$MA Admin Portal_${version}.${ext}",
+    "artifactName": "MA Admin Portal Installer ${version}.${ext}",
     "target": [
       "dmg",
       "zip"
@@ -24,7 +26,7 @@
         ]
       }
     ],
-    "artifactName": "$MA Admin Portal_${version}.${ext}"
+    "artifactName": "MA Admin Portal Installer ${version}.${ext}"
   },
   "nsis": {
     "oneClick": false,
