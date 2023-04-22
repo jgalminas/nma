@@ -17,13 +17,17 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentUploadBinding;
 import com.example.nmadrawingapp.model.enums.Image;
 import com.example.nmadrawingapp.model.enums.Response;
+import com.example.nmadrawingapp.utils.SafeToast;
 import com.example.nmadrawingapp.view.adapters.ImageAdapter;
 import com.example.nmadrawingapp.viewmodel.UploadViewModel;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -109,47 +113,49 @@ public class UploadFragment extends Fragment {
         binding.sendButton.setOnClickListener(button -> {
 
             List<Integer> selectedImages = adapter.getSelectedImages().getValue();
+            if (selectedImages.size() > 0) {
+                for (int imageId : selectedImages) {
 
-            for (int imageId : selectedImages) {
+                    uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
 
-                uploadViewModel.uploadImage(imageId).observe(getViewLifecycleOwner(), status -> {
+                        // check if image is loading
+                        if (status.getStatus() == Response.LOADING) {
+                            adapter.showEventError(imageId, false);
+                            adapter.setImageLoadingStatus(imageId, Image.UPLOADING);
 
-                    // check if image is loading
-                    if (status.getStatus() == Response.LOADING) {
-                        adapter.showEventError(imageId, false);
-                        adapter.setImageLoadingStatus(imageId, Image.UPLOADING);
+                            // increase currently uploading number
+                            uploading.setValue(uploading.getValue() + 1);
+                        } else {
+                            // reduce currently uploading number
+                            uploading.setValue(uploading.getValue() - 1);
+                        }
 
-                        // increase currently uploading number
-                        uploading.setValue(uploading.getValue() + 1);
-                    }
-                    else {
-                        // reduce currently uploading number
-                        uploading.setValue(uploading.getValue() - 1);
-                    }
+                        // handle result
+                        if (status.isSuccessful()) {
+                            adapter.removeImage(status.getImageId());
+                        } else if (status.getStatus() == Response.INVALID_EVENT_ID) {
+                            adapter.showEventError(imageId, true);
+                            adapter.setImageLoadingStatus(imageId, Image.DEFAULT);
+                        } else if (status.getStatus() == Response.ERROR) {
+                            adapter.setImageLoadingStatus(imageId, Image.ERROR);
+                        }
 
-                    // handle result
-                    if (status.isSuccessful()) {
-                        adapter.removeImage(status.getImageId());
-                    }
-                    else if (status.getStatus() == Response.INVALID_EVENT_ID) {
-                        adapter.showEventError(imageId, true);
-                        adapter.setImageLoadingStatus(imageId, Image.DEFAULT);
-                    }
-                    else if (status.getStatus() == Response.ERROR) {
-                        adapter.setImageLoadingStatus(imageId, Image.ERROR);
-                    }
-
-                });
-
+                    });
+                }
+            } else {
+                SafeToast.makeText(getContext(), "No drawing(s) selected", Toast.LENGTH_LONG);
             }
-
         });
 
     }
 
     private void onDeleteButtonClick(ImageAdapter adapter, UploadViewModel uploadViewModel) {
         binding.deleteButton.setOnClickListener(button -> {
-            showDialog(R.layout.dialog_confirm_delete, adapter, uploadViewModel);
+            if (adapter.getSelectedImages().getValue().size() > 0) {
+                showDialog(R.layout.dialog_confirm_delete, adapter, uploadViewModel);
+            } else {
+                SafeToast.makeText(getContext(), "No drawing(s) selected", Toast.LENGTH_LONG);
+            }
         });
     }
 
@@ -162,8 +168,7 @@ public class UploadFragment extends Fragment {
         return builder.create();
     }
 
-    private void showDialog(int layout, ImageAdapter adapter, UploadViewModel uploadViewModel) {
-
+    private void showDialog(int layout, ImageAdapter adapter, UploadViewModel uploadViewModel) { ;
         dialog = createDialog(layout);
 
         // make background transparent
@@ -178,17 +183,13 @@ public class UploadFragment extends Fragment {
 
         // register on confirm listener
         dialog.findViewById(R.id.positive_button).setOnClickListener(button -> {
-
             uploadViewModel.deleteImages(Objects.requireNonNull(adapter.getSelectedImages().getValue()));
-
+            ArrayList<Integer> Selected = adapter.getSelectedImages().getValue();
             for (int id : adapter.getSelectedImages().getValue()) {
-                adapter.removeImage(id);
+                adapter.removeImage(0);
             }
 
-            dialog.cancel();
-
+            dialog.dismiss();
         });
-
     }
-
 }
