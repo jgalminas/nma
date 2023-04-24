@@ -4,11 +4,11 @@ import H2Heading from '../../components/H2Heading';
 import PrimaryButton from '../../components/PrimaryButton';
 import TextAreaInput from '../../components/TextAreaInput';
 import TextButton from '../../components/TextButton';
-import { ScoreState, ScoreStateAction, ScoreStateActionType } from './Scoring';
+import { ScoreStateAction, ScoreStateActionType, TopicState } from './Scoring';
 import ScoreSelector from './ScoreSelector';
 
 export interface ScorePanelProps {
-	scores: ScoreState,
+	scores: TopicState[],
 	section: number,
 	setSection: (num: number) => void,
 	dispatch: React.Dispatch<ScoreStateAction>,
@@ -17,7 +17,7 @@ export interface ScorePanelProps {
 
 export default function ScorePanel({ scores, dispatch, section, setSection, onSubmit }: ScorePanelProps) {
 
-	const selectedTopics = scores.topics.filter(s => s.checked === true);
+	const selectedTopics = scores.filter(s => s.checked);
 	const shouldSubmit = section === selectedTopics.length - 1;
 	const isOnBreadth = section === -1;
 	const currentTopicId = selectedTopics[section]?.topic.id;
@@ -28,7 +28,6 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 
 	// state actions
 	const onCheck = (index: number) => dispatch({ type: ScoreStateActionType.CHECK, index });
-	const onUpdateNotes = (value: string) => dispatch({ type: ScoreStateActionType.UPDATE_NOTES, value });
 	const onScoreChange = (topicId: number, value: number, type: "UPDATE_EXTENT" | "UPDATE_DEPTH") => dispatch({ type, topicId, value });
 	const onUpdateScoreNotes = (topicId: number, value: string, type: "UPDATE_EXTENT_NOTES" | "UPDATE_DEPTH_NOTES") => dispatch({ type, topicId, value });
 
@@ -42,15 +41,11 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 			{ isOnBreadth
 				? <Fragment> 
 					<div className='mt-5 flex flex-col gap-2'>
-						{ scores.topics.map((scr, key) => {
+						{ scores.map((scr, key) => {
 							return (
 								<Checkbox key={key} label={scr.topic.name} checked={scr.checked} onChange={() => onCheck(key)}/>
 							)
 						}) }
-					</div>
-				
-					<div className='my-5'>
-						<TextAreaInput label='Notes' rows={4} value={scores.notes} onChange={onUpdateNotes}/>
 					</div>
 				</Fragment>
 				: <div className='flex flex-col gap-5 mt-5'>

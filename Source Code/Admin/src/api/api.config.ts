@@ -22,13 +22,13 @@ const applyAuthorizationHeader = ([ resources, config ]: Args): Args => {
 	if (!config) {
 		config = {
 			headers: {
-				"x-api-key": import.meta.env.VITE_API_KEY
+				"x-api-key": process.env.VITE_API_KEY
 			}
 		}
 	} else {
 		config.headers = {
 			...config.headers,
-			"x-api-key": import.meta.env.VITE_API_KEY
+			"x-api-key": process.env.VITE_API_KEY
 		} 
 	}
 

@@ -24,14 +24,8 @@ export interface TopicState {
 	depthNotes: string
 }
 
-export interface ScoreState {
-	notes: string,
-	topics: TopicState[]
-}
-
 export const ScoreStateActionType = {
 	CHECK: 'CHECK',
-	UPDATE_NOTES: 'UPDATE_NOTES',
 	UPDATE_DEPTH: 'UPDATE_DEPTH',
 	UPDATE_EXTENT: 'UPDATE_EXTENT',
 	UPDATE_DEPTH_NOTES: 'UPDATE_DEPTH_NOTES',
@@ -46,57 +40,40 @@ export type ScoreStateAction =
 	| { type: "UPDATE_EXTENT_NOTES" | "UPDATE_DEPTH_NOTES", topicId: number, value: string }
 	| { type: "SET_TOPICS", topics: TopicState[] }
 
-const reducer = (state: ScoreState, action: ScoreStateAction) => {
+const reducer = (state: TopicState[], action: ScoreStateAction) => {
 	switch (action.type) {
 		case ScoreStateActionType.CHECK:
-			return {
-				...state,
-				topics: [
-					...state.topics.slice(0, action.index),
-					{ ...state.topics[action.index], checked: !state.topics[action.index].checked },
-					...state.topics.slice(action.index + 1, state.topics.length)
-				]
-			}
-		case ScoreStateActionType.UPDATE_NOTES:
-			return {
-				...state,
-				notes: action.value
-			}
+			return [
+				...state.slice(0, action.index),
+				{ ...state[action.index], checked: !state[action.index].checked },
+				...state.slice(action.index + 1, state.length)
+			]
 		case ScoreStateActionType.UPDATE_EXTENT: 
 		case ScoreStateActionType.UPDATE_DEPTH:
 
 			var score = action.type === ScoreStateActionType.UPDATE_EXTENT ? 'extent' : 'depth';	
-			var topic = state.topics.find(t => t.topic.id === action.topicId);
-			var topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
+			var topic = state.find(t => t.topic.id === action.topicId);
+			var topicIndex = (topic && state.indexOf(topic)) ?? -1;
 
-			return {
-				...state,
-				topics: [
-					...state.topics.slice(0, topicIndex),
-					{ ...state.topics[topicIndex], [score]: action.value },
-					...state.topics.slice(topicIndex + 1, state.topics.length)
-				]
-			}
+			return [
+				...state.slice(0, topicIndex),
+				{ ...state[topicIndex], [score]: action.value },
+				...state.slice(topicIndex + 1, state.length)
+			]
 		case ScoreStateActionType.UPDATE_EXTENT_NOTES: 
 		case ScoreStateActionType.UPDATE_DEPTH_NOTES:
 
 			var scoreNotes = action.type === ScoreStateActionType.UPDATE_EXTENT_NOTES ? 'extentNotes' : 'depthNotes';	
-			var topic = state.topics.find(t => t.topic.id === action.topicId);
-			var topicIndex = (topic && state.topics.indexOf(topic)) ?? -1;
+			var topic = state.find(t => t.topic.id === action.topicId);
+			var topicIndex = (topic && state.indexOf(topic)) ?? -1;
 
-			return {
-				...state,
-				topics: [
-					...state.topics.slice(0, topicIndex),
-					{ ...state.topics[topicIndex], [scoreNotes]: action.value },
-					...state.topics.slice(topicIndex + 1, state.topics.length)
-				]
-			}
+			return [
+				...state.slice(0, topicIndex),
+				{ ...state[topicIndex], [scoreNotes]: action.value },
+				...state.slice(topicIndex + 1, state.length)
+			]
 		case ScoreStateActionType.SET_TOPICS:
-			return {
-				...state,
-				topics: action.topics
-			}
+			return action.topics;
 		default:
 			return state;
 	}
@@ -109,10 +86,7 @@ export default function Scoring() {
 	const navigate = useNavigate();
 	const queryClient = useQueryClient();
 
-	const [scores, dispatch] = useReducer(reducer, {
-		notes: '',
-		topics: []
-	});
+	const [scores, dispatch] = useReducer(reducer, []);
 
 	const { id } = useParams();
 	const { data: drawing } = useQuery({
@@ -153,7 +127,7 @@ export default function Scoring() {
 		mutation.mutate({
 			scorerId: user?.id ?? -1,
 			drawingId: drawing?.id ?? -1,
-			topicScores: scores.topics.filter((t) => t.checked).map(t => {
+			topicScores: scores.filter((t) => t.checked).map(t => {
 				return {
 					topicId:t.topic.id,
 					extent: t.extent,
