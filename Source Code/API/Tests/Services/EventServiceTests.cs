@@ -30,9 +30,9 @@ namespace Tests
             _context.Database.EnsureCreated();
 
             _context.AddRange(
-                new Event { EventId = 1, EventName = "Event 1" },
-                new Event { EventId = 2, EventName = "Event 2" },
-                new Event { EventId = 3, EventName = "Event 3" },
+                new Event { EventId = 1, EventName = "Event 1", LocationId = 1 },
+                new Event { EventId = 2, EventName = "Event 2", LocationId = 1 },
+                new Event { EventId = 3, EventName = "Event 3", LocationId = 1 },
 
                 new Location { LocationId = 1, LocationName = "Location 1" },
                 new Location { LocationId = 2, LocationName = "Location 2" }
@@ -55,7 +55,7 @@ namespace Tests
         public async Task GetEventByIdOk()
         {
             var ev = await _eventService.GetEventByIdAsync(2);
-            Assert.AreEqual(ev.EventName, "Event 2");
+            Assert.AreEqual("Event 2", ev.EventName);
         }
 
         [TestMethod]
@@ -69,9 +69,9 @@ namespace Tests
         [TestMethod]
         public async Task GetEventsOk()
         {
-            var evs = await _eventService.GetEventsAsync();
-            Assert.AreEqual(evs.Length, 3);
-            Assert.AreEqual(evs[1].EventId, 2);
+            var evs = await _eventService.GetEventsAsync(0, 20);
+            Assert.AreEqual(3, evs.Length);
+            Assert.AreEqual(2, evs[1].EventId);
         }
 
         // GetEventCountAsync
@@ -79,7 +79,7 @@ namespace Tests
         [TestMethod]
         public async Task GetEventCountOk()
         {
-            Assert.AreEqual(await _eventService.GetEventCountAsync(), 3);
+            Assert.AreEqual(3, await _eventService.GetEventCountAsync());
         }
 
         // CreateEventAsync
@@ -93,10 +93,10 @@ namespace Tests
                 EventName = "Event X",
             };
             var id = await _eventService.CreateEventAsync(dto);
-            Assert.AreEqual(id, 4);
+            Assert.AreEqual(4, id);
 
             var ev = await _eventService.GetEventByIdAsync(id);
-            Assert.AreEqual(ev.EventName, "Event X");
+            Assert.AreEqual("Event X", ev.EventName);
         }
 
         [TestMethod]
@@ -119,8 +119,8 @@ namespace Tests
             await _eventService.UpdateEventAsync(1, dto);
 
             var ev = await _eventService.GetEventByIdAsync(1);
-            Assert.AreEqual(ev.LocationId, 2);
-            Assert.AreEqual(ev.EventName, "New name");
+            Assert.AreEqual(2, ev.Location.Id);
+            Assert.AreEqual("New name", ev.EventName);
         }
 
         [TestMethod]
@@ -134,7 +134,7 @@ namespace Tests
         [TestMethod]
         public async Task DeleteEventOk()
         {
-            Assert.AreEqual((await _eventService.GetEventByIdAsync(1)).EventName, "Event 1");
+            Assert.AreEqual("Event 1", (await _eventService.GetEventByIdAsync(1)).EventName);
             await _eventService.DeleteEventAsync(1);
             await Assert.ThrowsExceptionAsync<NotFound>(() => _eventService.GetEventByIdAsync(1));
         }

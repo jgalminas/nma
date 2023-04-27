@@ -51,7 +51,7 @@ namespace Tests
         public async Task GetLocationByIdOk()
         {
             var loc = await _locationService.GetLocationByIdAsync(2);
-            Assert.AreEqual(loc.LocationName, "Location 2");
+            Assert.AreEqual("Location 2", loc.LocationName);
         }
 
         [TestMethod]
@@ -65,9 +65,9 @@ namespace Tests
         [TestMethod]
         public async Task GetLocationsOk()
         {
-            var evs = await _locationService.GetLocationsAsync();
-            Assert.AreEqual(evs.Length, 2);
-            Assert.AreEqual(evs[0].LocationId, 1);
+            var evs = await _locationService.GetLocationsAsync(0, 20);
+            Assert.AreEqual(2, evs.Length);
+            Assert.AreEqual(1, evs[0].LocationId);
         }
 
         // GetLocationCountAsync
@@ -75,7 +75,7 @@ namespace Tests
         [TestMethod]
         public async Task GetLocationCountOk()
         {
-            Assert.AreEqual(await _locationService.GetLocationCountAsync(), 2);
+            Assert.AreEqual(2, await _locationService.GetLocationCountAsync());
         }
 
         // CreateLocationAsync
@@ -85,10 +85,10 @@ namespace Tests
         {
             var dto = new LocationDTO() { LocationName = "Location X" };
             var id = await _locationService.CreateLocationAsync(dto);
-            Assert.AreEqual(id, 3);
+            Assert.AreEqual(3, id);
 
             var loc = await _locationService.GetLocationByIdAsync(id);
-            Assert.AreEqual(loc.LocationName, "Location X");
+            Assert.AreEqual("Location X", loc.LocationName);
         }
 
         // UpdateLocationAsync
@@ -100,7 +100,7 @@ namespace Tests
             await _locationService.UpdateLocationAsync(1, dto);
 
             var loc = await _locationService.GetLocationByIdAsync(1);
-            Assert.AreEqual(loc.LocationName, "New name");
+            Assert.AreEqual("New name", loc.LocationName);
         }
 
         [TestMethod]
@@ -114,7 +114,7 @@ namespace Tests
         [TestMethod]
         public async Task DeleteLocationOk()
         {
-            Assert.AreEqual((await _locationService.GetLocationByIdAsync(1)).LocationName, "Location 1");
+            Assert.AreEqual("Location 1", (await _locationService.GetLocationByIdAsync(1)).LocationName);
             await _locationService.DeleteLocationAsync(1);
             await Assert.ThrowsExceptionAsync<NotFound>(() => _locationService.GetLocationByIdAsync(1));
         }

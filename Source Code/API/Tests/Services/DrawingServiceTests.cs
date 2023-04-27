@@ -62,16 +62,16 @@ namespace Tests
         public async Task GetDrawingByIdOk()
         {
             var dr = await _drawingService.GetDrawingByIdAsync(2, false);
-            Assert.AreEqual(dr.Event.Name, "Event 2");
-            Assert.AreEqual(dr.ImageUrl, $"/api/drawing/image/file2");
+            Assert.AreEqual("Event 2", dr.Event.Name);
+            Assert.AreEqual($"/drawing/image/file2", dr.ImageUrl);
         }
 
         [TestMethod]
         public async Task GetDrawingByIdWithScoresOk()
         {
             var dr = await _drawingService.GetDrawingByIdAsync(1, true);
-            Assert.AreEqual(dr.Scores.Count, 1);
-            Assert.AreEqual(dr.Scores.ElementAt(0).ScoreId, 1);
+            Assert.AreEqual(1, dr.Scores.Count);
+            Assert.AreEqual(1, dr.Scores.ElementAt(0).ScoreId);
         }
 
         [TestMethod]
@@ -85,9 +85,9 @@ namespace Tests
         [TestMethod]
         public async Task GetDrawingsOk()
         {
-            var drs = await _drawingService.GetDrawingsAsync(999, false);
-            Assert.AreEqual(drs.Count, 2);
-            Assert.AreEqual(drs.ElementAt(1).Id, 2);
+            var drs = await _drawingService.GetDrawingsAsync(0, 20, false);
+            Assert.AreEqual(2, drs.Count);
+            Assert.AreEqual(2, drs.ElementAt(1).Id);
         }
 
         // GetDrawingCountAsync
@@ -95,7 +95,7 @@ namespace Tests
         [TestMethod]
         public async Task GetDrawingCountOk()
         {
-            Assert.AreEqual(await _drawingService.GetDrawingCountAsync(), 2);
+            Assert.AreEqual(2, await _drawingService.GetDrawingCountAsync());
         }
 
         // UploadDrawingAsync
@@ -115,7 +115,7 @@ namespace Tests
             await _drawingService.UpdateDrawingAsync(1, dto);
 
             var dr = await _drawingService.GetDrawingByIdAsync(1, false);
-            Assert.AreEqual(dr.DrawersName, "New name");
+            Assert.AreEqual("New name", dr.DrawersName);
         }
 
         [TestMethod]
