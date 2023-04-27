@@ -1,5 +1,4 @@
 export const BASE_URL = 'http://localhost:5000/api';
-export const API_KEY_HEADER = '';
 
 const { fetch: _fetch } = window;
 

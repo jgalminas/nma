@@ -2,7 +2,7 @@
 
 This part of the project contains code related to the admin portal application.
 
-It is built using [Electron](https://www.electronjs.org/docs/latest/), [TypeScript](https://www.typescriptlang.org/), [React](https://beta.reactjs.org/) and [Tailwind](https://tailwindcss.com/).
+It was built using [Electron](https://www.electronjs.org/docs/latest/), [TypeScript](https://www.typescriptlang.org/), [React](https://beta.reactjs.org/) and [Tailwind](https://tailwindcss.com/).
 
 ## Running the project
 
