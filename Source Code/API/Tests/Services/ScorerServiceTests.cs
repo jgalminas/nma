@@ -30,13 +30,6 @@ namespace Tests
             _context.Database.EnsureCreated();
 
             _context.AddRange(
-                // new Event { EventId = 1, EventName = "Event 1", LocationId = 1 },
-                // new Event { EventId = 2, EventName = "Event 2", LocationId = 1 },
-                // new Event { EventId = 3, EventName = "Event 3", LocationId = 1 },
-
-                // new Location { LocationId = 1, LocationName = "Location 1" },
-                // new Location { LocationId = 2, LocationName = "Location 2" }
-
                 new Scorer{ ScorerId = 1, Username = "Scorer 1" },
                 new Scorer{ ScorerId = 2, Username = "Scorer 2" }
             );

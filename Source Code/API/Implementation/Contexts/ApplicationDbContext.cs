@@ -73,6 +73,18 @@ namespace API.Contexts
             }
         }
 
+        public async Task<Score?> FindScoreAsync(int id)
+        {
+            try
+            {
+                return await Scores.Where(x => x.ScoreId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Drawing>(entity =>

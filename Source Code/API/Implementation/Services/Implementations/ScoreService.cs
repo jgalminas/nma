@@ -24,7 +24,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         public async Task<Score> GetScoreByIdAsync(int id)
         {
-            if (await _db.Scores.FindAsync(id) is Score sc)
+            if (await _db.FindScoreAsync(id) is Score sc)
             {
                 return sc;
             }
@@ -62,15 +62,20 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task<int> CreateScoreAsync(ScoreNewDTO data)
         {
-
-            if (await _db.Drawings.FindAsync(data.DrawingId) == null)
+            if (data.DrawingId is int did)
             {
-                throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
+                if (await _db.FindDrawingAsync(did) == null)
+                {
+                    throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
+                }
             }
 
-            if (await _db.Scorers.FindAsync(data.ScorerId) == null)
+            if (data.ScorerId is int sid)
             {
-                throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
+                if (await _db.FindScorerAsync(sid) == null)
+                {
+                    throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
+                }
             }
 
             var score = new Score()
@@ -125,7 +130,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task UpdateScoreAsync(int id, ScoreNewDTO data)
         {
-            if (await _db.Scores.FindAsync(id) is Score sc)
+            if (await _db.FindScoreAsync(id) is Score sc)
             {
                 foreach (TopicScoreNewDTO ts_data in data.TopicScores)
                 {
@@ -140,6 +145,22 @@ namespace API.Services.Implementations
                     else
                     {
                         throw new NotFound($"TopicScore with id {ts_data.TopicScoreId} doesn't exist");
+                    }
+                }
+
+                if (data.DrawingId is int did)
+                {
+                    if (await _db.FindDrawingAsync(did) == null)
+                    {
+                        throw new NotFound($"Drawing with id {data.DrawingId} doesn't exist");
+                    }
+                }
+
+                if (data.ScorerId is int sid)
+                {
+                    if (await _db.FindScorerAsync(sid) == null)
+                    {
+                        throw new NotFound($"Scorer with id {data.ScorerId} doesn't exist");
                     }
                 }
 
@@ -170,7 +191,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task DeleteScoreAsync(int id) 
         {
-            if (await _db.Scores.FindAsync(id) is Score sc)
+            if (await _db.FindScoreAsync(id) is Score sc)
             {
 
                 sc.IsDeleted = true;
