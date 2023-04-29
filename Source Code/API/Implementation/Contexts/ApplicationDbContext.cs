@@ -85,6 +85,30 @@ namespace API.Contexts
             }
         }
 
+        public async Task<Topic?> FindTopicAsync(int id)
+        {
+            try
+            {
+                return await Topics.Where(x => x.TopicId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        public async Task<TopicScore?> FindTopicScoreAsync(int id)
+        {
+            try
+            {
+                return await TopicScores.Where(x => x.TopicScoreId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Drawing>(entity =>

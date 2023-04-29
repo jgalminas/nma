@@ -159,7 +159,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task DeleteEventAsync(int id)
         {
-            if (await _db.Events.FindAsync(id) is Event ev)
+            if (await _db.FindEventAsync(id) is Event ev)
             {
 
                 ev.IsDeleted = true;

@@ -89,7 +89,7 @@ namespace API.Services.Implementations
 
             foreach (TopicScoreNewDTO ts in data.TopicScores)
             {
-                if (await _db.Topics.FindAsync(ts.TopicId) == null)
+                if (await _db.FindTopicAsync(ts.TopicId) == null)
                 {
                     throw new NotFound($"Topic with id {ts.TopicId} doesn't exist");
                 }
@@ -134,7 +134,7 @@ namespace API.Services.Implementations
             {
                 foreach (TopicScoreNewDTO ts_data in data.TopicScores)
                 {
-                    if (await _db.TopicScores.FindAsync(ts_data.TopicScoreId) is TopicScore ts)
+                    if (await _db.FindTopicScoreAsync(ts_data.TopicScoreId) is TopicScore ts)
                     {
                         ts.TopicId = ts_data.TopicId;
                         ts.Depth = ts_data.Depth;
