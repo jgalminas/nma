@@ -22,7 +22,7 @@ namespace API.Services.Implementations
         /// <returns></returns>
         private IQueryable<EventDTO> SelectEvent()
         {
-            return _db.Events.Select(e => new EventDTO()
+            return _db.Events.Where(e => !e.IsDeleted).Select(e => new EventDTO()
             {
                 EventId = e.EventId,
                 EventName = e.EventName,
@@ -61,7 +61,8 @@ namespace API.Services.Implementations
         /// <returns> An array of event object </returns>
         public async Task<EventDTO[]> GetEventsAsync(int page, int count)
         {
-            return await _db.Events.Where(e => !e.IsDeleted)
+            return await _db.Events
+                .Where(e => !e.IsDeleted)
                 .Select(e => new EventDTO()
                 {
                     EventId = e.EventId,
@@ -89,7 +90,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task<int> CreateEventAsync(EventNewDTO data)
         {
-            if (await _db.Locations.FindAsync(data.LocationId) is Location location)
+            if (await _db.FindLocationAsync(data.LocationId) is Location location)
             {
                 var ev = new Event()
                 {
@@ -127,7 +128,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task UpdateEventAsync(int id, EventUpdateDTO data)
         {
-            if (await _db.Events.FindAsync(id) is Event ev)
+            if (await _db.FindEventAsync(id) is Event ev)
             {
                 ev.LocationId = data.LocationId;
                 ev.EventName = data.EventName;

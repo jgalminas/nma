@@ -19,7 +19,7 @@ namespace API.Services.Implementations
 
         private IQueryable<DrawingDTO> GetDrawing()
         {
-            return _db.Drawings.Select(d => new DrawingDTO()
+            return _db.Drawings.Where(d => !d.IsDeleted).Select(d => new DrawingDTO()
             {
                 // map drawing data
                 Id = d.DrawingId,
@@ -37,7 +37,7 @@ namespace API.Services.Implementations
         }
         private IQueryable<DrawingDTO> GetDrawingWithScores()
         {
-            return _db.Drawings.Select(d => new DrawingDTO()
+            return _db.Drawings.Where(d => !d.IsDeleted).Select(d => new DrawingDTO()
             {
                 // map drawing data
                 Id = d.DrawingId,
@@ -92,7 +92,7 @@ namespace API.Services.Implementations
         public async Task DeleteDrawingAsync(int id)
         {
 
-            var drawing = await _db.Drawings.FindAsync(id);
+            var drawing = await _db.FindDrawingAsync(id);
 
             if (drawing == null)
             {
@@ -190,7 +190,7 @@ namespace API.Services.Implementations
         public async Task UpdateDrawingAsync(int id, DrawingUpdateDTO data)
         {
 
-            var drawing = await _db.Drawings.FindAsync(id);
+            var drawing = await _db.FindDrawingAsync(id);
 
             if (drawing == null)
             {
@@ -201,15 +201,15 @@ namespace API.Services.Implementations
             drawing.DrawersAge = data.DrawersAge;
             drawing.EventId = data.EventId;
 
-            try
+            if (data.EventId is int eid)
             {
-                await _db.SaveChangesAsync();
-            }
-            catch (ReferenceConstraintException)
-            {
-                throw new NotFound($"Event with id {data.EventId} doesn't exist");
+                if (await _db.FindEventAsync(eid) == null)
+                {
+                    throw new NotFound($"Event with id {data.EventId} doesn't exist");
+                }
             }
 
+            await _db.SaveChangesAsync();
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace API.Services.Implementations
         {
 
             // check if event with specified ID exists
-            var drawingEvent = await _db.Events.FindAsync(data.EventId);
+            var drawingEvent = await _db.FindEventAsync(data.EventId);
 
             if (drawingEvent == null)
             {

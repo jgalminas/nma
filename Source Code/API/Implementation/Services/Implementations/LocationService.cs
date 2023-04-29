@@ -24,7 +24,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         public async Task<Location> GetLocationByIdAsync(int id)
         {
-            if (await _db.Locations.FindAsync(id) is Location loc)
+            if (await _db.FindLocationAsync(id) is Location loc)
             {
                 return loc;
             }
@@ -94,7 +94,7 @@ namespace API.Services.Implementations
         /// <exception cref="ServerError"></exception>
         public async Task UpdateLocationAsync(int id, LocationDTO data)
         {
-            if (await _db.Locations.FindAsync(id) is Location loc)
+            if (await _db.FindLocationAsync(id) is Location loc)
             {
                 loc.Country = data.Country;
                 loc.City = data.City;

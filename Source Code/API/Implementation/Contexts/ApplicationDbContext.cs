@@ -25,6 +25,42 @@ namespace API.Contexts
         public virtual DbSet<Topic> Topics { get; set; } = null!;
         public virtual DbSet<TopicScore> TopicScores { get; set; } = null!;
 
+        public async Task<Drawing?> FindDrawingAsync(int id)
+        {
+            try
+            {
+                return await Drawings.Where(x => x.DrawingId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        public async Task<Event?> FindEventAsync(int id)
+        {
+            try
+            {
+                return await Events.Where(x => x.EventId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
+        public async Task<Location?> FindLocationAsync(int id)
+        {
+            try
+            {
+                return await Locations.Where(x => x.LocationId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Drawing>(entity =>
