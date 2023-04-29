@@ -61,6 +61,18 @@ namespace API.Contexts
             }
         }
 
+        public async Task<Scorer?> FindScorerAsync(int id)
+        {
+            try
+            {
+                return await Scorers.Where(x => x.ScorerId == id && !x.IsDeleted).FirstAsync();
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+        }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Drawing>(entity =>

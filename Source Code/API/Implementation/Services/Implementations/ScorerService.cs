@@ -41,7 +41,7 @@ namespace API.Services.Implementations
 
         public async Task DeleteScorerByIdAsync(int id)
         {
-            if (await _db.Scorers.FindAsync(id) is Scorer scorer)
+            if (await _db.FindScorerAsync(id) is Scorer scorer)
             {
 
                 scorer.IsDeleted = true;
@@ -63,7 +63,7 @@ namespace API.Services.Implementations
 
         public async Task<Scorer> GetScorerByIdAsync(int id)
         {
-            if (await _db.Scorers.FindAsync(id) is Scorer scorer)
+            if (await _db.FindScorerAsync(id) is Scorer scorer)
             {
                 return scorer;
             }
@@ -80,7 +80,7 @@ namespace API.Services.Implementations
 
         public async Task UpdateScorerAsync(int id, string username)
         {
-            if (await _db.Scorers.FindAsync(id) is Scorer scorer)
+            if (await _db.FindScorerAsync(id) is Scorer scorer)
             {
 
                 scorer.Username = username;
