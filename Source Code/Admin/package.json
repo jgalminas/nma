@@ -9,7 +9,8 @@
     "start": "vite",
     "build": "tsc && vite build && electron-builder",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest",
+    "test:coverage": "jest --coverage"
   },
   "debug": {
     "env": {

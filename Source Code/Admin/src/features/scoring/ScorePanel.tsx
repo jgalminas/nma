@@ -4,8 +4,9 @@ import H2Heading from '../../components/H2Heading';
 import PrimaryButton from '../../components/PrimaryButton';
 import TextAreaInput from '../../components/TextAreaInput';
 import TextButton from '../../components/TextButton';
-import { ScoreStateAction, ScoreStateActionType, TopicState } from './Scoring';
+import { TopicState } from './Scoring';
 import ScoreSelector from './ScoreSelector';
+import { ScoreStateAction, ScoreStateActionType } from './topicState.reducer';
 
 export interface ScorePanelProps {
 	scores: TopicState[],
@@ -49,10 +50,10 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 					</div>
 				</Fragment>
 				: <div className='flex flex-col gap-5 mt-5'>
-					<ScoreSelector label='Depth' value={selectedTopics[section].depth} onChange={(value) => onScoreChange(currentTopicId, value, "UPDATE_DEPTH")}/>
-					<TextAreaInput label='Depth Notes' rows={4} value={selectedTopics[section].depthNotes} onChange={(value) => onUpdateScoreNotes(currentTopicId, value, "UPDATE_DEPTH_NOTES")}/>
 					<ScoreSelector label='Extent' value={selectedTopics[section].extent} withInput onChange={(value) => onScoreChange(currentTopicId, value, "UPDATE_EXTENT")}/>
 					<TextAreaInput label='Extent Notes' rows={4} value={selectedTopics[section].extentNotes} onChange={(value) => onUpdateScoreNotes(currentTopicId, value, "UPDATE_EXTENT_NOTES")}/>
+					<ScoreSelector label='Depth' value={selectedTopics[section].depth} onChange={(value) => onScoreChange(currentTopicId, value, "UPDATE_DEPTH")}/>
+					<TextAreaInput label='Depth Notes' rows={4} value={selectedTopics[section].depthNotes} onChange={(value) => onUpdateScoreNotes(currentTopicId, value, "UPDATE_DEPTH_NOTES")}/>
 				</div>
 			}
 
