@@ -44,11 +44,11 @@ import retrofit2.Response;
 public class DrawingFragment extends Fragment {
 
     private SharedViewModel sharedViewModel;
-    public FragmentDrawingBinding binding;
+    private FragmentDrawingBinding binding;
 
     private Dialog dialog;
 
-    private RadioGroup colorSelection;
+    public RadioGroup colorSelection;
     private RadioGroup drawTypeSelection;
     private RadioGroup strokeWidthSelection;
 
