@@ -90,8 +90,6 @@ namespace API.Contexts
             {
                 entity.ToTable("Score");
 
-                entity.Property(e => e.Notes).HasMaxLength(255);
-
                 entity.Property(e => e.ScoredAt)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");

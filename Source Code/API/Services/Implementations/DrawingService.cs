@@ -31,7 +31,7 @@ namespace API.Services.Implementations
                 CreatedAt = d.CreatedAt,
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
-                isScored = d.Scores.Count != 0,
+                isScored = d.Scores.Where(s => !s.IsDeleted).Count() != 0,
                 ImageUrl = $"/drawing/image/{d.FileId}"
             });
         }
@@ -50,16 +50,15 @@ namespace API.Services.Implementations
                 DrawersAge = d.DrawersAge,
                 DrawersName = d.DrawersName,
                 ImageUrl = $"/drawing/image/{d.FileId}",
-                isScored = d.Scores.Count != 0,
+                isScored = d.Scores.Where(s => !s.IsDeleted).Count() != 0,
 
                 // map score data
-                Scores = d.Scores.Select(s => new ScoreDTO()
+                Scores = d.Scores.Where(s => !s.IsDeleted).Select(s => new ScoreDTO()
                 {
                     ScoreId = s.ScoreId,
                     Breadth = s.TopicScores.Count(),
                     ScoredAt = s.ScoredAt,
                     ScoredBy = s.Scorer.Username ?? string.Empty,
-                    Notes = s.Notes,
 
                     //map scores for each topic
                     TopicScores = s.TopicScores.Select(ts => new TopicScoreDTO()
@@ -67,7 +66,9 @@ namespace API.Services.Implementations
                         TopicScoreId = ts.TopicScoreId,
                         TopicName = ts.Topic.TopicName,
                         Depth = ts.Depth,
-                        Extent = ts.Extent
+                        Extent = ts.Extent,
+                        DepthNotes = ts.DepthNotes,
+                        ExtentNotes = ts.ExtentNotes
                     }).ToArray()
 
                 }).ToArray()
@@ -91,7 +92,6 @@ namespace API.Services.Implementations
         public async Task DeleteDrawingAsync(int id)
         {
 
-            // get drawing
             var drawing = await _db.Drawings.FindAsync(id);
 
             if (drawing == null)
@@ -99,19 +99,7 @@ namespace API.Services.Implementations
                 throw new NotFound($"Drawing with id {id} doesn't exist");
             }
 
-            // delete image from Backblaze S2
-            var response = await _storageClient.Files.DeleteAsync(
-                    drawing.FileId,
-                    $"{drawing.FileName}.{drawing.FileExt}"
-                );
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new ServerError();
-            }
-
-            // delete drawing record from database
-            _db.Drawings.Remove(drawing);
+            drawing.IsDeleted = true;
 
             try
             {
@@ -132,7 +120,7 @@ namespace API.Services.Implementations
         /// <exception cref="NotFound"></exception>
         /// <exception cref="ServerError"></exception>
         /// <exception cref="BadRequest"></exception>
-        public async Task<DrawingStreamDTO> GetDrawingByIdAsync(string fileId)
+        public async Task<DrawingStreamDTO> GetFileById(string fileId)
         {
 
             var stream = new MemoryStream();
@@ -170,7 +158,8 @@ namespace API.Services.Implementations
             if (!withScores)
             {
                 drawing = await GetDrawing().FirstOrDefaultAsync(d => d.Id == id);
-            } else
+            }
+            else
             {
                 drawing = await GetDrawingWithScores().FirstOrDefaultAsync(d => d.Id == id);
             }
@@ -189,7 +178,7 @@ namespace API.Services.Implementations
         /// <returns> numer of drawings </returns>
         public async Task<int> GetDrawingCountAsync()
         {
-            return await _db.Drawings.CountAsync();
+            return await _db.Drawings.Where(d => !d.IsDeleted).CountAsync();
         }
 
         /// <summary>
@@ -297,7 +286,8 @@ namespace API.Services.Implementations
             if (unscoredOnly)
             {
                 return await _db.Drawings
-                    .Where(d => !d.Scores.Any())
+                    .Where(d => !d.IsDeleted)
+                    .Where(d => !d.Scores.Any(s => !s.IsDeleted))
                     .Select(d => new DrawingDTO()
                     {
                         // map drawing data
@@ -310,19 +300,58 @@ namespace API.Services.Implementations
                         CreatedAt = d.CreatedAt,
                         DrawersAge = d.DrawersAge,
                         DrawersName = d.DrawersName,
-                        ImageUrl = $"/api/drawing/image/{d.FileId}",
+                        ImageUrl = $"/drawing/image/{d.FileId}",
                     })
                     .Skip(page * count)
                     .Take(count)
                     .ToArrayAsync();
-            } else
+            }
+            else
             {
-                return await GetDrawing()
+                return await _db.Drawings
+                    .Where(d => !d.IsDeleted)
+                    .Select(d => new DrawingDTO()
+                    {   
+                        // map drawing data
+                        Id = d.DrawingId,
+                        Event = new EventIdNameDTO()
+                        {
+                            Id = d.EventId,
+                            Name = d.Event.EventName ?? string.Empty
+                        },
+                        CreatedAt = d.CreatedAt,
+                        DrawersAge = d.DrawersAge,
+                        DrawersName = d.DrawersName,
+                        isScored = d.Scores.Where(d => !d.IsDeleted).Count() != 0,
+                        ImageUrl = $"/drawing/image/{d.FileId}"
+                    })
                     .Skip(page * count)
                     .Take(count)
                     .ToArrayAsync();
             }
 
         }
+
+        public async Task<DrawingDTO> GetFirstUnscoredDrawing()
+        {
+            return await _db.Drawings
+                    .Where(d => d.IsDeleted == false)
+                    .Where(d => !d.Scores.Any(s => !s.IsDeleted))
+                    .Select(d => new DrawingDTO()
+                    {
+                        // map drawing data
+                        Id = d.DrawingId,
+                        Event = new EventIdNameDTO()
+                        {
+                            Id = d.EventId,
+                            Name = d.Event.EventName ?? string.Empty,
+                        },
+                        CreatedAt = d.CreatedAt,
+                        DrawersAge = d.DrawersAge,
+                        DrawersName = d.DrawersName,
+                        ImageUrl = $"/drawing/image/{d.FileId}",
+                    }).FirstAsync();
+        }
+
     }
 }

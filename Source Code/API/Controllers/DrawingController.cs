@@ -92,7 +92,7 @@ namespace API.Controllers
         {
             try
             {
-                DrawingStreamDTO drawing = await _drawingService.GetDrawingByIdAsync(fileId);
+                DrawingStreamDTO drawing = await _drawingService.GetFileById(fileId);
                 return new FileStreamResult(drawing.Stream, drawing.ContentType);
             }
             catch (NotFound e)
@@ -197,6 +197,23 @@ namespace API.Controllers
             {
                 return Ok(
                     await _drawingService.GetDrawingsAsync(page, count, unscoredOnly)
+                    );
+
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, new GenericResponse() { Message = e.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("First-Unscored")]
+        public async Task<IActionResult> GetFirstUnscoredDrawing()
+        {
+            try
+            {
+                return Ok(
+                    await _drawingService.GetFirstUnscoredDrawing()
                     );
 
             }
