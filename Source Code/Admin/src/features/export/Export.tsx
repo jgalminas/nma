@@ -1,7 +1,7 @@
 export default function Export() {
 	return (
 		<div>
-			Export Data View
+			To be implemented...
 		</div>
 	)
 }

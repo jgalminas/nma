@@ -5,13 +5,16 @@ import Image from '../../components/Image';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchDrawingById, fetchImage } from '../../api/sharedDrawing.api';
 import H2Heading from '../../components/H2Heading';
-import { useReducer, useState } from 'react';
+import { Fragment, useReducer, useState } from 'react';
 import ScorePanel from './ScorePanel';
 import { CreateScore } from '../../admin.types';
 import { createScore, fetchTopics } from './scoring.api';
 import { useUser } from '../../contexts/UserContext';
 import { fetchFirstUnscoredDrawing } from '../../api/sharedDrawing.api';
 import { ScoreStateActionType, topicStateReducer as reducer } from './topicState.reducer';
+import LinkPrimaryButton from '../../components/LinkPrimaryButton';
+import LinkTextButton from '../../components/LinkTextButton';
+import TextButton from '../../components/TextButton';
 
 export interface TopicState {
 	checked: boolean,
@@ -105,18 +108,25 @@ export default function Scoring() {
 
 			<div className='xl:flex mt-7 bg-white flex-grow rounded-md border-gray-200 border overflow-x-auto'>
 				
-				<div className='flex-grow px-7 pt-7 xl:p-7'>
+				{ drawing ?
+					<Fragment>
+						<div className='flex-grow px-7 pt-7 xl:p-7'>
 
-				<H2Heading> Drawing </H2Heading>
-				<h3 className='text-lg text-gray-600 mb-5'> { id } </h3>
-				
-				<Image isLoading={isImageLoading} url={image}/>
-				</div>
+						<H2Heading> Drawing </H2Heading>
+						<h3 className='text-lg text-gray-600 mb-5'> { id } </h3>
 
-				<div className='xl:h-[90%] xl:border-l border-gray-200 self-center'/>
+						<Image isLoading={isImageLoading} url={image}/>
+						</div>
 
-				<ScorePanel {...scoreSelectorProps}/>
+						<div className='xl:h-[90%] xl:border-l border-gray-200 self-center'/>
 
+						<ScorePanel {...scoreSelectorProps}/>
+					</Fragment>
+					: <div className='p-5 w-full h-full flex flex-col justify-center items-center gap-3'>
+						<p className='text-gray-500'> No unscored drawings found. </p>
+						<TextButton onClick={() => navigate(-1)}> Navigate Back </TextButton>
+					</div>
+				}
 
 			</div>
 

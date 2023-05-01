@@ -11,6 +11,6 @@ namespace API.Services.Interfaces
         Task<DrawingDTO> GetDrawingByIdAsync(int id, bool withScores);
         Task<int> GetDrawingCountAsync();
         Task<ICollection<DrawingDTO>> GetDrawingsAsync(int page, int count, bool unscoredOnly);
-        Task<DrawingDTO> GetFirstUnscoredDrawing();
+        Task<DrawingDTO?> GetFirstUnscoredDrawing();
     }
 }
