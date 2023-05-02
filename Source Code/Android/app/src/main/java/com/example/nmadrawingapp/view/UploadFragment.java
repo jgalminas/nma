@@ -178,15 +178,15 @@ public class UploadFragment extends Fragment {
 
         // register on cancel listener
         dialog.findViewById(R.id.negative_button).setOnClickListener(button -> {
-            dialog.cancel();
+            dialog.dismiss();
         });
 
         // register on confirm listener
         dialog.findViewById(R.id.positive_button).setOnClickListener(button -> {
-            uploadViewModel.deleteImages(Objects.requireNonNull(adapter.getSelectedImages().getValue()));
-            ArrayList<Integer> Selected = adapter.getSelectedImages().getValue();
-            for (int id : adapter.getSelectedImages().getValue()) {
-                adapter.removeImage(0);
+            ArrayList<Integer> selected = Objects.requireNonNull(adapter.getSelectedImages().getValue());
+            uploadViewModel.deleteImages(selected);
+            for (int id : selected) {
+                adapter.removeImage(id);
             }
 
             dialog.dismiss();
