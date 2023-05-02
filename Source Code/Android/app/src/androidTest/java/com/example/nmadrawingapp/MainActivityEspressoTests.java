@@ -35,6 +35,7 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.example.nmadrawingapp.view.DrawingFragment;
 import com.example.nmadrawingapp.view.components.CanvasView;
 
 import org.hamcrest.Description;
@@ -46,6 +47,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 
+// These tests require an emulator/device
 @LargeTest
 public class MainActivityEspressoTests { // Test all canvas functionality. Simulates user interaction.
 
@@ -181,18 +183,8 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
 
         @Override
         protected boolean matchesSafely(View view) {
-            byte[] bytes = ((CanvasView) view).getImageBytes();
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inMutable = true;
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-            int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
-            bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-            for (int pixel : pixels) {
-                if (pixel != 0) {
-                    return true;
-                }
-            }
-            return false;
+            DrawingFragment drawingFragment = new DrawingFragment();
+            return drawingFragment.canvasHasContent();
         }
 
         @Override
@@ -202,7 +194,7 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
     }
 
     @Test
-    public void strokeChange() { // Test all strokes
+    public void strokeChange() { // Test all strokes. Warning: Strokes may be hidden on small displays. Test will fail.
         class Stroke
         {
             public float width;
@@ -212,18 +204,19 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
                 width = Width;
             }
         }
-        ArrayList<Stroke> strokes = new ArrayList<Stroke>();
+        startEvent();
+        ArrayList<Stroke> strokes = new ArrayList<>();
         strokes.add(new Stroke( R.id.radioButtonThinnestStroke, 3));
         strokes.add(new Stroke( R.id.radioButtonThinStroke, 6));
         strokes.add(new Stroke( R.id.radioButtonMediumStroke, 9));
         strokes.add(new Stroke( R.id.radioButtonThickStroke, 12));
         strokes.add(new Stroke( R.id.radioButtonThickestStroke, 15));
-        startEvent();
         for (Stroke s : strokes) {
-            ViewInteraction materialRadioButton = onView(withId(s.id));
-            materialRadioButton.perform(click());
+            System.out.println(s.id);
+            ViewInteraction strokeButton = onView(withId(s.id));
+            strokeButton.perform(click());
             ViewInteraction canvasView = onView(withId(R.id.canvas));
-            canvasView.check(matches(new strokeChangedMatcher(s.width))); // Check if colour was changed to red
+            canvasView.check(matches(new strokeChangedMatcher(s.width))); // Check if width was changed
         }
     }
 
@@ -266,7 +259,7 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
         appCompatImageButton.perform(click());
         ViewInteraction materialButton2 = onView(withId(R.id.positive_button));
         materialButton2.perform(click());
-        // recyclerView.check(matches(isDisplayed()));
+        recyclerView.check(matches(isDisplayed()));
     }
 
     @Test
