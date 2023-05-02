@@ -35,7 +35,6 @@ import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.filters.LargeTest;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.example.nmadrawingapp.view.DrawingFragment;
 import com.example.nmadrawingapp.view.components.CanvasView;
 
 import org.hamcrest.Description;
@@ -182,9 +181,16 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
     private class CanvasEmptyMatcher extends TypeSafeMatcher<View> {
 
         @Override
-        protected boolean matchesSafely(View view) {
-            DrawingFragment drawingFragment = new DrawingFragment();
-            return drawingFragment.canvasHasContent();
+        protected boolean matchesSafely(View view) { // Check canvas content manually. Slower but accounts for error
+            byte[] bytes = ((CanvasView) view).getImageBytes();
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inMutable = true;
+            Bitmap canvasBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+            Bitmap emptyBitmap = Bitmap.createBitmap(canvasBitmap.getWidth(), canvasBitmap.getHeight(), canvasBitmap.getConfig());
+            if (canvasBitmap.sameAs(emptyBitmap)) {
+                return true;
+            }
+            return false;
         }
 
         @Override
