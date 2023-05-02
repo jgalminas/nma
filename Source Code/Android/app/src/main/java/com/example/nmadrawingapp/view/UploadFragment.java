@@ -98,6 +98,8 @@ public class UploadFragment extends Fragment {
         adapter.getSelectedImages().observe(getViewLifecycleOwner(), images -> {
             if (adapter.getItemCount() > 0) {
                 binding.selected.setText(getString(R.string.drawings_selected, images.size(), adapter.getImageCount()));
+            } else {
+                binding.selected.setText("");
             }
         });
     }
@@ -183,12 +185,12 @@ public class UploadFragment extends Fragment {
 
         // register on confirm listener
         dialog.findViewById(R.id.positive_button).setOnClickListener(button -> {
-            ArrayList<Integer> selected = Objects.requireNonNull(adapter.getSelectedImages().getValue());
-            uploadViewModel.deleteImages(selected);
-            for (int id : selected) {
+            ArrayList<Integer> selected = Objects.requireNonNull(adapter.getSelectedImages().getValue()); // Dynamically updates
+            while (selected.size() > 0) {
+                int id = selected.get(0);
                 adapter.removeImage(id);
+                uploadViewModel.deleteImage(id);
             }
-
             dialog.dismiss();
         });
     }

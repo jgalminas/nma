@@ -303,13 +303,14 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     // check if its the last view in that event, if so remove the event view as well
                     if (items.get(i - 1).getType() == ItemType.EVENT && ((items.size() - 1 == i) || items.get(i + 1).getType() == ItemType.EVENT)) {
                         items.remove(it); // remove image
-                        items.remove(i - 1); // remove event view343
+                        items.remove(i - 1); // remove event view
                         notifyItemRangeRemoved(i - 1, 2); // update recycler view
                     } else {
                         items.remove(it); // remove just image
                         notifyItemRemoved(i); // update recycler
                     }
                     removeFromSelected(imageId); // update the selected item list
+                    break;
                 }
             }
         }
