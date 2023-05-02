@@ -187,7 +187,7 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
             options.inMutable = true;
             Bitmap canvasBitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
             Bitmap emptyBitmap = Bitmap.createBitmap(canvasBitmap.getWidth(), canvasBitmap.getHeight(), canvasBitmap.getConfig());
-            if (canvasBitmap.sameAs(emptyBitmap)) {
+            if (!canvasBitmap.sameAs(emptyBitmap)) {
                 return true;
             }
             return false;
@@ -335,7 +335,7 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
 
     @Test
     public void submitDrawing() {
-        startEvent();
+        drawingTest();
         ViewInteraction appCompatButton2 = onView(
                 allOf(withId(R.id.save_drawing_button), withText("Save Your Drawing"),
                         childAtPosition(
@@ -346,34 +346,31 @@ public class MainActivityEspressoTests { // Test all canvas functionality. Simul
                                 0),
                         isDisplayed()));
         appCompatButton2.perform(click());
-
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.age_input),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.custom),
-                                        0),
-                                6),
-                        isDisplayed()));
-        appCompatEditText2.perform(replaceText("1"), closeSoftKeyboard());
-
-        ViewInteraction appCompatEditText3 = onView(
                 allOf(withId(R.id.name_input),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
                                         0),
-                                4),
+                                5),
                         isDisplayed()));
-        appCompatEditText3.perform(replaceText("Frank"), closeSoftKeyboard());
-
+        appCompatEditText2.perform(replaceText("Frank"), closeSoftKeyboard());
+        ViewInteraction appCompatEditText3 = onView(
+                allOf(withId(R.id.age_input),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.custom),
+                                        0),
+                                7),
+                        isDisplayed()));
+        appCompatEditText3.perform(replaceText("5"), closeSoftKeyboard());
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.save_button), withText("Save"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.custom),
                                         0),
-                                7),
+                                1),
                         isDisplayed()));
         materialButton.perform(click());
         pressBack(); // Return to home
