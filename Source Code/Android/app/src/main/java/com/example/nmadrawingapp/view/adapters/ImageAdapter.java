@@ -295,33 +295,24 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void removeImage(int imageId) {
-
         for (int i = 0; i < items.size(); i++) {
-
             Item it = items.get(i);
-
             if (it.getType() == ItemType.IMAGE) {
-
                 // find the image by id
                 if (it.toImage().getId() == imageId) {
-
                     // check if its the last view in that event, if so remove the event view as well
-                    if (items.get(i - 1).getType() == ItemType.EVENT && items.get(i + 1).getType() == ItemType.EVENT) {
+                    if (items.get(i - 1).getType() == ItemType.EVENT && ((items.size() - 1 == i) || items.get(i + 1).getType() == ItemType.EVENT)) {
                         items.remove(it); // remove image
-                        items.remove(i - 1); // remove event view
+                        items.remove(i - 1); // remove event view343
                         notifyItemRangeRemoved(i - 1, 2); // update recycler view
                     } else {
                         items.remove(it); // remove just image
                         notifyItemRemoved(i); // update recycler
                     }
-
                     removeFromSelected(imageId); // update the selected item list
-
                 }
-
             }
         }
-
     }
 
     private void removeFromSelected(int imageId) {
