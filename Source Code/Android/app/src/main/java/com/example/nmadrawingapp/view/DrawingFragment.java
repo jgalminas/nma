@@ -31,6 +31,7 @@ import com.example.nmadrawingapp.model.data_sources.network.RetrofitClient;
 import com.example.nmadrawingapp.model.data_sources.network.services.DrawingService;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
 import com.example.nmadrawingapp.utils.NumberUtil;
+import com.example.nmadrawingapp.utils.SafeToast;
 import com.example.nmadrawingapp.view.components.CanvasView;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
 import java.util.Arrays;
@@ -85,10 +86,10 @@ public class DrawingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.saveDrawingButton.setOnClickListener(button -> {
-            if (canvasHasContent()) {
+            if (binding.canvas.canvasHasContent()) {
                 showDialog();
             } else {
-                Toast.makeText(getContext(), "Draw something first!", Toast.LENGTH_SHORT).show();
+                SafeToast.makeText(getContext(), "Draw something first!", Toast.LENGTH_SHORT);
             }
         });
 
@@ -191,7 +192,7 @@ public class DrawingFragment extends Fragment {
 
         // register on cancel listener
         dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
-            dialog.cancel();
+            dialog.dismiss();
         });
 
         // register on save listener
@@ -219,7 +220,7 @@ public class DrawingFragment extends Fragment {
             colorSelection.check(R.id.radioButtonBlack);
             strokeWidthSelection.check(R.id.radioButtonMediumStroke);
             dialog.dismiss();
-            Toast.makeText(getContext(), "Drawing Saved", Toast.LENGTH_SHORT).show();
+            SafeToast.makeText(getContext(), "Drawing Saved", Toast.LENGTH_SHORT);
         });
 
         // validate age input on text change
@@ -278,22 +279,6 @@ public class DrawingFragment extends Fragment {
 
          return true;
     }
-
-    public boolean canvasHasContent() {
-        byte[] bytes = binding.canvas.getImageBytes();
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inMutable = true;
-        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
-        int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
-        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
-        for (int pixel : pixels) {
-            if (pixel != 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     private void RetrieveBrushType(int i){
         if (i==R.id.radioButtonEraser){
