@@ -45,6 +45,8 @@ public class DrawingFragment extends Fragment {
     private RadioGroup drawTypeSelection;
     private RadioGroup strokeWidthSelection;
 
+    private int selectedDrawingTool = R.id.radioButtonLineDraw; // Start tool
+
 
 
     @Inject
@@ -86,31 +88,29 @@ public class DrawingFragment extends Fragment {
         colorSelection.check(R.id.radioButtonBlack);
 
 
-        colorSelection.setOnCheckedChangeListener((radioGroup, i) -> {
-            RetrieveColor(i);
-
+        colorSelection.setOnCheckedChangeListener((radioGroup, id) -> {
+            if (drawTypeSelection.getCheckedRadioButtonId() == R.id.radioButtonEraser) {
+                drawTypeSelection.check(selectedDrawingTool); // Set to previous tool
+            } else { // Called by tool change
+                setToolColourToSelection();
+            }
         });
 
         drawTypeSelection = (RadioGroup) getView().findViewById(R.id.radioGroupDrawTypeSelection);
-        drawTypeSelection.check(R.id.radioButtonLineDraw);
+        drawTypeSelection.check(selectedDrawingTool);
         drawTypeSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int colorId = colorSelection.getCheckedRadioButtonId();
                 switch (i){
-
-
                     case R.id.radioButtonLineDraw:
                         binding.canvas.setStyleStroke();
-
-                        RetrieveColor(colorId);
-
+                        setToolColourToSelection();
+                        selectedDrawingTool = i;
                         break;
                     case R.id.radioButtonFillDraw:
                         binding.canvas.setStyleFill();
-
-                        RetrieveColor(colorId);
-
+                        setToolColourToSelection();
+                        selectedDrawingTool = i;
                         break;
                     case R.id.radioButtonEraser:
                         binding.canvas.setStyleStroke();
@@ -126,8 +126,6 @@ public class DrawingFragment extends Fragment {
         strokeWidthSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int strokeSelection = drawTypeSelection.getCheckedRadioButtonId();
-
                 switch (i){
                     case R.id.radioButtonThinnestStroke:
                         binding.canvas.getBrushSettings().setWidth(3);
@@ -147,7 +145,7 @@ public class DrawingFragment extends Fragment {
                     default:
                         return;
                 }
-                if (i != R.id.radioButtonEraser){
+                if (drawTypeSelection.getCheckedRadioButtonId() != R.id.radioButtonEraser){
                     drawTypeSelection.check(R.id.radioButtonLineDraw);
                 }
             }
@@ -155,13 +153,9 @@ public class DrawingFragment extends Fragment {
     }
 
     private Dialog createDialog() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-
         LayoutInflater inflater = this.getLayoutInflater();
-
         builder.setView(inflater.inflate(R.layout.dialog_image_save, null));
-
         return builder.create();
     }
 
@@ -269,18 +263,12 @@ public class DrawingFragment extends Fragment {
          return true;
     }
 
-    public void RetrieveBrushTypeForColorChange(int i){
-        if (i==R.id.radioButtonEraser){
-            drawTypeSelection.check(R.id.radioButtonLineDraw);
-        }
-    }
-    private void RetrieveColor(int i){
-        int strokeSelection = drawTypeSelection.getCheckedRadioButtonId();
-        RadioButton colourButton = colorSelection.findViewById(i);
+    private void setToolColourToSelection(){
+        int colourSelection = colorSelection.getCheckedRadioButtonId();
+        RadioButton colourButton = colorSelection.findViewById(colourSelection);
         ColorStateList colourList =  colourButton.getButtonTintList();
-        int buttonColour = colourList.getDefaultColor();
+        int buttonColour = colourList.getDefaultColor(); // Get the colour of the button
         colourButton.getBackground();
         binding.canvas.getBrushSettings().setColor(buttonColour);
-        RetrieveBrushTypeForColorChange(strokeSelection);
     }
 }
