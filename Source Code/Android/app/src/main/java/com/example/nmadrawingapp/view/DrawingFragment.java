@@ -3,6 +3,8 @@ package com.example.nmadrawingapp.view;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
@@ -82,7 +85,11 @@ public class DrawingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.saveDrawingButton.setOnClickListener(button -> {
-            showDialog();
+            if (canvasHasContent()) {
+                showDialog();
+            } else {
+                Toast.makeText(getContext(), "Draw something first!", Toast.LENGTH_SHORT).show();
+            }
         });
 
         colorSelection = (RadioGroup) getView().findViewById(R.id.radioGroupColorSelector);
@@ -155,11 +162,6 @@ public class DrawingFragment extends Fragment {
                 }
             }
         });
-//       binding.buttonColorBlue.setOnClickListener(button -> {
-//
-//           binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
-//       });
-
     }
 
     private Dialog createDialog() {
@@ -194,36 +196,30 @@ public class DrawingFragment extends Fragment {
 
         // register on save listener
         dialog.findViewById(R.id.save_button).setOnClickListener(button -> {
-
             int age = NumberUtil.parseNumber(ageInput.getText().toString());
             String name = nameInput.getText().toString();
-            boolean ageIsValid = validateAge(age);
-            boolean nameIsValid = validateName(name);
 
-            if (ageIsValid && nameIsValid) {
-                imageRepository.insertImage(new Image(
-                        sharedViewModel.getEventId(),
-                        name,
-                        age,
-                        binding.canvas.getImageBytes()
-                ));
-
-                binding.canvas.clearCanvas();
-                binding.canvas.setStyleStroke();
-                colorSelection.check(R.id.radioButtonBlack);
-                strokeWidthSelection.check(R.id.radioButtonMediumStroke);
-                dialog.dismiss();
-
-            }
-
-            if (!ageIsValid) {
+            if (!validateAge(age)) {
                 dialog.findViewById(R.id.age_error_message).setVisibility(View.VISIBLE);
+                return;
             }
-
-            if (!nameIsValid) {
+            if (!validateName(name)) {
                 dialog.findViewById(R.id.name_error_message).setVisibility(View.VISIBLE);
+                return;
             }
 
+            imageRepository.insertImage(new Image(
+                    sharedViewModel.getEventId(),
+                    name,
+                    age,
+                    binding.canvas.getImageBytes()
+            ));
+            binding.canvas.clearCanvas();
+            binding.canvas.setStyleStroke();
+            colorSelection.check(R.id.radioButtonBlack);
+            strokeWidthSelection.check(R.id.radioButtonMediumStroke);
+            dialog.dismiss();
+            Toast.makeText(getContext(), "Drawing Saved", Toast.LENGTH_SHORT).show();
         });
 
         // validate age input on text change
@@ -283,12 +279,19 @@ public class DrawingFragment extends Fragment {
          return true;
     }
 
-    private int parseAge(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return 0;
+    public boolean canvasHasContent() {
+        byte[] bytes = binding.canvas.getImageBytes();
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inMutable = true;
+        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+        int[] pixels = new int[bitmap.getWidth() * bitmap.getHeight()];
+        bitmap.getPixels(pixels, 0, bitmap.getWidth(), 0, 0, bitmap.getWidth(), bitmap.getHeight());
+        for (int pixel : pixels) {
+            if (pixel != 0) {
+                return true;
+            }
         }
+        return false;
     }
 
 
