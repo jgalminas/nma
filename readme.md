@@ -6,7 +6,8 @@ An intuitive drawing application which allows users to sketch their perception o
 
 ### Scope 
 
-A simple drawing application which works on various devices and input methods (touch, mouse). The application should contain a small selection of brushes (pen, pencil, crayon), colours and brush sizes. 
+A simple drawing application which works on various devices and input methods (touch, mouse). The application should contain a small selection of brushes (pen, pencil, crayon), colours and brush sizes.
+
 
 ### Out of Scope 
 
@@ -14,6 +15,10 @@ Features such as layers, rotating the drawing, colour gradients and a wide range
 
 
 ## Project Structure
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/63853949/235922311-cd8747a1-aead-4639-936a-cbaeb708b769.png" alt="System Component Diagram">
+</p>
 
 More information regarding each part of the project can be found in their repective Read Mes which are located in the root of the project folder.
 
