@@ -100,7 +100,12 @@ namespace Tests
 
         // UploadDrawingAsync
 
-        // TODO
+        [TestMethod]
+        public async Task UploadDrawingNotFound()
+        {
+            var dto = new DrawingNewDTO() { EventId = 999 };
+            await Assert.ThrowsExceptionAsync<NotFound>(() => _drawingService.UploadDrawingAsync(dto));
+        }
 
         // UpdateDrawingAsync
 
