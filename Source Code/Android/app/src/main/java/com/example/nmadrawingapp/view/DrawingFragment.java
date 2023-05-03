@@ -48,7 +48,7 @@ public class DrawingFragment extends Fragment {
 
     private Dialog dialog;
 
-    private RadioGroup colorSelection;
+    public RadioGroup colorSelection;
     private RadioGroup drawTypeSelection;
     private RadioGroup strokeWidthSelection;
 
@@ -264,13 +264,13 @@ public class DrawingFragment extends Fragment {
 
     }
 
-    private boolean validateAge(int age) {
+    public boolean validateAge(int age) {
         return age > 0 && age <= 130;
     }
 
-    private boolean validateName(String name) {
+    public boolean validateName(String name) {
 
-        if (name.isEmpty()) {
+        if (name.isEmpty() || name.trim() != name) {
             return false;
         }
 

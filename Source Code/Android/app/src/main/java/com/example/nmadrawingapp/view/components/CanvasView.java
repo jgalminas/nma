@@ -50,6 +50,7 @@ public class CanvasView extends View {
             return paint.getStrokeWidth();
         }
 
+        public Paint.Style getStyle() {return  paint.getStyle(); }
 
 
         private Paint getPaint() {
