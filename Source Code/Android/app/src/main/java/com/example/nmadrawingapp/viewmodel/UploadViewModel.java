@@ -113,12 +113,8 @@ public class UploadViewModel extends ViewModel {
         return status;
     }
 
-    public void deleteImages(List<Integer> imageIds) {
-
-        for (int id : imageIds) {
-            imageRepository.deleteById(id);
-        }
-
+    public void deleteImage(int imageId) {
+        imageRepository.deleteById(imageId);
     }
 
 }

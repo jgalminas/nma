@@ -71,8 +71,10 @@ public class StartFragment extends Fragment {
 
         // on event start
         binding.startButton.setOnClickListener(btn -> {
-            if (isEventIdValid()) {
-                sharedViewModel.setEventId(Integer.parseInt(binding.eventInput.getText().toString()));
+            String input = binding.eventInput.getText().toString();
+            if (isEventIdValid(input)) {
+                binding.startErrorMessage.setVisibility(View.GONE);
+                sharedViewModel.setEventId(Integer.parseInt(input));
                 navController.navigate(R.id.drawingFragment);
             } else {
                 binding.startErrorMessage.setVisibility(View.VISIBLE);
@@ -81,12 +83,18 @@ public class StartFragment extends Fragment {
 
     }
 
-    private boolean isEventIdValid() {
-        // TODO validate fully based on ID criteria
-        if (binding.startErrorMessage.getVisibility() == View.VISIBLE) {
-            binding.startErrorMessage.setVisibility(View.GONE);
+    public boolean isEventIdValid(String idString) { // Don't trust android input box
+        if (idString.length() > 0) {
+            int id;
+            try {
+                id = Integer.parseInt(idString);
+                if (id >= 0) { // TODO validate fully based on ID criteria
+                    return true;
+                }
+            } catch (NumberFormatException error) {
+                // TODO Log errors
+            }
         }
-        return binding.eventInput.getText().length() > 0;
+        return false;
     }
-
 }

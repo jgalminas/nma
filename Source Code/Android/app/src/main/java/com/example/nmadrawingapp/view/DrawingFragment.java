@@ -2,7 +2,7 @@ package com.example.nmadrawingapp.view;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.res.Resources;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -17,28 +17,21 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.nmadrawingapp.R;
 import com.example.nmadrawingapp.databinding.FragmentDrawingBinding;
 import com.example.nmadrawingapp.model.data_sources.db.entitites.Image;
-import com.example.nmadrawingapp.model.data_sources.network.RetrofitClient;
-import com.example.nmadrawingapp.model.data_sources.network.services.DrawingService;
 import com.example.nmadrawingapp.model.repositories.ImageRepository;
 import com.example.nmadrawingapp.utils.NumberUtil;
-import com.example.nmadrawingapp.view.components.CanvasView;
+import com.example.nmadrawingapp.utils.SafeToast;
 import com.example.nmadrawingapp.viewmodel.SharedViewModel;
-import java.util.Arrays;
 import javax.inject.Inject;
 import dagger.hilt.android.AndroidEntryPoint;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+
 
 @AndroidEntryPoint
 public class DrawingFragment extends Fragment {
@@ -48,9 +41,11 @@ public class DrawingFragment extends Fragment {
 
     private Dialog dialog;
 
-    private RadioGroup colorSelection;
+    public RadioGroup colorSelection;
     private RadioGroup drawTypeSelection;
     private RadioGroup strokeWidthSelection;
+
+    private int selectedDrawingTool = R.id.radioButtonLineDraw; // Start tool
 
 
 
@@ -82,38 +77,40 @@ public class DrawingFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.saveDrawingButton.setOnClickListener(button -> {
-            showDialog();
+            if (binding.canvas.canvasHasContent()) {
+                showDialog();
+            } else {
+                SafeToast.makeText(getContext(), "Draw something first!", Toast.LENGTH_SHORT);
+            }
         });
 
         colorSelection = (RadioGroup) getView().findViewById(R.id.radioGroupColorSelector);
         colorSelection.check(R.id.radioButtonBlack);
 
 
-        colorSelection.setOnCheckedChangeListener((radioGroup, i) -> {
-            RetrieveColor(i);
-
+        colorSelection.setOnCheckedChangeListener((radioGroup, id) -> {
+            if (drawTypeSelection.getCheckedRadioButtonId() == R.id.radioButtonEraser) {
+                drawTypeSelection.check(selectedDrawingTool); // Set to previous tool
+            } else { // Called by tool change
+                setToolColourToSelection();
+            }
         });
 
         drawTypeSelection = (RadioGroup) getView().findViewById(R.id.radioGroupDrawTypeSelection);
-        drawTypeSelection.check(R.id.radioButtonLineDraw);
+        drawTypeSelection.check(selectedDrawingTool);
         drawTypeSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int colorId = colorSelection.getCheckedRadioButtonId();
                 switch (i){
-
-
                     case R.id.radioButtonLineDraw:
                         binding.canvas.setStyleStroke();
-
-                        RetrieveColor(colorId);
-
+                        setToolColourToSelection();
+                        selectedDrawingTool = i;
                         break;
                     case R.id.radioButtonFillDraw:
                         binding.canvas.setStyleFill();
-
-                        RetrieveColor(colorId);
-
+                        setToolColourToSelection();
+                        selectedDrawingTool = i;
                         break;
                     case R.id.radioButtonEraser:
                         binding.canvas.setStyleStroke();
@@ -129,47 +126,36 @@ public class DrawingFragment extends Fragment {
         strokeWidthSelection.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                int strokeSelection = drawTypeSelection.getCheckedRadioButtonId();
-
                 switch (i){
                     case R.id.radioButtonThinnestStroke:
                         binding.canvas.getBrushSettings().setWidth(3);
-                        RetrieveBrushType(strokeSelection);
                         break;
                     case R.id.radioButtonThinStroke:
                         binding.canvas.getBrushSettings().setWidth(6);
-                        RetrieveBrushType(strokeSelection);
                         break;
                     case R.id.radioButtonMediumStroke:
                         binding.canvas.getBrushSettings().setWidth(9);
-                        RetrieveBrushType(strokeSelection);
                         break;
                     case R.id.radioButtonThickStroke:
                         binding.canvas.getBrushSettings().setWidth(12);
-                        RetrieveBrushType(strokeSelection);
                         break;
                     case R.id.radioButtonThickestStroke:
                         binding.canvas.getBrushSettings().setWidth(15);
-                        RetrieveBrushType(strokeSelection);
                         break;
+                    default:
+                        return;
+                }
+                if (drawTypeSelection.getCheckedRadioButtonId() != R.id.radioButtonEraser){
+                    drawTypeSelection.check(R.id.radioButtonLineDraw);
                 }
             }
         });
-//       binding.buttonColorBlue.setOnClickListener(button -> {
-//
-//           binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
-//       });
-
     }
 
     private Dialog createDialog() {
-
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-
         LayoutInflater inflater = this.getLayoutInflater();
-
         builder.setView(inflater.inflate(R.layout.dialog_image_save, null));
-
         return builder.create();
     }
 
@@ -189,41 +175,35 @@ public class DrawingFragment extends Fragment {
 
         // register on cancel listener
         dialog.findViewById(R.id.cancel_button).setOnClickListener(button -> {
-            dialog.cancel();
+            dialog.dismiss();
         });
 
         // register on save listener
         dialog.findViewById(R.id.save_button).setOnClickListener(button -> {
-
             int age = NumberUtil.parseNumber(ageInput.getText().toString());
             String name = nameInput.getText().toString();
-            boolean ageIsValid = validateAge(age);
-            boolean nameIsValid = validateName(name);
 
-            if (ageIsValid && nameIsValid) {
-                imageRepository.insertImage(new Image(
-                        sharedViewModel.getEventId(),
-                        name,
-                        age,
-                        binding.canvas.getImageBytes()
-                ));
-
-                binding.canvas.clearCanvas();
-                binding.canvas.setStyleStroke();
-                colorSelection.check(R.id.radioButtonBlack);
-                strokeWidthSelection.check(R.id.radioButtonMediumStroke);
-                dialog.dismiss();
-
-            }
-
-            if (!ageIsValid) {
+            if (!validateAge(age)) {
                 dialog.findViewById(R.id.age_error_message).setVisibility(View.VISIBLE);
+                return;
             }
-
-            if (!nameIsValid) {
+            if (!validateName(name)) {
                 dialog.findViewById(R.id.name_error_message).setVisibility(View.VISIBLE);
+                return;
             }
 
+            imageRepository.insertImage(new Image(
+                    sharedViewModel.getEventId(),
+                    name,
+                    age,
+                    binding.canvas.getImageBytes()
+            ));
+            binding.canvas.clearCanvas();
+            binding.canvas.setStyleStroke();
+            colorSelection.check(R.id.radioButtonBlack);
+            strokeWidthSelection.check(R.id.radioButtonMediumStroke);
+            dialog.dismiss();
+            SafeToast.makeText(getContext(), "Drawing Saved", Toast.LENGTH_SHORT);
         });
 
         // validate age input on text change
@@ -264,13 +244,13 @@ public class DrawingFragment extends Fragment {
 
     }
 
-    private boolean validateAge(int age) {
+    public boolean validateAge(int age) {
         return age > 0 && age <= 130;
     }
 
-    private boolean validateName(String name) {
+    public boolean validateName(String name) {
 
-        if (name.isEmpty()) {
+        if (name.isEmpty() || name.trim() != name) {
             return false;
         }
 
@@ -283,82 +263,12 @@ public class DrawingFragment extends Fragment {
          return true;
     }
 
-    private int parseAge(String text) {
-        try {
-            return Integer.parseInt(text);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
+    private void setToolColourToSelection(){
+        int colourSelection = colorSelection.getCheckedRadioButtonId();
+        RadioButton colourButton = colorSelection.findViewById(colourSelection);
+        ColorStateList colourList =  colourButton.getButtonTintList();
+        int buttonColour = colourList.getDefaultColor(); // Get the colour of the button
+        colourButton.getBackground();
+        binding.canvas.getBrushSettings().setColor(buttonColour);
     }
-
-
-    private void RetrieveBrushType(int i){
-        if (i==R.id.radioButtonEraser){
-
-        }else{
-            drawTypeSelection.check(R.id.radioButtonLineDraw);
-        }
-    }
-
-    public void RetrieveBrushTypeForColorChange(int i){
-        if (i==R.id.radioButtonEraser){
-            drawTypeSelection.check(R.id.radioButtonLineDraw);
-        }
-    }
-    private void RetrieveColor(int i){
-        int strokeSelection = drawTypeSelection.getCheckedRadioButtonId();
-
-        switch(i){
-            case R.id.radioButtonRed:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonOrange:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.orange));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonYellow:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonYellowGreen:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.yellow_green));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonGreen:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.green));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonBlueGreen:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue_green));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonLightBlue:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.light_blue));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonBlue:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.blue));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonPurple:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.purple));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonRedViolet:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.red_violet));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonBrown:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.brown));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-            case R.id.radioButtonBlack:
-                binding.canvas.getBrushSettings().setColor(getResources().getColor(R.color.black));
-                RetrieveBrushTypeForColorChange(strokeSelection);
-                break;
-
-        }
-    }
-
 }

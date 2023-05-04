@@ -11,7 +11,7 @@ export async function fetchImage(imageUrl: string): Promise<Blob> {
 	return res.blob();
 }
 
-export async function fetchFirstUnscoredDrawing(): Promise<Drawing> {
-	const res = await fetch(`${BASE_URL}/drawing/first-unscored`);	
+export async function fetchFirstUnscoredDrawing(): Promise<Drawing | null | undefined> {
+	const res = await fetch(`${BASE_URL}/drawing/first-unscored`);
 	return res.json();
 }

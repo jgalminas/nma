@@ -17,8 +17,6 @@ import java.io.ByteArrayOutputStream;
 public class CanvasView extends View {
 
 
-
-
     public static class BrushSettings {
         
         private final Paint paint = new Paint();
@@ -50,6 +48,7 @@ public class CanvasView extends View {
             return paint.getStrokeWidth();
         }
 
+        public Paint.Style getStyle() {return  paint.getStyle(); }
 
 
         private Paint getPaint() {
@@ -64,6 +63,8 @@ public class CanvasView extends View {
 
     private float pointerX, pointerY;
     private static final float TOUCH_TOLERANCE = 4;
+
+    private boolean hasContent = false;
 
     public CanvasView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -86,7 +87,6 @@ public class CanvasView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         canvas.drawBitmap(bitmap, 0, 0, brushSettings.getPaint());
         canvas.drawPath(path, brushSettings.getPaint());
     }
@@ -111,6 +111,7 @@ public class CanvasView extends View {
     }
 
     private void onTouchStop() {
+        hasContent = true;
         path.lineTo(pointerX, pointerY);
         canvas.drawPath(path, brushSettings.getPaint());
         path = new Path();
@@ -155,6 +156,7 @@ public class CanvasView extends View {
     public BrushSettings getBrushSettings() {
         return brushSettings;
     }
+    public boolean canvasHasContent() {return hasContent;}
 
     public void setStyleFill(){
         brushSettings.paint.setStyle(Paint.Style.FILL);
@@ -169,5 +171,6 @@ public class CanvasView extends View {
     public void setNonErase() {brushSettings.paint.setXfermode(null);}
     public void clearCanvas() {
         canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
+        hasContent = false;
     }
 }
