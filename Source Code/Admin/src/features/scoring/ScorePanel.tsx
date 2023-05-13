@@ -33,7 +33,7 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 	const onUpdateScoreNotes = (topicId: number, value: string, type: "UPDATE_EXTENT_NOTES" | "UPDATE_DEPTH_NOTES") => dispatch({ type, topicId, value });
 
 	return (
-		<div className='min-w-[20rem] xl:w-80 h-full overflow-y-auto p-7 flex flex-col'>
+		<div className='min-w-[20rem] xl:w-80 h-full p-7 flex flex-col gap-5'>
 
 			<H2Heading>
 				{ isOnBreadth ? 'Breadth Score': `${selectedTopics[section].topic.name} Score` }
@@ -41,7 +41,7 @@ export default function ScorePanel({ scores, dispatch, section, setSection, onSu
 
 			{ isOnBreadth
 				? <Fragment> 
-					<div className='mt-5 flex flex-col gap-2'>
+					<div className='flex flex-col gap-2'>
 						{ scores.map((scr, key) => {
 							return (
 								<Checkbox key={key} label={scr.topic.name} checked={scr.checked} onChange={() => onCheck(key)}/>
