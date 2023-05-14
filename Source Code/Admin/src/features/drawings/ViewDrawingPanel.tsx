@@ -10,7 +10,7 @@ import { getFriendlyDate } from '../../utils/date';
 import { Fragment, useState } from 'react';
 import DeletePopup from '../../components/DeletePopup';
 import { usePage } from '../../contexts/PageContext';
-import { fetchDrawingByIdWithScores } from './drawing.api';
+import { deleteDrawingById, fetchDrawingByIdWithScores } from './drawing.api';
 import Image from '../../components/Image';
 import { Disclosure } from '@headlessui/react';
 import PrimaryButtonSmall from '../../components/PrimaryButtonSmall';
@@ -27,7 +27,7 @@ export default function ViewDrawingPanel() {
 	const queryClient = useQueryClient();
 	const { data: drawing } = useQuery(['drawing', Number(id)], () => fetchDrawingByIdWithScores(Number(id), true));
 	const { data: image, isLoading: isImageLoading } = useQuery(['image', Number(id)], () => fetchImage(drawing?.imageUrl ?? ''), { enabled: !!drawing });
-	const mutation = useMutation(['deleteDrawing', Number(id)], deleteEventById);
+	const mutation = useMutation(['deleteDrawing', Number(id)], deleteDrawingById);
 
 	// state
 	const [popup, setPopup] = useState(false);
