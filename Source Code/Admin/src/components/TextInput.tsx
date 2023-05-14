@@ -37,7 +37,7 @@ export default function TextInput({ validation, label, name, value, onChange, ty
 			<input
 			className={`bg-gray-100 border border-gray-200 rounded p-1.5 text-gray-700 focus:outline-none focus:border focus:border-blue-400
 				focus:ring ring-opacity-40 w-full
-				${validation?.isValid ? 'border-gray-100 focus:border-blue-400 ring-blue-300': 'border-red-500 focus:border-red-500 ring-red-300'}`}
+				${validation?.isValid ? 'border-gray-200 focus:border-blue-400 ring-blue-300': 'border-red-500 focus:border-red-500 ring-red-300'}`}
 			name={name}
 			type='text'
 			maxLength={max}

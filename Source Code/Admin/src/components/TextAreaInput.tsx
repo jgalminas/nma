@@ -22,7 +22,7 @@ export default function TextAreaInput({ label, rows, name, value, onChange }: Te
 				</label> }
 
 			<textarea
-			className='bg-gray-50 border border-gray-100 rounded p-1.5 text-gray-700 focus:outline-none focus:border focus:border-blue-400
+			className='bg-gray-100 border border-gray-200 rounded p-1.5 text-gray-700 focus:outline-none focus:border focus:border-blue-400
 				focus:ring ring-blue-300 ring-opacity-40 min-h-[38px]'
 			name={inputId}
 			rows={rowCount}
