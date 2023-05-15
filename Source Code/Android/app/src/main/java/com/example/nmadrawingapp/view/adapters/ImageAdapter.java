@@ -304,7 +304,7 @@ public class ImageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     if (items.get(i - 1).getType() == ItemType.EVENT && ((items.size() - 1 == i) || items.get(i + 1).getType() == ItemType.EVENT)) {
                         items.remove(it); // remove image
                         items.remove(i - 1); // remove event view
-                        notifyItemRangeRemoved(i - 1, 2); // update recycler view
+                        notifyDataSetChanged();
                     } else {
                         items.remove(it); // remove just image
                         notifyItemRemoved(i); // update recycler
