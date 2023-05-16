@@ -1,5 +1,7 @@
 # Marine Aquarium Drawing Application
 
+Kieran Jeffery = SkeeterQuill
+
 ## Project Vision 
 
 An intuitive drawing application which allows users to sketch their perception of what the National Marine Park is. The application will likely be used unsupervised and by people of various ages, therefore, it must have a simple interface and be easy to use.
